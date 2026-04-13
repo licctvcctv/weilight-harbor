@@ -1,0 +1,192 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Settings') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+.settings-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+}
+.settings-container h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+.settings-section {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.settings-section h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.settings-section h3 i {
+    color: var(--color-primary);
+}
+.lang-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-bottom: 0.5rem;
+}
+.lang-option:hover {
+    border-color: var(--color-primary);
+}
+.lang-option.selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+}
+.lang-option input[type="radio"] {
+    accent-color: var(--color-primary);
+}
+.delete-account-section {
+    border-color: #F8D7DA;
+}
+.delete-account-section h3 {
+    color: var(--color-error);
+}
+.btn-delete-disabled {
+    background: var(--color-bg-subtle);
+    color: var(--color-text-disabled);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    cursor: not-allowed;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+    <a href="{{ url_for('user_center.profile') }}" style="color:var(--color-text-secondary);text-decoration:none;display:inline-flex;align-items:center;gap:0.375rem;margin-bottom:1rem;font-size:0.9375rem;">
+        <i data-lucide="arrow-left" style="width:18px;height:18px"></i>
+        {{ _('Back to Profile') }}
+    </a>
+    <h1>{{ _('Settings') }}</h1>
+
+    <!-- Change Password -->
+    <div class="settings-section">
+        <h3>
+            <i data-lucide="lock" style="width:20px;height:20px"></i>
+            {{ _('Change Password') }}
+        </h3>
+        <form method="POST" id="passwordForm">
+            <input type="hidden" name="action" value="change_password">
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Current Password') }}</label>
+                <input type="password" name="old_password" class="form-control wl-form-control" required
+                       placeholder="{{ _('Enter current password') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('New Password') }}</label>
+                <input type="password" name="new_password" id="newPassword" class="form-control wl-form-control" required
+                       minlength="6" placeholder="{{ _('At least 6 characters') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Confirm New Password') }}</label>
+                <input type="password" id="confirmPassword" class="form-control wl-form-control" required
+                       minlength="6" placeholder="{{ _('Repeat new password') }}">
+                <div class="invalid-feedback" id="passwordMismatch" style="display:none">
+                    {{ _('Passwords do not match.') }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-wl-primary" id="changePasswordBtn">
+                {{ _('Update Password') }}
+            </button>
+        </form>
+    </div>
+
+    <!-- Language Preference -->
+    <div class="settings-section">
+        <h3>
+            <i data-lucide="globe" style="width:20px;height:20px"></i>
+            {{ _('Language Preference') }}
+        </h3>
+        <p class="small text-muted mb-3">{{ _('Choose your preferred language for the interface.') }}</p>
+        <label class="lang-option {{ 'selected' if current_user.locale == 'en' or not current_user.locale else '' }}">
+            <input type="radio" name="language" value="en" {{ 'checked' if current_user.locale == 'en' or not current_user.locale else '' }}
+                   onchange="setLanguage('en')">
+            <span class="fw-medium">English</span>
+        </label>
+        <label class="lang-option {{ 'selected' if current_user.locale == 'zh' else '' }}">
+            <input type="radio" name="language" value="zh" {{ 'checked' if current_user.locale == 'zh' else '' }}
+                   onchange="setLanguage('zh')">
+            <span class="fw-medium">中文</span>
+        </label>
+    </div>
+
+    <!-- Account / Delete -->
+    <div class="settings-section delete-account-section">
+        <h3>
+            <i data-lucide="alert-triangle" style="width:20px;height:20px"></i>
+            {{ _('Account') }}
+        </h3>
+        <p class="small text-muted mb-3">{{ _('Once your account is deleted, all data will be permanently removed. This action cannot be undone.') }}</p>
+        <button class="btn-delete-disabled" disabled>
+            <i data-lucide="trash-2" style="width:16px;height:16px;margin-right:4px"></i>
+            {{ _('Delete Account') }}
+        </button>
+        <p class="small text-muted mt-2">{{ _('Please contact admin to delete your account.') }}</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password confirmation validation
+    var form = document.getElementById('passwordForm');
+    var newPw = document.getElementById('newPassword');
+    var confirmPw = document.getElementById('confirmPassword');
+    var mismatchMsg = document.getElementById('passwordMismatch');
+
+    form.addEventListener('submit', function(e) {
+        if (newPw.value !== confirmPw.value) {
+            e.preventDefault();
+            mismatchMsg.style.display = 'block';
+            confirmPw.classList.add('is-invalid');
+        } else {
+            mismatchMsg.style.display = 'none';
+            confirmPw.classList.remove('is-invalid');
+        }
+    });
+
+    confirmPw.addEventListener('input', function() {
+        if (newPw.value === confirmPw.value) {
+            mismatchMsg.style.display = 'none';
+            confirmPw.classList.remove('is-invalid');
+        }
+    });
+
+    // Language radio highlight
+    document.querySelectorAll('.lang-option input[type="radio"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            document.querySelectorAll('.lang-option').forEach(function(opt) { opt.classList.remove('selected'); });
+            radio.closest('.lang-option').classList.add('selected');
+        });
+    });
+
+    lucide.createIcons();
+});
+
+function setLanguage(lang) {
+    // Set language cookie and reload
+    document.cookie = 'locale=' + lang + ';path=/;max-age=31536000';
+    window.location.reload();
+}
+</script>
+{% endblock %}

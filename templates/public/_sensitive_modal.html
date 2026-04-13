@@ -1,0 +1,20 @@
+<!-- Crisis Support Modal -->
+<div class="modal fade sensitive-modal" id="sensitiveModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="padding: 2rem;">
+            <div class="candle-icon">&#x1F56F;&#xFE0F;</div>
+            <h5 class="text-center mb-3">{{ _('We noticed your words may reflect a difficult moment.') }}</h5>
+            <p class="text-center text-muted mb-4">{{ _('You are not alone. Please know there is help available.') }}</p>
+            <a href="tel:4001619995" class="hotline-btn text-center d-block text-decoration-none">
+                <i data-lucide="phone" style="width:18px;height:18px"></i>
+                {{ _('Call Now: Crisis Hotline 400-161-9995') }}
+            </a>
+            <button class="btn btn-wl-secondary w-100 mb-2" data-bs-dismiss="modal">
+                {{ _("I'm okay, continue writing") }}
+            </button>
+            <div class="text-center">
+                <a href="/community/" class="btn-wl-ghost small">{{ _('Talk to the community') }}</a>
+            </div>
+        </div>
+    </div>
+</div>

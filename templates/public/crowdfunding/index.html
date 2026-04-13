@@ -1,0 +1,476 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Crowdfunding') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .crowdfunding-hero {
+        background: linear-gradient(135deg, #FEF5EB 0%, #FDF8F3 30%, #F7F0E8 60%, #FEF5EB 100%);
+        padding: 4rem 0;
+        min-height: 40vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .crowdfunding-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(232,145,58,0.08) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .crowdfunding-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -10%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(91,154,107,0.06) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .crowdfunding-hero h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        line-height: 1.4;
+        margin-bottom: 1rem;
+    }
+    .crowdfunding-hero .lead {
+        font-size: 1.1rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+    .hero-search {
+        max-width: 480px;
+    }
+    .hero-search .form-control {
+        border-radius: var(--radius-full);
+        padding: 0.75rem 1.25rem;
+        border: 1px solid var(--color-border);
+        background: white;
+        box-shadow: var(--shadow-sm);
+    }
+    .hero-search .form-control:focus {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(232,145,58,0.15);
+    }
+
+    .filter-bar {
+        background: var(--color-bg-card);
+        border-bottom: 1px solid var(--color-border);
+        padding: 1rem 0;
+        position: sticky;
+        top: 64px;
+        z-index: 100;
+    }
+
+    .campaign-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        padding: 2rem 0;
+    }
+    @media (max-width: 991.98px) {
+        .campaign-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .crowdfunding-hero h1 {
+            font-size: 2rem;
+        }
+    }
+    @media (max-width: 575.98px) {
+        .campaign-grid {
+            grid-template-columns: 1fr;
+        }
+        .crowdfunding-hero {
+            padding: 2.5rem 0;
+            min-height: auto;
+        }
+        .crowdfunding-hero h1 {
+            font-size: 1.625rem;
+        }
+    }
+
+    .campaign-card {
+        position: relative;
+    }
+    .campaign-card .card-img-wrapper {
+        position: relative;
+        aspect-ratio: 16/9;
+        overflow: hidden;
+        background: linear-gradient(135deg, var(--color-bg-subtle), var(--color-primary-bg));
+    }
+    .campaign-card .card-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform var(--transition-slow);
+    }
+    .campaign-card:hover .card-img-wrapper img {
+        transform: scale(1.05);
+    }
+    .campaign-card .card-img-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-disabled);
+    }
+    .campaign-card .verified-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: rgba(91,154,107,0.9);
+        color: white;
+        padding: 2px 8px;
+        border-radius: var(--radius-full);
+        font-size: 0.7rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        backdrop-filter: blur(4px);
+    }
+    .campaign-card .category-tag {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        background: rgba(255,255,255,0.9);
+        color: var(--color-text-secondary);
+        padding: 2px 10px;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 500;
+        backdrop-filter: blur(4px);
+    }
+    .campaign-card .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.5;
+    }
+    .campaign-card .card-title a {
+        color: var(--color-text-primary);
+    }
+    .campaign-card .card-title a:hover {
+        color: var(--color-primary);
+    }
+    .campaign-card .creator-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8125rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.75rem;
+    }
+    .campaign-card .creator-info img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .campaign-card .funding-text {
+        font-size: 0.8125rem;
+        color: var(--color-text-secondary);
+        margin-bottom: 0.25rem;
+    }
+    .campaign-card .funding-text .raised-amount {
+        color: var(--color-primary);
+        font-weight: 600;
+    }
+    .campaign-card .campaign-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.75rem;
+        font-size: 0.8125rem;
+        color: var(--color-text-secondary);
+    }
+    .campaign-card .progress-pct {
+        font-weight: 600;
+        color: var(--color-primary);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--color-text-secondary);
+    }
+    .empty-state i {
+        margin-bottom: 1rem;
+    }
+
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        padding: 2rem 0 3rem;
+    }
+    .pagination .page-link {
+        border: 1px solid var(--color-border);
+        color: var(--color-text-secondary);
+        border-radius: var(--radius-md) !important;
+        margin: 0 3px;
+        padding: 0.5rem 0.875rem;
+    }
+    .pagination .page-link:hover {
+        background-color: var(--color-primary-bg);
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+    .pagination .page-item.active .page-link {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+        color: white;
+    }
+    .pagination .page-item.disabled .page-link {
+        color: var(--color-text-disabled);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="crowdfunding-hero">
+    <div class="container position-relative" style="z-index:1">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1>{{ _('Every penny is a point of light') }}</h1>
+                <p class="lead">{{ _('Help families in need. Your donation, no matter how small, brings warmth and hope to those facing medical hardships.') }}</p>
+                <!-- Search -->
+                <form class="hero-search mb-3" action="{{ url_for('crowdfunding.search') }}" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="{{ _('Search campaigns...') }}" value="{{ search_query|default('', true) }}">
+                        <button class="btn btn-wl-primary" type="submit" style="border-radius:0 var(--radius-full) var(--radius-full) 0;">
+                            <i data-lucide="search" style="width:18px;height:18px"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="d-flex flex-wrap gap-3 align-items-center">
+                    {% if current_user.is_authenticated and current_user.is_certified %}
+                    <a href="{{ url_for('crowdfunding.create_campaign') }}" class="btn btn-wl-primary px-4 py-2">
+                        <i data-lucide="plus-circle" style="width:18px;height:18px;margin-right:6px"></i>
+                        {{ _('Start a Campaign') }}
+                    </a>
+                    {% elif current_user.is_authenticated %}
+                    <a href="{{ url_for('user_center.certification') }}" class="btn btn-wl-secondary px-4 py-2" title="{{ _('Get certified to start a campaign') }}">
+                        <i data-lucide="shield-check" style="width:18px;height:18px;margin-right:6px"></i>
+                        {{ _('Get Certified to Start') }}
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('auth.login_page') }}" class="btn btn-wl-secondary px-4 py-2">
+                        <i data-lucide="log-in" style="width:18px;height:18px;margin-right:6px"></i>
+                        {{ _('Login to Start a Campaign') }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5 d-none d-lg-flex justify-content-center">
+                <div style="font-size:8rem;opacity:0.15;color:var(--color-primary)">
+                    <i data-lucide="heart-handshake" style="width:200px;height:200px"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+                {% for value, label in categories %}
+                <a href="{{ url_for('crowdfunding.index', category=value, sort=current_sort) }}"
+                   class="wl-tag {{ 'active' if current_category == value else '' }}">
+                    {{ _(label) }}
+                </a>
+                {% endfor %}
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-muted" style="font-size:0.8125rem">{{ _('Sort:') }}</span>
+                <select class="form-select form-select-sm" id="sortSelect"
+                        style="width:auto;border-radius:var(--radius-md);border-color:var(--color-border);font-size:0.8125rem">
+                    <option value="newest" {{ 'selected' if current_sort == 'newest' else '' }}>{{ _('Newest') }}</option>
+                    <option value="urgent" {{ 'selected' if current_sort == 'urgent' else '' }}>{{ _('Most Urgent') }}</option>
+                    <option value="progress" {{ 'selected' if current_sort == 'progress' else '' }}>{{ _('By Progress') }}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Campaign Grid -->
+<div class="container">
+    {% if campaigns %}
+    <div class="campaign-grid">
+        {% for campaign in campaigns %}
+        {% set progress = 0 %}
+        {% if campaign.funding_goal and campaign.funding_goal > 0 %}
+            {% set progress = ((campaign.current_amount|float / campaign.funding_goal|float) * 100)|round(1) %}
+            {% if progress > 100 %}{% set progress = 100 %}{% endif %}
+        {% endif %}
+        {% set donor_count = campaign.donor_count or 0 %}
+
+        <div class="wl-card campaign-card">
+            {% if campaign.is_fully_funded %}
+            <div class="fully-funded-overlay">
+                <span class="fully-funded-badge">{{ _('Fully Funded') }}</span>
+            </div>
+            {% endif %}
+
+            <a href="{{ url_for('crowdfunding.detail', campaign_id=campaign.id) }}">
+                <div class="card-img-wrapper">
+                    {% if campaign.cover_image %}
+                    <img src="{{ campaign.cover_image }}" alt="{{ campaign.title }}">
+                    {% else %}
+                    <div class="card-img-placeholder">
+                        <i data-lucide="image" style="width:48px;height:48px"></i>
+                    </div>
+                    {% endif %}
+                    <span class="category-tag">{{ _(campaign.category or 'Other') }}</span>
+                    {% if campaign.status == 'approved' %}
+                    <span class="verified-badge">
+                        <i data-lucide="check-circle" style="width:12px;height:12px"></i>
+                        {{ _('Verified') }}
+                    </span>
+                    {% endif %}
+                </div>
+            </a>
+
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{{ url_for('crowdfunding.detail', campaign_id=campaign.id) }}">
+                        {{ campaign.title }}
+                    </a>
+                </h5>
+
+                <div class="creator-info">
+                    <img src="{{ campaign.user.avatar or url_for('static', filename='public/images/default-avatar.svg') }}" alt="">
+                    <span>{{ campaign.user.username }}</span>
+                    {% if campaign.user.is_certified %}
+                    <span class="badge-certified" style="font-size:0.625rem;padding:1px 6px">
+                        <i data-lucide="shield-check" style="width:10px;height:10px"></i>
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div class="wl-progress" style="margin-bottom:0.5rem">
+                    <div class="wl-progress-bar" data-progress="{{ progress }}" style="width: 0%"></div>
+                </div>
+
+                <div class="funding-text">
+                    {{ _('Raised:') }} <span class="raised-amount">&yen;{{ "%.2f"|format(campaign.current_amount|float) }}</span>
+                    / {{ _('Goal:') }} &yen;{{ "%.2f"|format(campaign.funding_goal|float) }}
+                </div>
+
+                <div class="campaign-meta">
+                    <span>
+                        <span class="progress-pct">{{ progress }}%</span>
+                        &middot;
+                        {{ donor_count }} {{ _('donors') }}
+                    </span>
+                    {% if not campaign.is_fully_funded %}
+                    <a href="{{ url_for('crowdfunding.detail', campaign_id=campaign.id) }}" class="btn btn-wl-primary" style="padding:0.25rem 0.875rem;font-size:0.8125rem">
+                        {{ _('Donate') }}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if pagination and pagination.pages > 1 %}
+    <div class="pagination-wrapper">
+        <nav>
+            <ul class="pagination mb-0">
+                {% if pagination.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('crowdfunding.index', page=pagination.prev_num, category=current_category, sort=current_sort) }}">
+                        <i data-lucide="chevron-left" style="width:16px;height:16px"></i>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link"><i data-lucide="chevron-left" style="width:16px;height:16px"></i></span></li>
+                {% endif %}
+
+                {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                    {% if p %}
+                    <li class="page-item {{ 'active' if p == pagination.page else '' }}">
+                        <a class="page-link" href="{{ url_for('crowdfunding.index', page=p, category=current_category, sort=current_sort) }}">{{ p }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('crowdfunding.index', page=pagination.next_num, category=current_category, sort=current_sort) }}">
+                        <i data-lucide="chevron-right" style="width:16px;height:16px"></i>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><span class="page-link"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></span></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+        <i data-lucide="heart" style="width:64px;height:64px;color:var(--color-text-disabled)"></i>
+        <h4 style="margin-top:1rem">{{ _('No campaigns yet') }}</h4>
+        <p>{{ _('Be the first to start a crowdfunding campaign and help someone in need.') }}</p>
+        {% if current_user.is_authenticated and current_user.is_certified %}
+        <a href="{{ url_for('crowdfunding.create_campaign') }}" class="btn btn-wl-primary mt-2">
+            {{ _('Start a Campaign') }}
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Sort select
+    var sortSelect = document.getElementById('sortSelect');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            var url = new URL(window.location.href);
+            url.searchParams.set('sort', this.value);
+            url.searchParams.delete('page');
+            window.location.href = url.toString();
+        });
+    }
+
+    // Animate progress bars
+    document.querySelectorAll('.wl-progress-bar[data-progress]').forEach(function(bar) {
+        var target = parseFloat(bar.getAttribute('data-progress'));
+        setTimeout(function() {
+            bar.style.width = target + '%';
+        }, 100);
+    });
+
+    // Re-init lucide icons
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+});
+</script>
+{% endblock %}

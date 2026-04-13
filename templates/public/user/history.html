@@ -1,0 +1,358 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('My History') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .history-header {
+        background: linear-gradient(135deg, var(--color-primary-bg) 0%, var(--color-bg-subtle) 100%);
+        padding: 2.5rem 0 1rem;
+    }
+    .history-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-bottom: 0.5rem;
+    }
+    .history-subtitle {
+        color: var(--color-text-secondary);
+        font-size: 0.9375rem;
+    }
+    .history-tabs {
+        background: var(--color-bg-card);
+        border-bottom: 1px solid var(--color-border);
+        position: sticky;
+        top: 64px;
+        z-index: 10;
+    }
+    .history-tabs .nav-link {
+        color: var(--color-text-secondary);
+        font-weight: 500;
+        padding: 1rem 1.25rem;
+        border: none;
+        border-bottom: 2px solid transparent;
+        border-radius: 0;
+        transition: all var(--transition-fast);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .history-tabs .nav-link:hover {
+        color: var(--color-primary);
+        background: none;
+    }
+    .history-tabs .nav-link.active {
+        color: var(--color-primary);
+        border-bottom-color: var(--color-primary);
+        background: none;
+    }
+    .tab-count {
+        background: var(--color-bg-subtle);
+        color: var(--color-text-secondary);
+        padding: 1px 8px;
+        border-radius: var(--radius-full);
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .nav-link.active .tab-count {
+        background: var(--color-primary-bg);
+        color: var(--color-primary);
+    }
+    .history-item {
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 1rem 1.25rem;
+        margin-bottom: 0.75rem;
+        transition: all var(--transition-fast);
+    }
+    .history-item:hover {
+        box-shadow: var(--shadow-sm);
+        border-color: var(--color-primary-light);
+    }
+    .history-item .item-title {
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin-bottom: 0.25rem;
+    }
+    .history-item .item-meta {
+        font-size: 0.8125rem;
+        color: var(--color-text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--color-text-secondary);
+    }
+    .empty-state .empty-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: var(--color-bg-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.25rem;
+    }
+    .empty-state .empty-icon i {
+        color: var(--color-text-disabled);
+    }
+    .empty-state h5 {
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin-bottom: 0.5rem;
+    }
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .status-dot.pending { background: var(--color-warning); }
+    .status-dot.approved, .status-dot.active, .status-dot.completed { background: var(--color-success); }
+    .status-dot.rejected, .status-dot.cancelled { background: var(--color-error); }
+    .status-dot.draft { background: var(--color-text-disabled); }
+    .history-pagination .page-link {
+        border: none;
+        color: var(--color-text-secondary);
+        border-radius: var(--radius-md);
+        margin: 0 2px;
+        padding: 0.5rem 0.875rem;
+    }
+    .history-pagination .page-item.active .page-link {
+        background-color: var(--color-primary);
+        color: white;
+    }
+    .history-pagination .page-link:hover {
+        background-color: var(--color-primary-bg);
+        color: var(--color-primary);
+    }
+</style>
+{% endblock %}
+
+{% macro render_history_pagination(pagination, page_param, tab_name) %}
+{% if pagination.pages > 1 %}
+<nav class="mt-3 d-flex justify-content-center">
+    <ul class="pagination history-pagination mb-0">
+        {% if pagination.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('user_center.history', tab=tab_name) }}&{{ page_param }}={{ pagination.prev_num }}">
+                <i data-lucide="chevron-left" style="width:16px;height:16px;"></i>
+            </a>
+        </li>
+        {% endif %}
+        {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+            {% if p %}
+            <li class="page-item {{ 'active' if p == pagination.page else '' }}">
+                <a class="page-link" href="{{ url_for('user_center.history', tab=tab_name) }}&{{ page_param }}={{ p }}">{{ p }}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('user_center.history', tab=tab_name) }}&{{ page_param }}={{ pagination.next_num }}">
+                <i data-lucide="chevron-right" style="width:16px;height:16px;"></i>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endmacro %}
+
+{% block content %}
+<!-- Header -->
+<div class="history-header">
+    <div class="container">
+        <h1 class="history-title">{{ _('My History') }}</h1>
+        <p class="history-subtitle">{{ _('Track all your activities and contributions') }}</p>
+    </div>
+</div>
+
+<!-- Tabs -->
+<div class="history-tabs">
+    <div class="container">
+        <ul class="nav" id="historyTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link {{ 'active' if tab == 'posts' }}" data-bs-toggle="tab" data-bs-target="#tab-posts" type="button">
+                    <i data-lucide="message-square" style="width:16px;height:16px;"></i>
+                    {{ _('Posts') }}
+                    <span class="tab-count">{{ post_count }}</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link {{ 'active' if tab == 'campaigns' }}" data-bs-toggle="tab" data-bs-target="#tab-campaigns" type="button">
+                    <i data-lucide="heart" style="width:16px;height:16px;"></i>
+                    {{ _('Campaigns') }}
+                    <span class="tab-count">{{ campaign_count }}</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link {{ 'active' if tab == 'donations' }}" data-bs-toggle="tab" data-bs-target="#tab-donations" type="button">
+                    <i data-lucide="gift" style="width:16px;height:16px;"></i>
+                    {{ _('Donations') }}
+                    <span class="tab-count">{{ donation_count }}</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link {{ 'active' if tab == 'requests' }}" data-bs-toggle="tab" data-bs-target="#tab-requests" type="button">
+                    <i data-lucide="map-pin" style="width:16px;height:16px;"></i>
+                    {{ _('Respite Requests') }}
+                    <span class="tab-count">{{ request_count }}</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Tab Content -->
+<div class="container py-4">
+    <div class="tab-content">
+        <!-- Posts -->
+        <div class="tab-pane fade {{ 'show active' if tab == 'posts' }}" id="tab-posts">
+            {% if posts %}
+                {% for post in posts %}
+                <div class="history-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="item-title">{{ post.title }}</div>
+                            <div class="item-meta">
+                                <span class="wl-tag" style="font-size:0.75rem;padding:2px 8px;">{{ post.category or 'General' }}</span>
+                                <span><i data-lucide="eye" style="width:12px;height:12px;"></i> {{ post.view_count }}</span>
+                                <span><i data-lucide="heart" style="width:12px;height:12px;"></i> {{ post.like_count }}</span>
+                                <span><i data-lucide="message-circle" style="width:12px;height:12px;"></i> {{ post.comment_count }}</span>
+                                <span>&middot; {{ post.create_at.strftime('%Y-%m-%d %H:%M') if post.create_at else '' }}</span>
+                            </div>
+                        </div>
+                        {% if post.is_anonymous %}
+                        <span class="wl-tag" style="font-size:0.7rem;padding:2px 6px;">{{ _('Anonymous') }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i data-lucide="message-square" style="width:28px;height:28px;"></i></div>
+                    <h5>{{ _('No posts yet') }}</h5>
+                    <p>{{ _('Share your story, ask questions, or offer support to others in the community.') }}</p>
+                    <a href="{{ url_for('community.index') }}" class="btn btn-wl-primary btn-sm mt-2">{{ _('Write a Post') }}</a>
+                </div>
+                {% endif %}
+                {{ render_history_pagination(posts_pagination, 'posts_page', 'posts') }}
+            </div>
+
+        <!-- Campaigns -->
+        <div class="tab-pane fade {{ 'show active' if tab == 'campaigns' }}" id="tab-campaigns">
+            {% if campaigns %}
+                {% for campaign in campaigns %}
+                <div class="history-item">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <div class="item-title">{{ campaign.title }}</div>
+                            <div class="item-meta">
+                                <span class="status-dot {{ campaign.status }}"></span>
+                                <span>{{ campaign.status|capitalize }}</span>
+                                <span>&middot; {{ _('Goal') }}: &yen;{{ campaign.funding_goal }}</span>
+                                <span>&middot; {{ _('Raised') }}: &yen;{{ campaign.current_amount }}</span>
+                                <span>&middot; {{ campaign.create_at.strftime('%Y-%m-%d') if campaign.create_at else '' }}</span>
+                            </div>
+                        </div>
+                        {% if campaign.is_fully_funded %}
+                        <span class="badge-certified" style="background:var(--color-success);">{{ _('Fully Funded') }}</span>
+                        {% endif %}
+                    </div>
+                    {% if campaign.funding_goal and campaign.funding_goal > 0 %}
+                    <div class="wl-progress">
+                        <div class="wl-progress-bar" style="width: {{ ((campaign.current_amount / campaign.funding_goal) * 100)|round(1) }}%"></div>
+                    </div>
+                    <div style="font-size:0.75rem;color:var(--color-text-secondary);margin-top:4px;">
+                        {{ ((campaign.current_amount / campaign.funding_goal) * 100)|round(1) }}% {{ _('funded') }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i data-lucide="heart" style="width:28px;height:28px;"></i></div>
+                    <h5>{{ _('No campaigns yet') }}</h5>
+                    <p>{{ _('Start a fundraising campaign to receive support from the community.') }}</p>
+                </div>
+            {% endif %}
+            {{ render_history_pagination(campaigns_pagination, 'campaigns_page', 'campaigns') }}
+        </div>
+
+        <!-- Donations -->
+        <div class="tab-pane fade {{ 'show active' if tab == 'donations' }}" id="tab-donations">
+            {% if donations %}
+                {% for donation in donations %}
+                <div class="history-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="item-title" style="color:var(--color-primary);">&yen;{{ donation.amount }}</div>
+                            <div class="item-meta">
+                                {% if donation.campaign %}
+                                <span>{{ _('To') }}: {{ donation.campaign.title }}</span>
+                                <span>&middot;</span>
+                                {% endif %}
+                                {% if donation.message %}
+                                <span>"{{ donation.message }}"</span>
+                                <span>&middot;</span>
+                                {% endif %}
+                                <span>{{ donation.create_at.strftime('%Y-%m-%d %H:%M') if donation.create_at else '' }}</span>
+                            </div>
+                        </div>
+                        {% if donation.is_anonymous %}
+                        <span class="wl-tag" style="font-size:0.7rem;padding:2px 6px;">{{ _('Anonymous') }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i data-lucide="gift" style="width:28px;height:28px;"></i></div>
+                    <h5>{{ _('No donations yet') }}</h5>
+                    <p>{{ _('Every contribution, no matter how small, brings warmth and hope to families in need.') }}</p>
+                </div>
+            {% endif %}
+            {{ render_history_pagination(donations_pagination, 'donations_page', 'donations') }}
+        </div>
+
+        <!-- Respite Requests -->
+        <div class="tab-pane fade {{ 'show active' if tab == 'requests' }}" id="tab-requests">
+            {% if requests %}
+                {% for req in requests %}
+                <div class="history-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="item-title">{{ req.title }}</div>
+                            <div class="item-meta">
+                                <span class="status-dot {{ req.status }}"></span>
+                                <span>{{ req.status|capitalize }}</span>
+                                <span>&middot; {{ req.request_type|capitalize if req.request_type else '' }}</span>
+                                {% if req.city %}
+                                <span>&middot; {{ req.city }}</span>
+                                {% endif %}
+                                <span>&middot; {{ req.create_at.strftime('%Y-%m-%d') if req.create_at else '' }}</span>
+                            </div>
+                        </div>
+                        <span class="wl-tag" style="font-size:0.75rem;padding:2px 8px;">{{ req.category or req.request_type or '' }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i data-lucide="map-pin" style="width:28px;height:28px;"></i></div>
+                    <h5>{{ _('No respite requests yet') }}</h5>
+                    <p>{{ _('Need help? Submit a respite request and connect with volunteers in your area.') }}</p>
+                </div>
+            {% endif %}
+            {{ render_history_pagination(requests_pagination, 'requests_page', 'requests') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

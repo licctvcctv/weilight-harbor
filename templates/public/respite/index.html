@@ -1,0 +1,235 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Respite Station') }} - Weilight Harbor{% endblock %}
+{% block extra_css %}
+<style>
+  /* Override footer for full-page map */
+  .wl-footer { display: none; }
+
+  /* Mobile bottom sheet behavior */
+  @media (max-width: 767.98px) {
+    .map-sidebar {
+      position: fixed !important;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: auto !important;
+      width: 100% !important;
+      max-height: 50vh;
+      min-height: 60px;
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+      z-index: 20;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .map-sidebar.collapsed {
+      max-height: 60px;
+    }
+    .map-sidebar::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 4px;
+      background: var(--color-border);
+      border-radius: 2px;
+      margin: 8px auto;
+      cursor: grab;
+    }
+    .map-sidebar .p-3.border-bottom {
+      padding-top: 0.25rem !important;
+    }
+    #requestList {
+      overflow-y: auto;
+      max-height: calc(50vh - 180px);
+    }
+    #sidebarToggle {
+      display: none !important;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Pass auth info to JS -->
+<script>
+    window.currentUserId = {{ current_user.id if current_user.is_authenticated else 0 }};
+    window.isCertified = {{ 'true' if current_user.is_authenticated and current_user.is_certified else 'false' }};
+</script>
+
+<div class="map-container">
+    <!-- Left Sidebar / Drawer -->
+    <div class="map-sidebar" id="mapSidebar">
+        <div class="p-3 border-bottom">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0" style="font-weight:600;">{{ _('Respite Station') }}</h5>
+                <button class="btn btn-sm btn-wl-ghost" onclick="toggleSidebar()">
+                    <i data-lucide="panel-left-close" style="width:20px;height:20px"></i>
+                </button>
+            </div>
+            <!-- Filter Buttons -->
+            <div class="d-flex gap-2 mb-3">
+                <button class="wl-tag active" data-filter="all" onclick="filterPins('all', this)">{{ _('All') }}</button>
+                <button class="wl-tag" data-filter="service" onclick="filterPins('service', this)" style="border-color: #E8913A;">&#x1F7E0; {{ _('Need Help') }}</button>
+                <button class="wl-tag" data-filter="equipment" onclick="filterPins('equipment', this)" style="border-color: #5B9A6B;">&#x1F7E2; {{ _('Equipment') }}</button>
+            </div>
+            <!-- Radius Filter -->
+            <div class="d-flex gap-2 mb-3">
+                <span class="small text-muted" style="line-height:2;">{{ _('Radius:') }}</span>
+                <button class="wl-tag" onclick="setRadiusZoom(3, this)">3km</button>
+                <button class="wl-tag" onclick="setRadiusZoom(5, this)">5km</button>
+                <button class="wl-tag active" onclick="setRadiusZoom(10, this)">10km</button>
+                <button class="wl-tag" onclick="setRadiusZoom(20, this)">20km</button>
+            </div>
+            <!-- Search -->
+            <input type="text" class="form-control wl-form-control" placeholder="{{ _('Search location...') }}" id="locationSearch">
+        </div>
+
+        <!-- Request List -->
+        <div id="requestList" class="p-3">
+            <p class="text-muted small">{{ _('Loading nearby requests...') }}</p>
+        </div>
+    </div>
+
+    <!-- Sidebar Toggle (when collapsed) -->
+    <button class="btn btn-wl-primary position-absolute" id="sidebarToggle"
+            style="top:1rem;left:1rem;z-index:15;display:none;border-radius:var(--radius-full);"
+            onclick="toggleSidebar()">
+        <i data-lucide="panel-left-open" style="width:20px;height:20px"></i>
+    </button>
+
+    <!-- Map -->
+    <div id="mapView" style="width:100%;height:100%;"></div>
+
+    <!-- Floating Action Buttons -->
+    {% if current_user.is_authenticated and current_user.is_certified %}
+    <div class="position-absolute" style="bottom:2rem;right:2rem;z-index:15;display:flex;flex-direction:column;gap:0.75rem;">
+        <button class="btn btn-wl-primary" style="border-radius:var(--radius-full);padding:0.75rem 1.25rem;box-shadow:var(--shadow-lg);"
+                data-bs-toggle="modal" data-bs-target="#createRequestModal">
+            <i data-lucide="plus" style="width:18px;height:18px"></i> {{ _('Post Request') }}
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Info Window Template (hidden, cloned by JS) -->
+<template id="infoWindowTemplate">
+    <div class="wl-card" style="max-width:300px;border:none;">
+        <div class="card-body p-3">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="badge" id="iwTypeBadge"></span>
+                <span class="badge badge-certified" id="iwCertBadge" style="display:none;">&#x2713; Verified</span>
+            </div>
+            <h6 class="mb-1" id="iwTitle"></h6>
+            <p class="small text-muted mb-2" id="iwUser"></p>
+            <p class="small mb-2" id="iwDesc"></p>
+            <p class="small text-muted mb-3"><i data-lucide="clock" style="width:14px;height:14px"></i> <span id="iwTime"></span></p>
+            <div id="iwActions"></div>
+        </div>
+    </div>
+</template>
+
+<!-- Create Request Modal -->
+<div class="modal fade" id="createRequestModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:var(--radius-xl);">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">{{ _('Post a Request') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Type Selector Cards -->
+                <div class="mb-3">
+                    <label class="form-label small fw-medium">{{ _('What would you like to post?') }}</label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="wl-card text-center p-3 type-option active" data-type="service" onclick="selectReqType('service', this)" style="cursor:pointer;border:2px solid var(--color-primary);transition:all 0.2s">
+                                <input type="radio" name="req_type" value="service" checked class="d-none">
+                                <div style="font-size:2rem;margin-bottom:0.5rem">&#x1F7E0;</div>
+                                <div class="fw-medium" style="font-size:0.9375rem">{{ _('I Need Help') }}</div>
+                                <div class="small text-muted">{{ _('Request caregiving or volunteer service') }}</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="wl-card text-center p-3 type-option" data-type="equipment" onclick="selectReqType('equipment', this)" style="cursor:pointer;border:2px solid var(--color-border);transition:all 0.2s">
+                                <input type="radio" name="req_type" value="equipment" class="d-none">
+                                <div style="font-size:2rem;margin-bottom:0.5rem">&#x1F7E2;</div>
+                                <div class="fw-medium" style="font-size:0.9375rem">{{ _('I Have Equipment') }}</div>
+                                <div class="small text-muted">{{ _('Lend medical equipment to others') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-medium">{{ _('Title') }}</label>
+                    <input type="text" id="reqTitle" class="form-control wl-form-control" placeholder="{{ _('Brief description of your need') }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small fw-medium">{{ _('Details') }}</label>
+                    <textarea id="reqDesc" class="form-control wl-form-control" rows="3" placeholder="{{ _('Provide more details...') }}"></textarea>
+                </div>
+
+                <!-- Service-specific fields -->
+                <div id="serviceFields">
+                    <div class="mb-3">
+                        <label class="form-label small fw-medium">{{ _('Service Category') }}</label>
+                        <select id="reqCategory" class="form-select wl-form-control">
+                            <option value="companionship">{{ _('Companionship') }}</option>
+                            <option value="daily_care">{{ _('Daily Care') }}</option>
+                            <option value="medical_watch">{{ _('Medical Watch') }}</option>
+                            <option value="errands">{{ _('Errands') }}</option>
+                            <option value="other">{{ _('Other') }}</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-medium">{{ _('Time Needed') }}</label>
+                        <input type="text" id="reqTime" class="form-control wl-form-control" placeholder="{{ _('e.g., Saturday afternoon, 4 hours') }}">
+                    </div>
+                </div>
+
+                <!-- Equipment-specific fields -->
+                <div id="equipmentFields" style="display:none">
+                    <div class="mb-3">
+                        <label class="form-label small fw-medium">{{ _('Equipment Type') }}</label>
+                        <select id="reqEquipCategory" class="form-select wl-form-control">
+                            <option value="wheelchair">{{ _('Wheelchair') }}</option>
+                            <option value="oxygen">{{ _('Oxygen Equipment') }}</option>
+                            <option value="hospital_bed">{{ _('Hospital Bed') }}</option>
+                            <option value="walker">{{ _('Walker') }}</option>
+                            <option value="other">{{ _('Other') }}</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-medium">{{ _('Condition') }}</label>
+                        <select id="reqCondition" class="form-select wl-form-control">
+                            <option value="good">{{ _('Good') }}</option>
+                            <option value="fair">{{ _('Fair') }}</option>
+                            <option value="worn">{{ _('Worn but usable') }}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label small fw-medium">{{ _('City') }}</label>
+                    <input type="text" id="reqCity" class="form-control wl-form-control" placeholder="{{ _('e.g., Beijing') }}">
+                </div>
+                <p class="small text-muted">&#x1F4CD; {{ _('Click on the map to set the location after posting.') }}</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button class="btn btn-wl-secondary" data-bs-dismiss="modal">{{ _('Cancel') }}</button>
+                <button class="btn btn-wl-primary" onclick="submitRequest()">{{ _('Post Request') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Use Leaflet + OpenStreetMap (free, no API key needed) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="{{ url_for('static', filename='public/js/respite.js') }}"></script>
+{% endblock %}

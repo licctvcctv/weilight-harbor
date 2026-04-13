@@ -1,0 +1,2298 @@
+# Translations template for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-04-13 17:03+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: templates/public/_footer.html:9
+msgid ""
+"A warm harbor for caregivers and families facing serious illness. You are"
+" not alone."
+msgstr ""
+
+#: templates/public/_footer.html:12
+msgid "Platform"
+msgstr ""
+
+#: templates/public/_footer.html:14 templates/public/_navbar.html:27
+#: templates/public/about.html:126
+#: templates/public/community/create_post.html:2
+#: templates/public/community/create_post.html:222
+#: templates/public/community/index.html:2
+#: templates/public/community/index.html:182
+#: templates/public/community/post_detail.html:2
+#: templates/public/community/post_detail.html:195
+#: templates/public/help.html:126
+msgid "Community"
+msgstr ""
+
+#: templates/public/_footer.html:15 templates/public/_navbar.html:30
+#: templates/public/crowdfunding/detail.html:2
+#: templates/public/crowdfunding/detail.html:377
+#: templates/public/crowdfunding/index.html:2 templates/public/help.html:158
+#: templates/public/terms.html:96
+msgid "Crowdfunding"
+msgstr ""
+
+#: templates/public/_footer.html:16 templates/public/_navbar.html:38
+#: templates/public/respite/index.html:2 templates/public/respite/index.html:64
+msgid "Respite Station"
+msgstr ""
+
+#: templates/public/_footer.html:20
+msgid "Support"
+msgstr ""
+
+#: templates/public/_footer.html:22 templates/public/about.html:2
+msgid "About"
+msgstr ""
+
+#: templates/public/_footer.html:23
+msgid "Help"
+msgstr ""
+
+#: templates/public/_footer.html:24
+msgid "Privacy"
+msgstr ""
+
+#: templates/public/_footer.html:25
+msgid "Terms"
+msgstr ""
+
+#: templates/public/_footer.html:29
+msgid "Crisis Support"
+msgstr ""
+
+#: templates/public/_footer.html:30
+msgid "If you or someone you know is in crisis:"
+msgstr ""
+
+#: templates/public/_footer.html:31
+msgid "National Crisis Hotline"
+msgstr ""
+
+#: templates/public/_footer.html:37
+msgid "Made with care."
+msgstr ""
+
+#: templates/public/_navbar.html:24
+msgid "Home"
+msgstr ""
+
+#: templates/public/_navbar.html:34
+msgid "Life Journal"
+msgstr ""
+
+#: templates/public/_navbar.html:46
+msgid "Search"
+msgstr ""
+
+#: templates/public/_navbar.html:51
+msgid "Search..."
+msgstr ""
+
+#: templates/public/_navbar.html:62
+msgid "Notifications"
+msgstr ""
+
+#: templates/public/_navbar.html:76 templates/public/user/profile.html:2
+msgid "My Profile"
+msgstr ""
+
+#: templates/public/_navbar.html:79
+msgid "My Journal"
+msgstr ""
+
+#: templates/public/_navbar.html:82 templates/public/user/profile.html:231
+msgid "My Donations"
+msgstr ""
+
+#: templates/public/_navbar.html:85 templates/public/user/profile.html:225
+msgid "My Campaigns"
+msgstr ""
+
+#: templates/public/_navbar.html:88
+#: templates/public/user/certification_status.html:2
+#: templates/public/user/certification_status.html:144
+#: templates/public/user/profile.html:198
+msgid "Certification Status"
+msgstr ""
+
+#: templates/public/_navbar.html:91 templates/public/user/settings.html:2
+#: templates/public/user/settings.html:79
+msgid "Settings"
+msgstr ""
+
+#: templates/public/_navbar.html:96
+msgid "Admin Panel"
+msgstr ""
+
+#: templates/public/_navbar.html:103
+msgid "Logout"
+msgstr ""
+
+#: templates/public/_navbar.html:111 templates/public/auth/login.html:2
+#: templates/public/auth/login.html:23 templates/public/auth/register.html:37
+msgid "Login"
+msgstr ""
+
+#: templates/public/_navbar.html:114 templates/public/index.html:16
+msgid "Join the Harbor"
+msgstr ""
+
+#: templates/public/_sensitive_modal.html:6
+msgid "We noticed your words may reflect a difficult moment."
+msgstr ""
+
+#: templates/public/_sensitive_modal.html:7
+msgid "You are not alone. Please know there is help available."
+msgstr ""
+
+#: templates/public/_sensitive_modal.html:10
+msgid "Call Now: Crisis Hotline 400-161-9995"
+msgstr ""
+
+#: templates/public/_sensitive_modal.html:13
+msgid "I'm okay, continue writing"
+msgstr ""
+
+#: templates/public/_sensitive_modal.html:16
+msgid "Talk to the community"
+msgstr ""
+
+#: templates/public/about.html:80
+msgid "About Weilight Harbor"
+msgstr ""
+
+#: templates/public/about.html:81
+msgid ""
+"A warm digital harbor for caregivers and families navigating the journey "
+"of serious illness. Here, no one walks alone."
+msgstr ""
+
+#: templates/public/about.html:89
+msgid "Our Mission"
+msgstr ""
+
+#: templates/public/about.html:91
+msgid ""
+"Weilight Harbor was born from a simple belief: caregivers and families "
+"facing serious illness deserve a safe space to share, connect, and find "
+"support. We provide a platform where empathy flows freely, where stories "
+"illuminate the path for others, and where practical help is always within"
+" reach."
+msgstr ""
+
+#: templates/public/about.html:101
+msgid "Our Values"
+msgstr ""
+
+#: templates/public/about.html:108
+msgid "Compassion"
+msgstr ""
+
+#: templates/public/about.html:109
+msgid ""
+"Every interaction is grounded in empathy and understanding. We listen "
+"without judgment and support without conditions."
+msgstr ""
+
+#: templates/public/about.html:117
+msgid "Safety"
+msgstr ""
+
+#: templates/public/about.html:118
+msgid ""
+"This is a safe harbor. We protect privacy, moderate content sensitively, "
+"and maintain a space free from harm."
+msgstr ""
+
+#: templates/public/about.html:127
+msgid ""
+"Strength comes from connection. We bring together families, volunteers, "
+"and organizations to form a caring community."
+msgstr ""
+
+#: templates/public/about.html:139 templates/public/index.html:53
+msgid "How It Works"
+msgstr ""
+
+#: templates/public/about.html:143
+msgid "Create an Account"
+msgstr ""
+
+#: templates/public/about.html:144
+msgid ""
+"Sign up for free and join our community. Optionally get certified to "
+"unlock more features."
+msgstr ""
+
+#: templates/public/about.html:150
+msgid "Connect and Share"
+msgstr ""
+
+#: templates/public/about.html:151
+msgid ""
+"Share your story in the community, keep a private life journal, or find "
+"support at the respite station."
+msgstr ""
+
+#: templates/public/about.html:157
+msgid "Give and Receive Help"
+msgstr ""
+
+#: templates/public/about.html:158
+msgid ""
+"Launch or support crowdfunding campaigns, volunteer your time, or simply "
+"be there for someone who needs it."
+msgstr ""
+
+#: templates/public/about.html:171
+msgid "Our Team"
+msgstr ""
+
+#: templates/public/about.html:173
+msgid ""
+"Weilight Harbor is built by a small team of designers, developers, and "
+"social workers who have been personally touched by the caregiving "
+"journey. We understand the challenges because we have lived them. Every "
+"feature is crafted with real needs in mind."
+msgstr ""
+
+#: templates/public/about.html:176
+msgid "Join the Community"
+msgstr ""
+
+#: templates/public/about.html:177
+msgid "Get Help"
+msgstr ""
+
+#: templates/public/help.html:2 templates/public/help.html:70
+msgid "Help Center"
+msgstr ""
+
+#: templates/public/help.html:71
+msgid "Find answers to common questions about using Weilight Harbor."
+msgstr ""
+
+#: templates/public/help.html:82
+msgid "Getting Started"
+msgstr ""
+
+#: templates/public/help.html:88
+msgid "How do I create an account?"
+msgstr ""
+
+#: templates/public/help.html:93
+msgid ""
+"Click \"Join the Harbor\" in the top navigation bar. Fill in your "
+"username, email, and password. After registration, you will be "
+"automatically logged in and can start using all basic features right "
+"away."
+msgstr ""
+
+#: templates/public/help.html:100
+msgid "What is certification and do I need it?"
+msgstr ""
+
+#: templates/public/help.html:105
+msgid ""
+"Certification verifies your identity as a family caregiver or volunteer. "
+"While not required for basic features like browsing and posting, "
+"certification unlocks advanced features such as creating crowdfunding "
+"campaigns and builds trust within the community. You can apply from your "
+"profile page."
+msgstr ""
+
+#: templates/public/help.html:112
+msgid "Is the platform free to use?"
+msgstr ""
+
+#: templates/public/help.html:117
+msgid ""
+"Yes, Weilight Harbor is completely free for all users. We are a non-"
+"profit platform dedicated to helping caregivers and families. All "
+"donations through crowdfunding go directly to the campaign recipients."
+msgstr ""
+
+#: templates/public/help.html:132
+msgid "How do I create a post?"
+msgstr ""
+
+#: templates/public/help.html:137
+msgid ""
+"Navigate to the Community page and click \"Create Post.\" You can share "
+"your experiences, ask questions, or offer support. Posts are moderated to"
+" keep the community safe and respectful."
+msgstr ""
+
+#: templates/public/help.html:144
+msgid "Can I post anonymously?"
+msgstr ""
+
+#: templates/public/help.html:149
+msgid ""
+"Yes, you can choose to post anonymously when creating a post. Anonymous "
+"posts will show a generic username to protect your privacy while still "
+"allowing you to share and connect."
+msgstr ""
+
+#: templates/public/help.html:164
+msgid "How do I start a crowdfunding campaign?"
+msgstr ""
+
+#: templates/public/help.html:169
+msgid ""
+"You need to be a certified user to create a campaign. Once certified, go "
+"to the Crowdfunding page and click \"Create Campaign.\" Fill in the "
+"details about the patient, the funding goal, and your story. Campaigns "
+"are reviewed before going live."
+msgstr ""
+
+#: templates/public/help.html:176
+msgid "How are funds distributed?"
+msgstr ""
+
+#: templates/public/help.html:181
+msgid ""
+"This is a demo platform. In a production environment, funds would be "
+"transferred directly to the verified recipient after the campaign ends or"
+" when withdrawal is requested. All transactions would be transparent and "
+"auditable."
+msgstr ""
+
+#: templates/public/help.html:190
+msgid "Account & Privacy"
+msgstr ""
+
+#: templates/public/help.html:196
+msgid "How is my personal information protected?"
+msgstr ""
+
+#: templates/public/help.html:201
+msgid ""
+"We take privacy seriously. Personal information submitted during "
+"certification is encrypted and only accessible to authorized reviewers. "
+"We never share your data with third parties. See our Privacy Policy for "
+"full details."
+msgstr ""
+
+#: templates/public/help.html:208
+msgid "How do I reset my password?"
+msgstr ""
+
+#: templates/public/help.html:213
+msgid ""
+"Click \"Forgot password?\" on the login page and enter your registered "
+"email address. You will receive a password reset link. Note: this is a "
+"demo feature in the current version."
+msgstr ""
+
+#: templates/public/help.html:222
+msgid "Still need help?"
+msgstr ""
+
+#: templates/public/help.html:223
+msgid ""
+"If you could not find an answer to your question, feel free to reach out "
+"to our support team."
+msgstr ""
+
+#: templates/public/auth/register.html:17 templates/public/help.html:225
+#: templates/public/privacy.html:121 templates/public/terms.html:124
+#: templates/public/user/edit_profile.html:100
+msgid "Email"
+msgstr ""
+
+#: templates/public/index.html:3
+msgid "A Harbor of Faint Lights"
+msgstr ""
+
+#: templates/public/index.html:11
+msgid "You are not alone in the dark"
+msgstr ""
+
+#: templates/public/index.html:12
+msgid ""
+"A warm harbor for caregivers and families facing serious illness. Share "
+"your story, find support, and discover that even the faintest light can "
+"guide the way."
+msgstr ""
+
+#: templates/public/index.html:18
+msgid "Browse Stories"
+msgstr ""
+
+#: templates/public/index.html:36
+msgid "Families Supported"
+msgstr ""
+
+#: templates/public/index.html:40
+msgid "Active Campaigns"
+msgstr ""
+
+#: templates/public/index.html:44
+msgid "Funds Raised"
+msgstr ""
+
+#: templates/public/index.html:54
+msgid "Four simple steps to join our caring community"
+msgstr ""
+
+#: templates/public/auth/login.html:26 templates/public/auth/register.html:2
+#: templates/public/index.html:62
+msgid "Register"
+msgstr ""
+
+#: templates/public/index.html:63
+msgid "Create your free account in seconds"
+msgstr ""
+
+#: templates/public/index.html:73 templates/public/user/profile.html:158
+msgid "Get Certified"
+msgstr ""
+
+#: templates/public/index.html:74
+msgid "Verify your caregiver status for full access"
+msgstr ""
+
+#: templates/public/index.html:84
+msgid "Share Your Story"
+msgstr ""
+
+#: templates/public/index.html:85
+msgid "Connect with others who understand"
+msgstr ""
+
+#: templates/public/index.html:95
+msgid "Find Support"
+msgstr ""
+
+#: templates/public/index.html:96
+msgid "Fundraise, find respite, and heal together"
+msgstr ""
+
+#: templates/public/index.html:107
+msgid "Their Stories"
+msgstr ""
+
+#: templates/public/index.html:108
+msgid "Real families, real journeys, real lights"
+msgstr ""
+
+#: templates/public/index.html:132 templates/public/user/history.html:274
+msgid "funded"
+msgstr ""
+
+#: templates/public/index.html:147
+msgid "Medical"
+msgstr ""
+
+#: templates/public/index.html:148
+msgid "Help a Family in Need"
+msgstr ""
+
+#: templates/public/index.html:149
+msgid "Every contribution brings hope to those facing their darkest hours."
+msgstr ""
+
+#: templates/public/index.html:154
+#, python-format
+msgid "%(percent)s%% funded"
+msgstr ""
+
+#: templates/public/index.html:155
+msgid "days left"
+msgstr ""
+
+#: templates/public/index.html:164
+msgid "View All Campaigns"
+msgstr ""
+
+#: templates/public/index.html:173
+msgid "Community Voices"
+msgstr ""
+
+#: templates/public/index.html:174
+msgid "Stories and reflections from our community"
+msgstr ""
+
+#: templates/public/community/create_post.html:402
+#: templates/public/community/index.html:240
+#: templates/public/community/post_detail.html:216
+#: templates/public/crowdfunding/detail.html:455
+#: templates/public/index.html:192 templates/public/user/history.html:233
+#: templates/public/user/history.html:310
+#: templates/public/user/profile.html:313
+msgid "Anonymous"
+msgstr ""
+
+#: templates/public/index.html:202
+msgid "Join the Conversation"
+msgstr ""
+
+#: templates/public/index.html:215
+msgid ""
+"I thought I was the only one awake at 3 AM, crying in the hallway so my "
+"mother wouldn't hear. Then I found this harbor, and discovered a thousand"
+" other lights in the dark."
+msgstr ""
+
+#: templates/public/index.html:217
+msgid "Anonymous Caregiver, 3 years"
+msgstr ""
+
+#: templates/public/privacy.html:2 templates/public/privacy.html:51
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/public/privacy.html:52 templates/public/terms.html:52
+msgid "Last updated"
+msgstr ""
+
+#: templates/public/privacy.html:60
+msgid ""
+"At Weilight Harbor, your privacy is of utmost importance to us. This "
+"Privacy Policy explains how we collect, use, protect, and share your "
+"personal information when you use our platform."
+msgstr ""
+
+#: templates/public/privacy.html:62
+msgid "Information We Collect"
+msgstr ""
+
+#: templates/public/privacy.html:63
+msgid "We collect the following types of information:"
+msgstr ""
+
+#: templates/public/privacy.html:65
+msgid "Account Information"
+msgstr ""
+
+#: templates/public/privacy.html:65
+msgid "Username, email address, and password when you register."
+msgstr ""
+
+#: templates/public/privacy.html:66
+msgid "Profile Information"
+msgstr ""
+
+#: templates/public/privacy.html:66
+msgid "Optional details such as your real name, phone number, bio, and avatar."
+msgstr ""
+
+#: templates/public/privacy.html:67
+msgid "Certification Data"
+msgstr ""
+
+#: templates/public/privacy.html:67
+msgid ""
+"Identity documents, patient information, and medical records submitted "
+"for certification."
+msgstr ""
+
+#: templates/public/privacy.html:68
+msgid "Usage Data"
+msgstr ""
+
+#: templates/public/privacy.html:68
+msgid ""
+"Information about how you interact with our platform, including pages "
+"visited and features used."
+msgstr ""
+
+#: templates/public/community/create_post.html:255
+#: templates/public/privacy.html:69
+msgid "Content"
+msgstr ""
+
+#: templates/public/privacy.html:69
+msgid ""
+"Posts, comments, journal entries, and other content you create on the "
+"platform."
+msgstr ""
+
+#: templates/public/privacy.html:72
+msgid "How We Use Your Information"
+msgstr ""
+
+#: templates/public/privacy.html:74
+msgid "To provide, maintain, and improve our services"
+msgstr ""
+
+#: templates/public/privacy.html:75
+msgid "To verify your identity during the certification process"
+msgstr ""
+
+#: templates/public/privacy.html:76
+msgid "To facilitate crowdfunding campaigns and donations"
+msgstr ""
+
+#: templates/public/privacy.html:77
+msgid "To communicate with you about your account and our services"
+msgstr ""
+
+#: templates/public/privacy.html:78
+msgid "To ensure the safety and security of our community"
+msgstr ""
+
+#: templates/public/privacy.html:79
+msgid "To comply with legal obligations"
+msgstr ""
+
+#: templates/public/privacy.html:82
+msgid "Data Protection"
+msgstr ""
+
+#: templates/public/privacy.html:83
+msgid ""
+"We implement industry-standard security measures to protect your personal"
+" information:"
+msgstr ""
+
+#: templates/public/privacy.html:85
+msgid "Passwords are hashed and never stored in plain text"
+msgstr ""
+
+#: templates/public/privacy.html:86
+msgid "Sensitive certification documents are stored with restricted access"
+msgstr ""
+
+#: templates/public/privacy.html:87
+msgid "All data transmission uses encrypted connections"
+msgstr ""
+
+#: templates/public/privacy.html:88
+msgid "Regular security audits and monitoring"
+msgstr ""
+
+#: templates/public/privacy.html:91
+msgid "Information Sharing"
+msgstr ""
+
+#: templates/public/privacy.html:92
+msgid ""
+"We do not sell, trade, or rent your personal information to third "
+"parties. We may share information only in the following circumstances:"
+msgstr ""
+
+#: templates/public/privacy.html:94
+msgid "With your explicit consent"
+msgstr ""
+
+#: templates/public/privacy.html:95
+msgid "With authorized certification reviewers (certification data only)"
+msgstr ""
+
+#: templates/public/privacy.html:96
+msgid "When required by law or legal process"
+msgstr ""
+
+#: templates/public/privacy.html:97
+msgid "To protect the safety of our users and the public"
+msgstr ""
+
+#: templates/public/privacy.html:100
+msgid "Your Rights"
+msgstr ""
+
+#: templates/public/privacy.html:101
+msgid "You have the right to:"
+msgstr ""
+
+#: templates/public/privacy.html:103
+msgid "Access and download your personal data"
+msgstr ""
+
+#: templates/public/privacy.html:104
+msgid "Correct inaccurate information"
+msgstr ""
+
+#: templates/public/privacy.html:105
+msgid "Request deletion of your account and data"
+msgstr ""
+
+#: templates/public/privacy.html:106
+msgid "Opt out of non-essential communications"
+msgstr ""
+
+#: templates/public/privacy.html:107
+msgid "Withdraw consent at any time"
+msgstr ""
+
+#: templates/public/privacy.html:110
+msgid "Cookies"
+msgstr ""
+
+#: templates/public/privacy.html:111
+msgid ""
+"We use essential cookies to maintain your session and preferences (such "
+"as language). We do not use tracking cookies or third-party advertising "
+"cookies."
+msgstr ""
+
+#: templates/public/privacy.html:113
+msgid "Children's Privacy"
+msgstr ""
+
+#: templates/public/privacy.html:114
+msgid ""
+"Our platform is not intended for users under the age of 16. We do not "
+"knowingly collect personal information from children."
+msgstr ""
+
+#: templates/public/privacy.html:116
+msgid "Changes to This Policy"
+msgstr ""
+
+#: templates/public/privacy.html:117
+msgid ""
+"We may update this Privacy Policy from time to time. We will notify you "
+"of any significant changes through the platform or via email."
+msgstr ""
+
+#: templates/public/privacy.html:119
+msgid "Contact Us"
+msgstr ""
+
+#: templates/public/privacy.html:120
+msgid ""
+"If you have questions or concerns about this Privacy Policy, please "
+"contact us at:"
+msgstr ""
+
+#: templates/public/terms.html:2 templates/public/terms.html:51
+msgid "Terms of Service"
+msgstr ""
+
+#: templates/public/terms.html:60
+msgid ""
+"Welcome to Weilight Harbor. By accessing or using our platform, you agree"
+" to be bound by these Terms of Service. Please read them carefully."
+msgstr ""
+
+#: templates/public/terms.html:62
+msgid "Acceptance of Terms"
+msgstr ""
+
+#: templates/public/terms.html:63
+msgid ""
+"By creating an account or using Weilight Harbor, you agree to these Terms"
+" of Service and our Privacy Policy. If you do not agree, please do not "
+"use the platform."
+msgstr ""
+
+#: templates/public/terms.html:65
+msgid "Eligibility"
+msgstr ""
+
+#: templates/public/terms.html:66
+msgid ""
+"You must be at least 16 years old to use Weilight Harbor. By using the "
+"platform, you represent that you meet this age requirement."
+msgstr ""
+
+#: templates/public/terms.html:68
+msgid "Account Responsibilities"
+msgstr ""
+
+#: templates/public/terms.html:70
+msgid ""
+"You are responsible for maintaining the security of your account "
+"credentials."
+msgstr ""
+
+#: templates/public/terms.html:71
+msgid ""
+"You must provide accurate information during registration and "
+"certification."
+msgstr ""
+
+#: templates/public/terms.html:72
+msgid "You are responsible for all activity that occurs under your account."
+msgstr ""
+
+#: templates/public/terms.html:73
+msgid "You must notify us immediately of any unauthorized access to your account."
+msgstr ""
+
+#: templates/public/terms.html:76
+msgid "Community Guidelines"
+msgstr ""
+
+#: templates/public/terms.html:77
+msgid "When using Weilight Harbor, you agree to:"
+msgstr ""
+
+#: templates/public/terms.html:79
+msgid "Treat all community members with respect and compassion"
+msgstr ""
+
+#: templates/public/terms.html:80
+msgid "Not post false, misleading, or defamatory content"
+msgstr ""
+
+#: templates/public/terms.html:81
+msgid "Not harass, bully, or threaten other users"
+msgstr ""
+
+#: templates/public/terms.html:82
+msgid "Not share others' personal information without consent"
+msgstr ""
+
+#: templates/public/terms.html:83
+msgid "Not use the platform for commercial advertising or spam"
+msgstr ""
+
+#: templates/public/terms.html:84
+msgid "Not attempt to circumvent security or moderation measures"
+msgstr ""
+
+#: templates/public/terms.html:85
+msgid "Report any content that violates these guidelines"
+msgstr ""
+
+#: templates/public/terms.html:88 templates/public/user/certification.html:2
+#: templates/public/user/certification.html:161
+msgid "Certification"
+msgstr ""
+
+#: templates/public/terms.html:89
+msgid ""
+"The certification process is designed to verify identities and build "
+"community trust. By applying:"
+msgstr ""
+
+#: templates/public/terms.html:91
+msgid "You confirm that all submitted information and documents are authentic"
+msgstr ""
+
+#: templates/public/terms.html:92
+msgid ""
+"You understand that providing false information may result in account "
+"suspension"
+msgstr ""
+
+#: templates/public/terms.html:93
+msgid "You consent to our team reviewing your submitted documents"
+msgstr ""
+
+#: templates/public/terms.html:98
+msgid "Campaign creators must provide truthful and accurate information"
+msgstr ""
+
+#: templates/public/terms.html:99
+msgid "Funds raised must be used for the stated purpose"
+msgstr ""
+
+#: templates/public/terms.html:100
+msgid ""
+"We reserve the right to review, pause, or terminate campaigns that "
+"violate our guidelines"
+msgstr ""
+
+#: templates/public/terms.html:101
+msgid ""
+"Donors understand that contributions are voluntary and at their own "
+"discretion"
+msgstr ""
+
+#: templates/public/terms.html:104
+msgid "Content Ownership"
+msgstr ""
+
+#: templates/public/terms.html:105
+msgid ""
+"You retain ownership of content you create on the platform. By posting "
+"content, you grant Weilight Harbor a non-exclusive license to display and"
+" distribute that content within the platform for the purpose of providing"
+" our services."
+msgstr ""
+
+#: templates/public/terms.html:107
+msgid "Content Moderation"
+msgstr ""
+
+#: templates/public/terms.html:108
+msgid ""
+"We reserve the right to review, edit, or remove any content that violates"
+" these terms or our community guidelines. Content involving sensitive "
+"topics is filtered to maintain a safe environment. We may also employ "
+"automated tools to detect harmful content."
+msgstr ""
+
+#: templates/public/terms.html:110
+msgid "Disclaimer"
+msgstr ""
+
+#: templates/public/terms.html:111
+msgid ""
+"Weilight Harbor is provided \"as is\" without warranties of any kind. We "
+"do not provide medical, legal, or financial advice. Information shared on"
+" the platform is for peer support purposes and should not replace "
+"professional guidance."
+msgstr ""
+
+#: templates/public/terms.html:113
+msgid "Limitation of Liability"
+msgstr ""
+
+#: templates/public/terms.html:114
+msgid ""
+"To the maximum extent permitted by law, Weilight Harbor shall not be "
+"liable for any indirect, incidental, special, or consequential damages "
+"arising from your use of the platform."
+msgstr ""
+
+#: templates/public/terms.html:116
+msgid "Account Termination"
+msgstr ""
+
+#: templates/public/terms.html:117
+msgid ""
+"We reserve the right to suspend or terminate accounts that violate these "
+"terms. You may also delete your account at any time by contacting our "
+"support team."
+msgstr ""
+
+#: templates/public/terms.html:119
+msgid "Changes to Terms"
+msgstr ""
+
+#: templates/public/terms.html:120
+msgid ""
+"We may update these Terms of Service from time to time. Continued use of "
+"the platform after changes constitutes acceptance of the updated terms."
+msgstr ""
+
+#: templates/public/terms.html:122
+msgid "Contact"
+msgstr ""
+
+#: templates/public/terms.html:123
+msgid "For questions about these Terms of Service, please contact us at:"
+msgstr ""
+
+#: templates/public/auth/forgot_password.html:2
+#: templates/public/auth/forgot_password.html:9
+msgid "Forgot Password"
+msgstr ""
+
+#: templates/public/auth/forgot_password.html:10
+msgid "Enter your email address and we will send you a reset link"
+msgstr ""
+
+#: templates/public/auth/forgot_password.html:14
+msgid ""
+"This is a demo feature. No actual email will be sent, but the flow is "
+"fully functional."
+msgstr ""
+
+#: templates/public/auth/forgot_password.html:19
+msgid "Email Address"
+msgstr ""
+
+#: templates/public/auth/forgot_password.html:20
+msgid "Enter your registered email"
+msgstr ""
+
+#: templates/public/auth/forgot_password.html:24
+msgid "Send Reset Link"
+msgstr ""
+
+#: templates/public/auth/forgot_password.html:28
+msgid "Back to Login"
+msgstr ""
+
+#: templates/public/auth/login.html:9
+msgid "Welcome Back"
+msgstr ""
+
+#: templates/public/auth/login.html:10
+msgid "Welcome back to the harbor"
+msgstr ""
+
+#: templates/public/auth/login.html:13
+msgid "Username or Email"
+msgstr ""
+
+#: templates/public/auth/login.html:14
+msgid "Enter your username or email"
+msgstr ""
+
+#: templates/public/auth/login.html:17 templates/public/auth/register.html:21
+msgid "Password"
+msgstr ""
+
+#: templates/public/auth/login.html:18
+msgid "Enter your password"
+msgstr ""
+
+#: templates/public/auth/login.html:20
+msgid "Forgot password?"
+msgstr ""
+
+#: templates/public/auth/login.html:26
+msgid "Don't have an account?"
+msgstr ""
+
+#: templates/public/auth/register.html:9
+msgid "Light Your First Light"
+msgstr ""
+
+#: templates/public/auth/register.html:10
+msgid "Join our caring community"
+msgstr ""
+
+#: templates/public/auth/register.html:13
+msgid "Username"
+msgstr ""
+
+#: templates/public/auth/register.html:14
+msgid "Choose a username"
+msgstr ""
+
+#: templates/public/auth/register.html:18
+msgid "Your email address"
+msgstr ""
+
+#: templates/public/auth/register.html:22
+msgid "Create a password"
+msgstr ""
+
+#: templates/public/auth/register.html:25
+msgid "Confirm Password"
+msgstr ""
+
+#: templates/public/auth/register.html:26
+msgid "Confirm your password"
+msgstr ""
+
+#: templates/public/auth/register.html:31
+msgid "I agree to the Terms of Service and Privacy Policy"
+msgstr ""
+
+#: templates/public/auth/register.html:34
+msgid "Create Account"
+msgstr ""
+
+#: templates/public/auth/register.html:37
+msgid "Already have an account?"
+msgstr ""
+
+#: templates/public/community/create_post.html:2
+msgid "Create Post"
+msgstr ""
+
+#: templates/public/community/create_post.html:223
+#: templates/public/community/index.html:188
+#: templates/public/community/index.html:193
+msgid "New Post"
+msgstr ""
+
+#: templates/public/community/create_post.html:229
+msgid "Create a New Post"
+msgstr ""
+
+#: templates/public/community/create_post.html:236
+#: templates/public/crowdfunding/create.html:259
+msgid "Category"
+msgstr ""
+
+#: templates/public/community/create_post.html:236
+msgid "select one or more"
+msgstr ""
+
+#: templates/public/community/create_post.html:247
+#: templates/public/respite/index.html:164
+msgid "Title"
+msgstr ""
+
+#: templates/public/community/create_post.html:249
+msgid "Give your post a title..."
+msgstr ""
+
+#: templates/public/community/create_post.html:257
+msgid "Share your story, thoughts, or questions..."
+msgstr ""
+
+#: templates/public/community/create_post.html:267
+msgid "Images"
+msgstr ""
+
+#: templates/public/community/create_post.html:267
+msgid "optional, max 9"
+msgstr ""
+
+#: templates/public/community/create_post.html:273
+msgid "Click or drag images here"
+msgstr ""
+
+#: templates/public/community/create_post.html:274
+msgid "Supports JPG, PNG, GIF, WebP"
+msgstr ""
+
+#: templates/public/community/create_post.html:286
+msgid "Post Anonymously"
+msgstr ""
+
+#: templates/public/community/create_post.html:287
+msgid ""
+"Your name and avatar will be hidden. Other users will see \"Anonymous\" "
+"instead. Admins can still see your identity for moderation purposes."
+msgstr ""
+
+#: templates/public/community/create_post.html:295
+#: templates/public/respite/index.html:219
+#: templates/public/user/certification.html:362
+#: templates/public/user/edit_profile.html:120
+msgid "Cancel"
+msgstr ""
+
+#: templates/public/community/create_post.html:298
+msgid "Publish"
+msgstr ""
+
+#: templates/public/community/create_post.html:307
+msgid "Preview"
+msgstr ""
+
+#: templates/public/community/create_post.html:312
+msgid "Just now"
+msgstr ""
+
+#: templates/public/community/create_post.html:314
+#: templates/public/community/create_post.html:383
+msgid "Your title will appear here..."
+msgstr ""
+
+#: templates/public/community/create_post.html:315
+#: templates/public/community/create_post.html:388
+msgid "Your content will appear here..."
+msgstr ""
+
+#: templates/public/community/create_post.html:517
+msgid "Some words may be sensitive:"
+msgstr ""
+
+#: templates/public/community/index.html:183
+msgid "Share, support, and connect with others"
+msgstr ""
+
+#: templates/public/community/index.html:213
+msgid "Latest"
+msgstr ""
+
+#: templates/public/community/index.html:218
+msgid "Most Empathized"
+msgstr ""
+
+#: templates/public/community/index.html:223
+msgid "Hot"
+msgstr ""
+
+#: templates/public/community/index.html:251
+#: templates/public/community/post_detail.html:227
+#: templates/public/crowdfunding/detail.html:543
+#: templates/public/user/profile.html:142
+msgid "Certified"
+msgstr ""
+
+#: templates/public/community/index.html:304
+msgid "No posts yet. Be the first to share!"
+msgstr ""
+
+#: templates/public/community/index.html:346
+#: templates/public/community/index.html:430
+msgid "Night Confessions"
+msgstr ""
+
+#: templates/public/community/index.html:354
+#: templates/public/community/index.html:437
+msgid "Night Confessions opens at 21:00"
+msgstr ""
+
+#: templates/public/community/index.html:366
+msgid "Confessions will appear here..."
+msgstr ""
+
+#: templates/public/community/index.html:377
+#: templates/public/community/index.html:444
+msgid "Share your thoughts anonymously..."
+msgstr ""
+
+#: templates/public/community/index.html:381
+#: templates/public/community/index.html:448
+msgid "Send into the night"
+msgstr ""
+
+#: templates/public/community/index.html:403
+#: templates/public/community/index.html:467
+msgid "The night is quiet. Be the first to share."
+msgstr ""
+
+#: templates/public/community/post_detail.html:237
+msgid "Are you sure you want to delete this post?"
+msgstr ""
+
+#: templates/public/community/post_detail.html:240
+#: templates/public/journal/view_entry.html:158
+msgid "Delete"
+msgstr ""
+
+#: templates/public/community/post_detail.html:266
+msgid "Empathy"
+msgstr ""
+
+#: templates/public/community/post_detail.html:270
+msgid "comments"
+msgstr ""
+
+#: templates/public/community/post_detail.html:274
+msgid "views"
+msgstr ""
+
+#: templates/public/community/post_detail.html:282
+#: templates/public/crowdfunding/detail.html:420
+msgid "Comments"
+msgstr ""
+
+#: templates/public/community/post_detail.html:288
+msgid "Share your thoughts and support..."
+msgstr ""
+
+#: templates/public/community/post_detail.html:292
+msgid "Post Comment"
+msgstr ""
+
+#: templates/public/community/post_detail.html:298
+msgid "Log in to comment"
+msgstr ""
+
+#: templates/public/community/post_detail.html:313
+msgid "replying to"
+msgstr ""
+
+#: templates/public/community/post_detail.html:333
+msgid "No comments yet. Be the first to show support!"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:2
+msgid "Create Campaign"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:215
+msgid "Start a Crowdfunding Campaign"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:216
+msgid "Share your story and let the community help."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:223
+#: templates/public/crowdfunding/detail.html:418
+msgid "Story"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:228
+#: templates/public/user/history.html:260
+#: templates/public/user/profile.html:272
+msgid "Goal"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:233
+msgid "Verification"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:238
+msgid "Submit"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:247
+msgid "Tell Your Story"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:249
+msgid "Share the story of the person who needs help."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:252
+msgid "Campaign Title"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:254
+msgid "e.g. Help Xiao Ming fight leukemia"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:255
+msgid "Keep it clear and compelling. Max 200 characters."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:268
+msgid "Description"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:270
+msgid ""
+"Describe the situation, medical condition, treatment needed, and how the "
+"funds will be used..."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:271
+msgid "Be detailed and honest. This helps donors understand the situation."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:275
+msgid "Cover Image"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:281
+msgid "Click or drag to upload cover image"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:282
+msgid "JPG, PNG, or WebP. Recommended: 16:9 ratio."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:288
+msgid "Patient Photo"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:294
+msgid "Click or drag to upload patient photo"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:295
+msgid "Optional. Helps build trust with donors."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:305
+msgid "Set Your Goal"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:307
+msgid "How much do you need to raise?"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:310
+msgid "Funding Goal"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:316
+msgid "Set a realistic goal. Minimum: 100 yuan."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:324
+msgid "Verification Materials"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:326
+msgid "Upload a payment QR code for admin review purposes."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:329
+msgid "Payment QR Code"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:335
+msgid "Click or drag to upload QR code"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:336
+msgid "Optional. WeChat or Alipay QR code."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:346
+msgid ""
+"Your campaign will be reviewed by our team within 24 hours before it "
+"becomes visible to the public. We take privacy seriously and will handle "
+"your information with care."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:354
+msgid "Submit for Review"
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:356
+msgid "You can edit your campaign before it is approved."
+msgstr ""
+
+#: templates/public/crowdfunding/create.html:429
+msgid "Please fill in all required fields. Minimum goal is 100 yuan."
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:386
+msgid ""
+"This campaign is pending review. It will be visible to the public once "
+"approved."
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:391
+msgid "This campaign was rejected."
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:392
+msgid "Reason:"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:402
+#: templates/public/crowdfunding/detail.html:519
+#: templates/public/crowdfunding/index.html:327
+#: templates/public/user/history.html:266
+msgid "Fully Funded"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:419
+#: templates/public/crowdfunding/detail.html:437
+#: templates/public/crowdfunding/detail.html:503
+msgid "Donors"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:428
+msgid "Patient photo"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:469
+msgid "No donations yet. Be the first to help!"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:479
+msgid "Comments coming soon"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:480
+msgid "We are working on adding comments. Stay tuned!"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:490
+msgid "raised of"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:490
+msgid "goal"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:499
+msgid "Funded"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:506
+msgid "Ongoing"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:507
+#: templates/public/user/certification_status.html:205
+msgid "Status"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:514
+msgid "Donate Now"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:523
+msgid "Not Accepting Donations"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:531
+msgid "Copy Link"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:547
+msgid "Campaign organizer"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:565
+msgid "Make a Donation"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:571
+msgid "Choose an amount to donate to"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:580
+msgid "Custom"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:586
+msgid "Enter amount"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:591
+msgid "Leave a message of support (optional)"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:598
+msgid "Donate anonymously"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:603
+msgid "Confirm Donation"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:607
+msgid "This is a simulated donation for demonstration purposes."
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:619
+msgid "Thank You!"
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:621
+msgid "Your kindness brings warmth and hope."
+msgstr ""
+
+#: templates/public/crowdfunding/detail.html:625
+msgid "Done"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:247
+msgid "Every penny is a point of light"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:248
+msgid ""
+"Help families in need. Your donation, no matter how small, brings warmth "
+"and hope to those facing medical hardships."
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:252
+msgid "Search campaigns..."
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:263
+#: templates/public/crowdfunding/index.html:440
+msgid "Start a Campaign"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:266
+msgid "Get certified to start a campaign"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:268
+msgid "Get Certified to Start"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:273
+msgid "Login to Start a Campaign"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:300
+msgid "Sort:"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:303
+msgid "Newest"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:304
+msgid "Most Urgent"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:305
+msgid "By Progress"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:344
+msgid "Verified"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:372
+msgid "Raised:"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:373
+msgid "Goal:"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:380
+msgid "donors"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:384
+msgid "Donate"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:436
+#: templates/public/user/history.html:282
+msgid "No campaigns yet"
+msgstr ""
+
+#: templates/public/crowdfunding/index.html:437
+msgid "Be the first to start a crowdfunding campaign and help someone in need."
+msgstr ""
+
+#: templates/public/journal/view_entry.html:119
+msgid "Back to Timeline"
+msgstr ""
+
+#: templates/public/journal/view_entry.html:144
+msgid "Journal image"
+msgstr ""
+
+#: templates/public/journal/view_entry.html:152
+msgid "Edit"
+msgstr ""
+
+#: templates/public/journal/view_entry.html:155
+msgid "Are you sure you want to delete this entry?"
+msgstr ""
+
+#: templates/public/respite/index.html:71
+msgid "All"
+msgstr ""
+
+#: templates/public/respite/index.html:72
+msgid "Need Help"
+msgstr ""
+
+#: templates/public/respite/index.html:73
+msgid "Equipment"
+msgstr ""
+
+#: templates/public/respite/index.html:77
+msgid "Radius:"
+msgstr ""
+
+#: templates/public/respite/index.html:84
+msgid "Search location..."
+msgstr ""
+
+#: templates/public/respite/index.html:89
+msgid "Loading nearby requests..."
+msgstr ""
+
+#: templates/public/respite/index.html:108
+#: templates/public/respite/index.html:220
+msgid "Post Request"
+msgstr ""
+
+#: templates/public/respite/index.html:136
+msgid "Post a Request"
+msgstr ""
+
+#: templates/public/respite/index.html:142
+msgid "What would you like to post?"
+msgstr ""
+
+#: templates/public/respite/index.html:148
+msgid "I Need Help"
+msgstr ""
+
+#: templates/public/respite/index.html:149
+msgid "Request caregiving or volunteer service"
+msgstr ""
+
+#: templates/public/respite/index.html:156
+msgid "I Have Equipment"
+msgstr ""
+
+#: templates/public/respite/index.html:157
+msgid "Lend medical equipment to others"
+msgstr ""
+
+#: templates/public/respite/index.html:165
+msgid "Brief description of your need"
+msgstr ""
+
+#: templates/public/respite/index.html:168
+#: templates/public/user/profile.html:207
+msgid "Details"
+msgstr ""
+
+#: templates/public/respite/index.html:169
+msgid "Provide more details..."
+msgstr ""
+
+#: templates/public/respite/index.html:175
+msgid "Service Category"
+msgstr ""
+
+#: templates/public/respite/index.html:177
+msgid "Companionship"
+msgstr ""
+
+#: templates/public/respite/index.html:178
+msgid "Daily Care"
+msgstr ""
+
+#: templates/public/respite/index.html:179
+msgid "Medical Watch"
+msgstr ""
+
+#: templates/public/respite/index.html:180
+msgid "Errands"
+msgstr ""
+
+#: templates/public/respite/index.html:181
+#: templates/public/respite/index.html:199
+#: templates/public/user/certification.html:296
+msgid "Other"
+msgstr ""
+
+#: templates/public/respite/index.html:185
+msgid "Time Needed"
+msgstr ""
+
+#: templates/public/respite/index.html:186
+msgid "e.g., Saturday afternoon, 4 hours"
+msgstr ""
+
+#: templates/public/respite/index.html:193
+msgid "Equipment Type"
+msgstr ""
+
+#: templates/public/respite/index.html:195
+msgid "Wheelchair"
+msgstr ""
+
+#: templates/public/respite/index.html:196
+msgid "Oxygen Equipment"
+msgstr ""
+
+#: templates/public/respite/index.html:197
+msgid "Hospital Bed"
+msgstr ""
+
+#: templates/public/respite/index.html:198
+msgid "Walker"
+msgstr ""
+
+#: templates/public/respite/index.html:203
+msgid "Condition"
+msgstr ""
+
+#: templates/public/respite/index.html:205
+msgid "Good"
+msgstr ""
+
+#: templates/public/respite/index.html:206
+msgid "Fair"
+msgstr ""
+
+#: templates/public/respite/index.html:207
+msgid "Worn but usable"
+msgstr ""
+
+#: templates/public/respite/index.html:213
+msgid "City"
+msgstr ""
+
+#: templates/public/respite/index.html:214
+msgid "e.g., Beijing"
+msgstr ""
+
+#: templates/public/respite/index.html:216
+msgid "Click on the map to set the location after posting."
+msgstr ""
+
+#: templates/public/user/certification.html:163
+msgid "Get certified to unlock more features and build trust in the community"
+msgstr ""
+
+#: templates/public/user/certification.html:171
+msgid "Application Under Review"
+msgstr ""
+
+#: templates/public/user/certification.html:173
+msgid ""
+"Your certification application is being reviewed. This usually takes "
+"24-48 hours."
+msgstr ""
+
+#: templates/public/user/certification.html:176
+#: templates/public/user/certification.html:197
+#: templates/public/user/certification_status.html:219
+#: templates/public/user/profile.html:203
+msgid "Type"
+msgstr ""
+
+#: templates/public/user/certification.html:177
+msgid "Name"
+msgstr ""
+
+#: templates/public/user/certification.html:178
+#: templates/public/user/profile.html:204
+msgid "Applied"
+msgstr ""
+
+#: templates/public/user/certification.html:182
+msgid "View Status"
+msgstr ""
+
+#: templates/public/user/certification.html:183
+#: templates/public/user/certification.html:203
+#: templates/public/user/certification_status.html:265
+#: templates/public/user/settings.html:77
+msgid "Back to Profile"
+msgstr ""
+
+#: templates/public/user/certification.html:192
+msgid "Certification Approved!"
+msgstr ""
+
+#: templates/public/user/certification.html:194
+msgid "Congratulations! Your identity has been verified."
+msgstr ""
+
+#: templates/public/user/certification.html:198
+msgid "Verified Name"
+msgstr ""
+
+#: templates/public/user/certification.html:199
+#: templates/public/user/certification_status.html:183
+#: templates/public/user/certification_status.html:211
+msgid "Approved"
+msgstr ""
+
+#: templates/public/user/certification.html:213
+msgid "Previous Application Rejected"
+msgstr ""
+
+#: templates/public/user/certification.html:216
+msgid "Reason"
+msgstr ""
+
+#: templates/public/user/certification.html:218
+msgid "Please review the requirements and try again."
+msgstr ""
+
+#: templates/public/user/certification.html:227
+msgid "Certification Type"
+msgstr ""
+
+#: templates/public/user/certification.html:234
+msgid "Family Member"
+msgstr ""
+
+#: templates/public/user/certification.html:235
+msgid "Family or caregiver of a patient"
+msgstr ""
+
+#: templates/public/user/certification.html:244
+msgid "Volunteer"
+msgstr ""
+
+#: templates/public/user/certification.html:245
+msgid "Volunteer wanting to help families"
+msgstr ""
+
+#: templates/public/user/certification.html:253
+msgid "Personal Information"
+msgstr ""
+
+#: templates/public/user/certification.html:257
+#: templates/public/user/edit_profile.html:86
+msgid "Real Name"
+msgstr ""
+
+#: templates/public/user/certification.html:259
+msgid "Enter your legal name"
+msgstr ""
+
+#: templates/public/user/certification.html:263
+msgid "ID Number"
+msgstr ""
+
+#: templates/public/user/certification.html:265
+msgid "Enter your ID card number"
+msgstr ""
+
+#: templates/public/user/certification.html:269
+msgid "Relationship to Patient"
+msgstr ""
+
+#: templates/public/user/certification.html:271
+msgid "e.g., Parent, Spouse, Child"
+msgstr ""
+
+#: templates/public/user/certification.html:278
+msgid "Patient Information"
+msgstr ""
+
+#: templates/public/user/certification.html:282
+msgid "Patient Name"
+msgstr ""
+
+#: templates/public/user/certification.html:284
+msgid "Enter the patient's name"
+msgstr ""
+
+#: templates/public/user/certification.html:288
+msgid "Patient Illness"
+msgstr ""
+
+#: templates/public/user/certification.html:290
+msgid "Select illness type"
+msgstr ""
+
+#: templates/public/user/certification.html:291
+msgid "Alzheimer's"
+msgstr ""
+
+#: templates/public/user/certification.html:292
+msgid "ALS"
+msgstr ""
+
+#: templates/public/user/certification.html:293
+msgid "Cancer"
+msgstr ""
+
+#: templates/public/user/certification.html:294
+msgid "Rare Disease"
+msgstr ""
+
+#: templates/public/user/certification.html:295
+msgid "Mental Health"
+msgstr ""
+
+#: templates/public/user/certification.html:301
+msgid "Hospital Name"
+msgstr ""
+
+#: templates/public/user/certification.html:303
+msgid "Enter the hospital name"
+msgstr ""
+
+#: templates/public/user/certification.html:307
+msgid "Diagnosis Date"
+msgstr ""
+
+#: templates/public/user/certification.html:315
+msgid "Document Upload"
+msgstr ""
+
+#: templates/public/user/certification.html:319
+msgid "Main Supporting Document"
+msgstr ""
+
+#: templates/public/user/certification.html:323
+msgid "Click to upload ID photo or medical certificate"
+msgstr ""
+
+#: templates/public/user/certification.html:325
+msgid "Max 5MB"
+msgstr ""
+
+#: templates/public/user/certification.html:332
+msgid "Additional Documents"
+msgstr ""
+
+#: templates/public/user/certification.html:332
+msgid "Optional, up to 3"
+msgstr ""
+
+#: templates/public/user/certification.html:338
+msgid "Document"
+msgstr ""
+
+#: templates/public/user/certification.html:351
+msgid "Your privacy is protected"
+msgstr ""
+
+#: templates/public/user/certification.html:352
+msgid ""
+"All personal information is encrypted and stored securely. It will only "
+"be used for identity verification and will never be shared with third "
+"parties."
+msgstr ""
+
+#: templates/public/user/certification.html:360
+msgid "Submit Application"
+msgstr ""
+
+#: templates/public/user/certification_status.html:155
+#: templates/public/user/certification_status.html:227
+msgid "Submitted"
+msgstr ""
+
+#: templates/public/user/certification_status.html:166
+msgid "Under Review"
+msgstr ""
+
+#: templates/public/user/certification_status.html:171
+msgid "Reviewed"
+msgstr ""
+
+#: templates/public/user/certification_status.html:188
+#: templates/public/user/certification_status.html:213
+msgid "Rejected"
+msgstr ""
+
+#: templates/public/user/certification_status.html:193
+msgid "Result"
+msgstr ""
+
+#: templates/public/user/certification_status.html:201
+msgid "Application ID"
+msgstr ""
+
+#: templates/public/user/certification_status.html:209
+msgid "Pending Review"
+msgstr ""
+
+#: templates/public/user/certification_status.html:223
+msgid "Applicant"
+msgstr ""
+
+#: templates/public/user/certification_status.html:232
+msgid "Estimated Review Time"
+msgstr ""
+
+#: templates/public/user/certification_status.html:233
+msgid "hours"
+msgstr ""
+
+#: templates/public/user/certification_status.html:238
+msgid "Reviewed At"
+msgstr ""
+
+#: templates/public/user/certification_status.html:248
+msgid "Rejection Reason"
+msgstr ""
+
+#: templates/public/user/certification_status.html:251
+msgid "No specific reason provided. Please review the requirements and try again."
+msgstr ""
+
+#: templates/public/user/certification_status.html:257
+msgid "Re-apply"
+msgstr ""
+
+#: templates/public/user/certification_status.html:275
+msgid "No Certification Application"
+msgstr ""
+
+#: templates/public/user/certification_status.html:276
+msgid "You have not submitted a certification application yet."
+msgstr ""
+
+#: templates/public/user/certification_status.html:279
+msgid "Apply Now"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:2
+#: templates/public/user/edit_profile.html:71
+#: templates/public/user/profile.html:153
+msgid "Edit Profile"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:72
+msgid "Update your personal information"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:78
+#: templates/public/user/profile.html:135
+msgid "Avatar"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:81
+msgid "Click to change avatar"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:88
+msgid "Enter your real name"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:93
+msgid "Phone"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:95
+msgid "Enter your phone number"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:102
+msgid "Enter your email"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:107
+msgid "Bio"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:109
+msgid "Tell us about yourself..."
+msgstr ""
+
+#: templates/public/user/edit_profile.html:110
+msgid "Max 500 characters"
+msgstr ""
+
+#: templates/public/user/edit_profile.html:117
+msgid "Save Changes"
+msgstr ""
+
+#: templates/public/user/history.html:2 templates/public/user/history.html:172
+msgid "My History"
+msgstr ""
+
+#: templates/public/user/history.html:173
+msgid "Track all your activities and contributions"
+msgstr ""
+
+#: templates/public/user/history.html:184
+#: templates/public/user/profile.html:173
+msgid "Posts"
+msgstr ""
+
+#: templates/public/user/history.html:191
+#: templates/public/user/profile.html:177
+msgid "Campaigns"
+msgstr ""
+
+#: templates/public/user/history.html:198
+#: templates/public/user/profile.html:181
+msgid "Donations"
+msgstr ""
+
+#: templates/public/user/history.html:205
+msgid "Respite Requests"
+msgstr ""
+
+#: templates/public/user/history.html:241
+msgid "No posts yet"
+msgstr ""
+
+#: templates/public/user/history.html:242
+msgid ""
+"Share your story, ask questions, or offer support to others in the "
+"community."
+msgstr ""
+
+#: templates/public/user/history.html:243
+msgid "Write a Post"
+msgstr ""
+
+#: templates/public/user/history.html:261
+#: templates/public/user/profile.html:273
+msgid "Raised"
+msgstr ""
+
+#: templates/public/user/history.html:283
+msgid "Start a fundraising campaign to receive support from the community."
+msgstr ""
+
+#: templates/public/user/history.html:299
+msgid "To"
+msgstr ""
+
+#: templates/public/user/history.html:318
+msgid "No donations yet"
+msgstr ""
+
+#: templates/public/user/history.html:319
+msgid ""
+"Every contribution, no matter how small, brings warmth and hope to "
+"families in need."
+msgstr ""
+
+#: templates/public/user/history.html:350
+msgid "No respite requests yet"
+msgstr ""
+
+#: templates/public/user/history.html:351
+msgid ""
+"Need help? Submit a respite request and connect with volunteers in your "
+"area."
+msgstr ""
+
+#: templates/public/user/profile.html:185
+msgid "Days Active"
+msgstr ""
+
+#: templates/public/user/profile.html:219
+msgid "My Posts"
+msgstr ""
+
+#: templates/public/user/profile.html:253
+#: templates/public/user/profile.html:289
+#: templates/public/user/profile.html:319
+msgid "View All"
+msgstr ""
+
+#: templates/public/user/profile.html:258
+msgid "No posts yet. Share your story with the community!"
+msgstr ""
+
+#: templates/public/user/profile.html:294
+msgid "No campaigns yet. Start one to get support from the community!"
+msgstr ""
+
+#: templates/public/user/profile.html:324
+msgid "No donations yet. Every little bit of kindness matters!"
+msgstr ""
+
+#: templates/public/user/settings.html:85
+msgid "Change Password"
+msgstr ""
+
+#: templates/public/user/settings.html:90
+msgid "Current Password"
+msgstr ""
+
+#: templates/public/user/settings.html:92
+msgid "Enter current password"
+msgstr ""
+
+#: templates/public/user/settings.html:95
+msgid "New Password"
+msgstr ""
+
+#: templates/public/user/settings.html:97
+msgid "At least 6 characters"
+msgstr ""
+
+#: templates/public/user/settings.html:100
+msgid "Confirm New Password"
+msgstr ""
+
+#: templates/public/user/settings.html:102
+msgid "Repeat new password"
+msgstr ""
+
+#: templates/public/user/settings.html:104
+msgid "Passwords do not match."
+msgstr ""
+
+#: templates/public/user/settings.html:108
+msgid "Update Password"
+msgstr ""
+
+#: templates/public/user/settings.html:117
+msgid "Language Preference"
+msgstr ""
+
+#: templates/public/user/settings.html:119
+msgid "Choose your preferred language for the interface."
+msgstr ""
+
+#: templates/public/user/settings.html:136
+msgid "Account"
+msgstr ""
+
+#: templates/public/user/settings.html:138
+msgid ""
+"Once your account is deleted, all data will be permanently removed. This "
+"action cannot be undone."
+msgstr ""
+
+#: templates/public/user/settings.html:141
+msgid "Delete Account"
+msgstr ""
+
+#: templates/public/user/settings.html:143
+msgid "Please contact admin to delete your account."
+msgstr ""
+

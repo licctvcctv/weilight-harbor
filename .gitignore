@@ -1,0 +1,15 @@
+venv/
+__pycache__/
+*.pyc
+*.db
+.env
+*.mo
+references/
+product_design.md
+*.pdf
+*.docx
+
+# Large admin vendor files (download separately)
+static/admin/component/pear/module/echarts.js
+static/admin/component/pear/module/tinymce/
+static/admin/component/layui/layui.js

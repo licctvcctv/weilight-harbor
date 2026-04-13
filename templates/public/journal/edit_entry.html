@@ -1,0 +1,178 @@
+{% extends 'public/base.html' %}
+{% block title %}Edit Entry - Life Journal - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+.edit-entry-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.edit-form .form-label {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+.content-textarea {
+    min-height: 200px;
+    resize: vertical;
+    line-height: 1.8;
+}
+
+/* Mood Selector */
+.mood-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+.mood-selector input[type="radio"] {
+    display: none;
+}
+.mood-selector label {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--color-bg-card);
+}
+.mood-selector label:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+    transform: scale(1.1);
+}
+.mood-selector input[type="radio"]:checked + label {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+    box-shadow: 0 0 0 3px rgba(232,145,58,0.2);
+    transform: scale(1.1);
+}
+
+/* Existing images */
+.existing-images {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+.existing-images img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="edit-entry-container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb" style="font-size:0.875rem">
+                <li class="breadcrumb-item"><a href="{{ url_for('journal.timeline') }}" style="color:var(--color-text-secondary);text-decoration:none">Life Journal</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit Entry</li>
+            </ol>
+        </nav>
+
+        <div class="wl-card">
+            <div class="card-body" style="padding:2rem">
+                <h2 style="font-size:1.375rem;font-weight:700;margin-bottom:1.5rem">Edit Journal Entry</h2>
+
+                <form class="edit-form" method="POST" action="{{ url_for('journal.edit_entry', entry_id=entry.id) }}">
+
+                    <!-- Date (read-only display) -->
+                    <div class="mb-4">
+                        <label class="form-label">Date</label>
+                        <div style="padding:0.75rem 1rem;background:var(--color-bg-subtle);border-radius:var(--radius-md);color:var(--color-text-secondary);font-size:0.9375rem">
+                            {{ entry.entry_date.strftime('%B %d, %Y') if entry.entry_date else 'No date' }}
+                        </div>
+                    </div>
+
+                    <!-- Mood -->
+                    <div class="mb-4">
+                        <label class="form-label">How are you feeling?</label>
+                        <div class="mood-selector" id="moodSelector">
+                            <input type="radio" name="mood" id="mood1" value="&#128543;" {{ 'checked' if entry.mood == '\U0001f61f' else '' }}>
+                            <label for="mood1" title="Sad">&#128543;</label>
+
+                            <input type="radio" name="mood" id="mood2" value="&#128533;" {{ 'checked' if entry.mood == '\U0001f615' else '' }}>
+                            <label for="mood2" title="Worried">&#128533;</label>
+
+                            <input type="radio" name="mood" id="mood3" value="&#128528;" {{ 'checked' if entry.mood == '\U0001f610' else '' }}>
+                            <label for="mood3" title="Neutral">&#128528;</label>
+
+                            <input type="radio" name="mood" id="mood4" value="&#128578;" {{ 'checked' if entry.mood == '\U0001f642' else '' }}>
+                            <label for="mood4" title="Good">&#128578;</label>
+
+                            <input type="radio" name="mood" id="mood5" value="&#128522;" {{ 'checked' if entry.mood == '\U0001f60a' else '' }}>
+                            <label for="mood5" title="Great">&#128522;</label>
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <div class="mb-4">
+                        <label class="form-label" for="entryTitle">Title <span style="font-weight:400;color:var(--color-text-disabled)">(optional)</span></label>
+                        <input type="text" class="wl-form-control" id="entryTitle" name="title"
+                               value="{{ entry.title or '' }}"
+                               placeholder="Give this moment a name..." maxlength="200" style="width:100%">
+                    </div>
+
+                    <!-- Content -->
+                    <div class="mb-4">
+                        <label class="form-label" for="entryContent">What happened?</label>
+                        <textarea class="wl-form-control content-textarea" id="entryContent" name="content"
+                                  placeholder="Write freely..." style="width:100%">{{ entry.content or '' }}</textarea>
+                    </div>
+
+                    <!-- Existing Images (display only) -->
+                    {% if entry.parsed_images %}
+                    <div class="mb-4">
+                        <label class="form-label">Attached Photos</label>
+                        <div class="existing-images">
+                            {% for img in entry.parsed_images %}
+                            <img src="{{ img }}" alt="Journal image" loading="lazy">
+                            {% endfor %}
+                        </div>
+                        <div style="font-size:0.8125rem;color:var(--color-text-disabled)">Photos cannot be changed after creation.</div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Submit -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('journal.timeline') }}" class="btn btn-wl-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-wl-primary">
+                            <i data-lucide="save" style="width:16px;height:16px;vertical-align:-2px"></i>
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='public/js/journal.js') }}"></script>
+<script>
+    lucide.createIcons();
+    // Pre-select mood if stored value matches
+    const moodInputs = document.querySelectorAll('.mood-selector input[type="radio"]');
+    const storedMood = "{{ entry.mood or '' }}";
+    if (storedMood) {
+        moodInputs.forEach(input => {
+            // Compare the actual rendered character
+            const label = document.querySelector('label[for="' + input.id + '"]');
+            if (label && label.textContent.trim() === storedMood.trim()) {
+                input.checked = true;
+            }
+        });
+    }
+</script>
+{% endblock %}

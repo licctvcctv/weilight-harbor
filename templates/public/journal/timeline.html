@@ -1,0 +1,374 @@
+{% extends 'public/base.html' %}
+{% block title %}Life Journal - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+.journal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.journal-header .header-left h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+.journal-header .header-left .subtitle {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+}
+.journal-header .header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+.year-select {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9375rem;
+    background: var(--color-bg-card);
+    color: var(--color-text-primary);
+    cursor: pointer;
+}
+.year-select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(232,145,58,0.15);
+}
+
+/* Month pills */
+.month-pills {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+}
+.month-pills::-webkit-scrollbar {
+    height: 4px;
+}
+.month-pills::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 2px;
+}
+.month-pill {
+    flex-shrink: 0;
+    padding: 0.375rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+.month-pill:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+.month-pill.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+/* Annual Film Banner */
+.annual-film-banner {
+    background: linear-gradient(135deg, #2D2A26 0%, #4A3728 100%);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem 2rem;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.annual-film-banner .banner-text h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+}
+.annual-film-banner .banner-text p {
+    opacity: 0.8;
+    font-size: 0.875rem;
+    margin: 0;
+}
+.annual-film-banner .btn-film {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+.annual-film-banner .btn-film:hover {
+    background: var(--color-primary-dark);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+}
+.empty-state .seedling {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    display: block;
+}
+.empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+.empty-state p {
+    color: var(--color-text-secondary);
+    margin-bottom: 1.5rem;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Timeline enhancements */
+.timeline-card .card-body {
+    padding: 1.25rem;
+    position: relative;
+}
+.timeline-card .entry-date-badge {
+    display: inline-block;
+    background: var(--color-primary-bg);
+    color: var(--color-primary-dark);
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+.timeline-card .entry-mood {
+    font-size: 1.25rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+.timeline-card .entry-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin-bottom: 0.375rem;
+    color: var(--color-text-primary);
+}
+.timeline-card .entry-content {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+.timeline-card .entry-images {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+.timeline-card .entry-images img {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+}
+.timeline-card .entry-actions {
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+.timeline-card:hover .entry-actions {
+    opacity: 1;
+}
+.timeline-card .entry-actions a,
+.timeline-card .entry-actions button {
+    background: var(--color-bg-subtle);
+    border: none;
+    border-radius: var(--radius-sm);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+.timeline-card .entry-actions a:hover,
+.timeline-card .entry-actions button:hover {
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+}
+.timeline-card .entry-actions button.delete-btn:hover {
+    background: #fde8e8;
+    color: var(--color-error);
+}
+
+@media (max-width: 768px) {
+    .timeline-card .entry-actions {
+        opacity: 1;
+    }
+    .journal-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="journal-header">
+        <div class="header-left">
+            <h1>Life Journal</h1>
+            <div class="subtitle">Your private space to record every small light</div>
+        </div>
+        <div class="header-right">
+            <select class="year-select" id="yearSelect" onchange="location.href='{{ url_for('journal.timeline') }}?year=' + this.value">
+                {% for y in available_years %}
+                <option value="{{ y }}" {{ 'selected' if y == current_year else '' }}>{{ y }}</option>
+                {% endfor %}
+            </select>
+            <a href="{{ url_for('journal.create_entry') }}" class="btn btn-wl-primary">
+                <i data-lucide="plus" style="width:16px;height:16px;vertical-align:-2px"></i>
+                New Entry
+            </a>
+        </div>
+    </div>
+
+    <!-- Month Filter Pills -->
+    {% if available_months %}
+    <div class="month-pills">
+        <a href="{{ url_for('journal.timeline', year=current_year) }}"
+           class="month-pill {{ 'active' if current_month == 0 else '' }}">All</a>
+        {% set month_names = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %}
+        {% for m in available_months %}
+        <a href="{{ url_for('journal.timeline', year=current_year, month=m) }}"
+           class="month-pill {{ 'active' if current_month == m else '' }}">{{ month_names[m] }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if entries|length == 0 %}
+    <!-- Empty State -->
+    <div class="empty-state">
+        <span class="seedling">🌱</span>
+        <h3>Your journal is waiting</h3>
+        <p>Start recording the small moments that matter. Every entry becomes a seed that grows into your story.</p>
+        <a href="{{ url_for('journal.create_entry') }}" class="btn btn-wl-primary">
+            <i data-lucide="edit-3" style="width:16px;height:16px;vertical-align:-2px"></i>
+            Write my first entry
+        </a>
+    </div>
+    {% else %}
+
+    {% if entry_count >= 10 %}
+    <!-- Annual Film Banner -->
+    <div class="annual-film-banner">
+        <div class="banner-text">
+            <h3>Your {{ current_year }} in Review</h3>
+            <p>{{ entry_count }} entries recorded this year. Watch your memories come alive.</p>
+        </div>
+        <a href="{{ url_for('journal.annual_film', year=current_year) }}" class="btn-film">
+            <i data-lucide="play-circle" style="width:18px;height:18px"></i>
+            Watch Annual Film
+        </a>
+    </div>
+    {% endif %}
+
+    <!-- Timeline -->
+    <div class="timeline">
+        {% for entry in entries %}
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="wl-card timeline-card">
+                <div class="card-body">
+                    <!-- Actions (visible on hover) -->
+                    <div class="entry-actions">
+                        <a href="{{ url_for('journal.edit_entry', entry_id=entry.id) }}" title="Edit">
+                            <i data-lucide="pencil" style="width:14px;height:14px"></i>
+                        </a>
+                        <form method="POST" action="{{ url_for('journal.delete_entry', entry_id=entry.id) }}" style="margin:0" onsubmit="return confirm('Delete this entry?')">
+                            <button type="submit" class="delete-btn" title="Delete">
+                                <i data-lucide="trash-2" style="width:14px;height:14px"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <a href="{{ url_for('journal.view_entry', entry_id=entry.id) }}" style="text-decoration:none;color:inherit;display:block">
+                    <!-- Date & Mood -->
+                    <span class="entry-date-badge">
+                        {{ entry.entry_date.strftime('%b %d') if entry.entry_date else '' }}
+                    </span>
+                    {% if entry.mood %}
+                    <span class="entry-mood">{{ entry.mood }}</span>
+                    {% endif %}
+
+                    <!-- Title -->
+                    {% if entry.title %}
+                    <div class="entry-title">{{ entry.title }}</div>
+                    {% endif %}
+
+                    <!-- Content -->
+                    {% if entry.content %}
+                    <div class="entry-content">{{ entry.content }}</div>
+                    {% endif %}
+
+                    <!-- Images -->
+                    {% if entry.parsed_images %}
+                    <div class="entry-images">
+                        {% for img in entry.parsed_images[:4] %}
+                        <img src="{{ img }}" alt="Journal image" loading="lazy">
+                        {% endfor %}
+                        {% if entry.parsed_images|length > 4 %}
+                        <span style="display:flex;align-items:center;color:var(--color-text-secondary);font-size:0.8125rem;">+{{ entry.parsed_images|length - 4 }}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- FAB -->
+<a href="{{ url_for('journal.create_entry') }}" class="wl-fab" title="New Entry">
+    <i data-lucide="plus" style="width:24px;height:24px"></i>
+</a>
+{% endblock %}
+
+{% block extra_js %}
+<script>lucide.createIcons();</script>
+{% endblock %}

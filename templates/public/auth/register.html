@@ -1,0 +1,41 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Register') }} - Weilight Harbor{% endblock %}
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="text-center mb-4" style="color: var(--color-primary);">
+            <i data-lucide="lighthouse" style="width:48px;height:48px"></i>
+        </div>
+        <h4 class="auth-title">{{ _('Light Your First Light') }}</h4>
+        <p class="auth-subtitle">{{ _('Join our caring community') }}</p>
+        <form method="POST" action="/auth/register">
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Username') }}</label>
+                <input type="text" name="username" class="form-control wl-form-control" required minlength="3" maxlength="20" placeholder="{{ _('Choose a username') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Email') }}</label>
+                <input type="email" name="email" class="form-control wl-form-control" required placeholder="{{ _('Your email address') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Password') }}</label>
+                <input type="password" name="password" class="form-control wl-form-control" required minlength="6" placeholder="{{ _('Create a password') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Confirm Password') }}</label>
+                <input type="password" name="confirm_password" class="form-control wl-form-control" required placeholder="{{ _('Confirm your password') }}">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                <label class="form-check-label small" for="agreeTerms">
+                    {{ _('I agree to the Terms of Service and Privacy Policy') }}
+                </label>
+            </div>
+            <button type="submit" class="btn btn-wl-primary w-100 mb-3">{{ _('Create Account') }}</button>
+        </form>
+        <p class="text-center small text-muted">
+            {{ _('Already have an account?') }} <a href="/auth/login">{{ _('Login') }}</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

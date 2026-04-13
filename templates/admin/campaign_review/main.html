@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Campaign Review</title>
+    {% include 'admin/common/header.html' %}
+</head>
+<body class="pear-container">
+{# Filter form #}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form" action="" lay-filter="campaign-query-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">Status</label>
+                <div class="layui-input-inline">
+                    <select name="status">
+                        <option value="">All</option>
+                        <option value="draft">Draft</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="campaign-query">
+                    <i class="layui-icon layui-icon-search"></i>
+                    Search
+                </button>
+                <button type="reset" class="pear-btn pear-btn-md">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    Reset
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{# Table #}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <table id="campaign-table" lay-filter="campaign-table"></table>
+    </div>
+</div>
+</body>
+
+{# Status badge template #}
+<script type="text/html" id="campaign-status">
+    {{ '{{# if(d.status === "draft"){ }}
+    <span class="layui-badge layui-bg-gray">Draft</span>
+    {{# } else if(d.status === "pending"){ }}
+    <span class="layui-badge layui-bg-orange">Pending</span>
+    {{# } else if(d.status === "approved"){ }}
+    <span class="layui-badge layui-bg-green">Approved</span>
+    {{# } else if(d.status === "rejected"){ }}
+    <span class="layui-badge">Rejected</span>
+    {{# } else { }}
+    <span class="layui-badge layui-bg-blue">{{d.status}}</span>
+    {{# } }}'|safe }}
+</script>
+
+{# Cover image preview template #}
+<script type="text/html" id="campaign-cover">
+    {{ '{{# if(d.cover_image){ }}
+    <img src="{{d.cover_image}}" style="width:60px;height:40px;object-fit:cover;cursor:pointer;" onclick="layer.photos({photos:{data:[{src:\\\'{{d.cover_image}}\\\'}]}})">
+    {{# } else { }}
+    <span style="color:#999">N/A</span>
+    {{# } }}'|safe }}
+</script>
+
+{# QR code preview template #}
+<script type="text/html" id="campaign-qr">
+    {{ '{{# if(d.qr_code_url){ }}
+    <img src="{{d.qr_code_url}}" style="width:40px;height:40px;cursor:pointer;" onclick="layer.photos({photos:{data:[{src:\\\'{{d.qr_code_url}}\\\'}]}})">
+    {{# } else { }}
+    <span style="color:#999">N/A</span>
+    {{# } }}'|safe }}
+</script>
+
+{# Funding goal format #}
+<script type="text/html" id="campaign-goal">
+    {{ '{{# var pct = d.funding_goal > 0 ? ((d.current_amount / d.funding_goal) * 100).toFixed(1) : 0; }}
+    <span>${{d.current_amount}} / ${{d.funding_goal}}</span><br>
+    <span style="color:#999;font-size:12px">({{pct}}%)</span>'|safe }}
+</script>
+
+{# Actions template #}
+<script type="text/html" id="campaign-bar">
+    {{ '{{# if(d.status === "pending"){ }}
+    <button class="layui-btn layui-btn-xs" lay-event="approve">Approve</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">Reject</button>
+    {{# } else { }}
+    <span style="color:#999">Reviewed</span>
+    {{# } }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view">Details</button>'|safe }}
+</script>
+
+{# Toolbar #}
+<script type="text/html" id="campaign-toolbar">
+    <button class="pear-btn pear-btn-md" lay-event="refresh">
+        <i class="layui-icon layui-icon-refresh"></i>
+        Refresh
+    </button>
+</script>
+
+{% include 'admin/common/footer.html' %}
+
+<script>
+  layui.use(['table', 'form', 'jquery', 'popup', 'layer'], function () {
+    let table = layui.table
+    let form = layui.form
+    let $ = layui.jquery
+    let popup = layui.popup
+    let layer = layui.layer
+    let MODULE_PATH = '/admin/campaign-review/'
+
+    let cols = [
+      [
+        { title: 'ID', field: 'id', align: 'center', width: 70 },
+        { title: 'Creator', field: 'username', align: 'center', width: 120 },
+        { title: 'Title', field: 'title', align: 'center', minWidth: 180 },
+        { title: 'Category', field: 'category', align: 'center', width: 100 },
+        { title: 'Cover', field: 'cover_image', align: 'center', width: 90, templet: '#campaign-cover' },
+        { title: 'QR Code', field: 'qr_code_url', align: 'center', width: 80, templet: '#campaign-qr' },
+        { title: 'Funding', field: 'funding_goal', align: 'center', width: 160, templet: '#campaign-goal' },
+        { title: 'Status', field: 'status', align: 'center', width: 110, templet: '#campaign-status' },
+        { title: 'Reject Reason', field: 'reject_reason', align: 'center', width: 150 },
+        { title: 'Created', field: 'create_at', align: 'center', width: 150 },
+        { title: 'Actions', toolbar: '#campaign-bar', align: 'center', width: 200, fixed: 'right' }
+      ]
+    ]
+
+    table.render({
+      elem: '#campaign-table',
+      url: MODULE_PATH + 'data',
+      page: true,
+      cols: cols,
+      skin: 'line',
+      toolbar: '#campaign-toolbar',
+      defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'],
+      text: { none: 'No campaign records found' }
+    })
+
+    form.on('submit(campaign-query)', function (data) {
+      table.reload('campaign-table', { where: data.field })
+      return false
+    })
+
+    table.on('toolbar(campaign-table)', function (obj) {
+      if (obj.event === 'refresh') {
+        table.reload('campaign-table')
+      }
+    })
+
+    table.on('tool(campaign-table)', function (obj) {
+      if (obj.event === 'approve') {
+        layer.confirm('Are you sure you want to approve this campaign?', { icon: 3, title: 'Confirm' }, function (index) {
+          layer.close(index)
+          let loading = layer.load()
+          $.ajax({
+            url: MODULE_PATH + 'approve/' + obj.data.id,
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.msg, function () {
+                  table.reload('campaign-table')
+                })
+              } else {
+                popup.failure(result.msg)
+              }
+            }
+          })
+        })
+      } else if (obj.event === 'reject') {
+        layer.prompt({
+          formType: 2,
+          title: 'Please enter the rejection reason',
+          area: ['400px', '150px'],
+          value: ''
+        }, function (value, promptIndex) {
+          layer.close(promptIndex)
+          let loading = layer.load()
+          $.ajax({
+            url: MODULE_PATH + 'reject/' + obj.data.id,
+            data: JSON.stringify({ reason: value }),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.msg, function () {
+                  table.reload('campaign-table')
+                })
+              } else {
+                popup.failure(result.msg)
+              }
+            }
+          })
+        })
+      } else if (obj.event === 'view') {
+        window.open('/crowdfunding/campaign/' + obj.data.id, '_blank')
+      }
+    })
+  })
+</script>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Community Moderation</title>
+    {% include 'admin/common/header.html' %}
+</head>
+<body class="pear-container">
+{# Filter form #}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form" action="" lay-filter="community-query-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">Status</label>
+                <div class="layui-input-inline">
+                    <select name="status">
+                        <option value="">All</option>
+                        <option value="0">Hidden (Pending)</option>
+                        <option value="1">Visible</option>
+                    </select>
+                </div>
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="community-query">
+                    <i class="layui-icon layui-icon-search"></i>
+                    Search
+                </button>
+                <button type="reset" class="pear-btn pear-btn-md">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    Reset
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{# Table #}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <table id="community-table" lay-filter="community-table"></table>
+    </div>
+</div>
+</body>
+
+{# Status badge template #}
+<script type="text/html" id="community-status">
+    {{ '{{# if(d.status === 0){ }}
+    <span class="layui-badge layui-bg-orange">Hidden</span>
+    {{# } else if(d.status === 1){ }}
+    <span class="layui-badge layui-bg-green">Visible</span>
+    {{# } }}'|safe }}
+</script>
+
+{# Anonymous badge template #}
+<script type="text/html" id="community-anonymous">
+    {{ '{{# if(d.is_anonymous){ }}
+    <span class="layui-badge layui-bg-gray">Yes</span>
+    {{# } else { }}
+    <span style="color:#999">No</span>
+    {{# } }}'|safe }}
+</script>
+
+{# Actions template #}
+<script type="text/html" id="community-bar">
+    {{ '{{# if(d.status === 0){ }}
+    <button class="layui-btn layui-btn-xs" lay-event="approve">Approve</button>
+    {{# } else { }}
+    <button class="layui-btn layui-btn-warm layui-btn-xs" lay-event="hide">Hide</button>
+    {{# } }}
+    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">Delete</button>'|safe }}
+</script>
+
+{# Toolbar #}
+<script type="text/html" id="community-toolbar">
+    <button class="pear-btn pear-btn-md" lay-event="refresh">
+        <i class="layui-icon layui-icon-refresh"></i>
+        Refresh
+    </button>
+</script>
+
+{% include 'admin/common/footer.html' %}
+
+<script>
+  layui.use(['table', 'form', 'jquery', 'popup', 'layer'], function () {
+    let table = layui.table
+    let form = layui.form
+    let $ = layui.jquery
+    let popup = layui.popup
+    let layer = layui.layer
+    let MODULE_PATH = '/admin/community/'
+
+    let cols = [
+      [
+        { title: 'ID', field: 'id', align: 'center', width: 70 },
+        { title: 'Author', field: 'username', align: 'center', width: 120 },
+        { title: 'Title', field: 'title', align: 'center', minWidth: 160 },
+        { title: 'Category', field: 'category', align: 'center', width: 110 },
+        { title: 'Content Preview', field: 'content', align: 'center', minWidth: 180 },
+        { title: 'Status', field: 'status', align: 'center', width: 100, templet: '#community-status' },
+        { title: 'Likes', field: 'like_count', align: 'center', width: 80 },
+        { title: 'Comments', field: 'comment_count', align: 'center', width: 90 },
+        { title: 'Date', field: 'create_at', align: 'center', width: 150 },
+        { title: 'Actions', toolbar: '#community-bar', align: 'center', width: 180, fixed: 'right' }
+      ]
+    ]
+
+    table.render({
+      elem: '#community-table',
+      url: MODULE_PATH + 'data',
+      page: true,
+      cols: cols,
+      skin: 'line',
+      toolbar: '#community-toolbar',
+      defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'],
+      text: { none: 'No community posts found' }
+    })
+
+    form.on('submit(community-query)', function (data) {
+      table.reload('community-table', { where: data.field })
+      return false
+    })
+
+    table.on('toolbar(community-table)', function (obj) {
+      if (obj.event === 'refresh') {
+        table.reload('community-table')
+      }
+    })
+
+    table.on('tool(community-table)', function (obj) {
+      if (obj.event === 'approve') {
+        layer.confirm('Approve this post and make it visible?', { icon: 3, title: 'Confirm' }, function (index) {
+          layer.close(index)
+          let loading = layer.load()
+          $.ajax({
+            url: MODULE_PATH + 'approve/' + obj.data.id,
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.msg, function () {
+                  table.reload('community-table')
+                })
+              } else {
+                popup.failure(result.msg)
+              }
+            }
+          })
+        })
+      } else if (obj.event === 'hide') {
+        layer.confirm('Hide this post from public view?', { icon: 3, title: 'Confirm' }, function (index) {
+          layer.close(index)
+          let loading = layer.load()
+          $.ajax({
+            url: MODULE_PATH + 'hide/' + obj.data.id,
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.msg, function () {
+                  table.reload('community-table')
+                })
+              } else {
+                popup.failure(result.msg)
+              }
+            }
+          })
+        })
+      } else if (obj.event === 'delete') {
+        layer.confirm('Are you sure you want to delete this post? This action cannot be undone.', { icon: 2, title: 'Warning' }, function (index) {
+          layer.close(index)
+          let loading = layer.load()
+          $.ajax({
+            url: MODULE_PATH + 'delete/' + obj.data.id,
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'delete',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.msg, function () {
+                  table.reload('community-table')
+                })
+              } else {
+                popup.failure(result.msg)
+              }
+            }
+          })
+        })
+      }
+    })
+  })
+</script>
+</html>

@@ -1,0 +1,233 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Help Center') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .help-hero {
+        background: linear-gradient(135deg, #FDF8F3 0%, #FEF5EB 100%);
+        padding: 4rem 1rem 3rem;
+        text-align: center;
+    }
+    .help-hero h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-bottom: 0.75rem;
+    }
+    .help-content {
+        padding: 3rem 0 4rem;
+    }
+    .faq-section-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin: 2rem 0 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .accordion-button {
+        font-weight: 500;
+        color: var(--color-text-primary);
+        background: white;
+        border-radius: var(--radius-md) !important;
+    }
+    .accordion-button:not(.collapsed) {
+        color: var(--color-primary-dark);
+        background: var(--color-primary-bg);
+        box-shadow: none;
+    }
+    .accordion-button:focus {
+        box-shadow: 0 0 0 2px rgba(242, 184, 114, 0.25);
+        border-color: var(--color-primary);
+    }
+    .accordion-item {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md) !important;
+        margin-bottom: 0.5rem;
+        overflow: hidden;
+    }
+    .accordion-body {
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        font-size: 0.9375rem;
+    }
+    .contact-card {
+        background: linear-gradient(135deg, #FDF8F3 0%, #FEF5EB 100%);
+        border-radius: var(--radius-xl);
+        padding: 2.5rem;
+        text-align: center;
+        margin-top: 3rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="help-hero">
+    <div style="color:var(--color-primary);margin-bottom:1rem;">
+        <i data-lucide="life-buoy" style="width:48px;height:48px;"></i>
+    </div>
+    <h1>{{ _('Help Center') }}</h1>
+    <p style="color:var(--color-text-secondary);max-width:500px;margin:0 auto;">{{ _('Find answers to common questions about using Weilight Harbor.') }}</p>
+</div>
+
+<div class="help-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <!-- Getting Started -->
+                <div class="faq-section-title">
+                    <i data-lucide="rocket" style="width:20px;height:20px;color:var(--color-primary);"></i>
+                    {{ _('Getting Started') }}
+                </div>
+                <div class="accordion" id="faqStarted">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                {{ _('How do I create an account?') }}
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqStarted">
+                            <div class="accordion-body">
+                                {{ _('Click "Join the Harbor" in the top navigation bar. Fill in your username, email, and password. After registration, you will be automatically logged in and can start using all basic features right away.') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                {{ _('What is certification and do I need it?') }}
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqStarted">
+                            <div class="accordion-body">
+                                {{ _('Certification verifies your identity as a family caregiver or volunteer. While not required for basic features like browsing and posting, certification unlocks advanced features such as creating crowdfunding campaigns and builds trust within the community. You can apply from your profile page.') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                {{ _('Is the platform free to use?') }}
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqStarted">
+                            <div class="accordion-body">
+                                {{ _('Yes, Weilight Harbor is completely free for all users. We are a non-profit platform dedicated to helping caregivers and families. All donations through crowdfunding go directly to the campaign recipients.') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community -->
+                <div class="faq-section-title">
+                    <i data-lucide="message-circle" style="width:20px;height:20px;color:var(--color-primary);"></i>
+                    {{ _('Community') }}
+                </div>
+                <div class="accordion" id="faqCommunity">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                {{ _('How do I create a post?') }}
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqCommunity">
+                            <div class="accordion-body">
+                                {{ _('Navigate to the Community page and click "Create Post." You can share your experiences, ask questions, or offer support. Posts are moderated to keep the community safe and respectful.') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                {{ _('Can I post anonymously?') }}
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqCommunity">
+                            <div class="accordion-body">
+                                {{ _('Yes, you can choose to post anonymously when creating a post. Anonymous posts will show a generic username to protect your privacy while still allowing you to share and connect.') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crowdfunding -->
+                <div class="faq-section-title">
+                    <i data-lucide="hand-heart" style="width:20px;height:20px;color:var(--color-primary);"></i>
+                    {{ _('Crowdfunding') }}
+                </div>
+                <div class="accordion" id="faqCrowd">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                                {{ _('How do I start a crowdfunding campaign?') }}
+                            </button>
+                        </h2>
+                        <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqCrowd">
+                            <div class="accordion-body">
+                                {{ _('You need to be a certified user to create a campaign. Once certified, go to the Crowdfunding page and click "Create Campaign." Fill in the details about the patient, the funding goal, and your story. Campaigns are reviewed before going live.') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                                {{ _('How are funds distributed?') }}
+                            </button>
+                        </h2>
+                        <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqCrowd">
+                            <div class="accordion-body">
+                                {{ _('This is a demo platform. In a production environment, funds would be transferred directly to the verified recipient after the campaign ends or when withdrawal is requested. All transactions would be transparent and auditable.') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account & Privacy -->
+                <div class="faq-section-title">
+                    <i data-lucide="lock" style="width:20px;height:20px;color:var(--color-primary);"></i>
+                    {{ _('Account & Privacy') }}
+                </div>
+                <div class="accordion" id="faqPrivacy">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                                {{ _('How is my personal information protected?') }}
+                            </button>
+                        </h2>
+                        <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqPrivacy">
+                            <div class="accordion-body">
+                                {{ _('We take privacy seriously. Personal information submitted during certification is encrypted and only accessible to authorized reviewers. We never share your data with third parties. See our Privacy Policy for full details.') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">
+                                {{ _('How do I reset my password?') }}
+                            </button>
+                        </h2>
+                        <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faqPrivacy">
+                            <div class="accordion-body">
+                                {{ _('Click "Forgot password?" on the login page and enter your registered email address. You will receive a password reset link. Note: this is a demo feature in the current version.') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <div class="contact-card">
+                    <i data-lucide="mail" style="width:36px;height:36px;color:var(--color-primary);margin-bottom:1rem;"></i>
+                    <h4 style="font-weight:600;">{{ _('Still need help?') }}</h4>
+                    <p style="color:var(--color-text-secondary);margin-bottom:1.5rem;">{{ _('If you could not find an answer to your question, feel free to reach out to our support team.') }}</p>
+                    <p style="font-size:0.9375rem;color:var(--color-text-secondary);">
+                        <strong>{{ _('Email') }}:</strong> support@weilightharbor.org
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

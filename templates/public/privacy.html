@@ -1,0 +1,127 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Privacy Policy') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .policy-hero {
+        background: linear-gradient(135deg, #FDF8F3 0%, #FEF5EB 100%);
+        padding: 4rem 1rem 3rem;
+        text-align: center;
+    }
+    .policy-hero h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-bottom: 0.5rem;
+    }
+    .policy-content {
+        padding: 3rem 0 4rem;
+    }
+    .policy-content h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin: 2rem 0 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--color-primary-bg);
+    }
+    .policy-content p, .policy-content li {
+        color: var(--color-text-secondary);
+        font-size: 0.9375rem;
+        line-height: 1.8;
+    }
+    .policy-content ul {
+        padding-left: 1.25rem;
+    }
+    .policy-content li {
+        margin-bottom: 0.5rem;
+    }
+    .last-updated {
+        font-size: 0.875rem;
+        color: var(--color-text-disabled);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="policy-hero">
+    <div style="color:var(--color-primary);margin-bottom:1rem;">
+        <i data-lucide="shield" style="width:48px;height:48px;"></i>
+    </div>
+    <h1>{{ _('Privacy Policy') }}</h1>
+    <p class="last-updated">{{ _('Last updated') }}: 2026-04-01</p>
+</div>
+
+<div class="policy-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <p>{{ _('At Weilight Harbor, your privacy is of utmost importance to us. This Privacy Policy explains how we collect, use, protect, and share your personal information when you use our platform.') }}</p>
+
+                <h2>1. {{ _('Information We Collect') }}</h2>
+                <p>{{ _('We collect the following types of information:') }}</p>
+                <ul>
+                    <li><strong>{{ _('Account Information') }}:</strong> {{ _('Username, email address, and password when you register.') }}</li>
+                    <li><strong>{{ _('Profile Information') }}:</strong> {{ _('Optional details such as your real name, phone number, bio, and avatar.') }}</li>
+                    <li><strong>{{ _('Certification Data') }}:</strong> {{ _('Identity documents, patient information, and medical records submitted for certification.') }}</li>
+                    <li><strong>{{ _('Usage Data') }}:</strong> {{ _('Information about how you interact with our platform, including pages visited and features used.') }}</li>
+                    <li><strong>{{ _('Content') }}:</strong> {{ _('Posts, comments, journal entries, and other content you create on the platform.') }}</li>
+                </ul>
+
+                <h2>2. {{ _('How We Use Your Information') }}</h2>
+                <ul>
+                    <li>{{ _('To provide, maintain, and improve our services') }}</li>
+                    <li>{{ _('To verify your identity during the certification process') }}</li>
+                    <li>{{ _('To facilitate crowdfunding campaigns and donations') }}</li>
+                    <li>{{ _('To communicate with you about your account and our services') }}</li>
+                    <li>{{ _('To ensure the safety and security of our community') }}</li>
+                    <li>{{ _('To comply with legal obligations') }}</li>
+                </ul>
+
+                <h2>3. {{ _('Data Protection') }}</h2>
+                <p>{{ _('We implement industry-standard security measures to protect your personal information:') }}</p>
+                <ul>
+                    <li>{{ _('Passwords are hashed and never stored in plain text') }}</li>
+                    <li>{{ _('Sensitive certification documents are stored with restricted access') }}</li>
+                    <li>{{ _('All data transmission uses encrypted connections') }}</li>
+                    <li>{{ _('Regular security audits and monitoring') }}</li>
+                </ul>
+
+                <h2>4. {{ _('Information Sharing') }}</h2>
+                <p>{{ _('We do not sell, trade, or rent your personal information to third parties. We may share information only in the following circumstances:') }}</p>
+                <ul>
+                    <li>{{ _('With your explicit consent') }}</li>
+                    <li>{{ _('With authorized certification reviewers (certification data only)') }}</li>
+                    <li>{{ _('When required by law or legal process') }}</li>
+                    <li>{{ _('To protect the safety of our users and the public') }}</li>
+                </ul>
+
+                <h2>5. {{ _('Your Rights') }}</h2>
+                <p>{{ _('You have the right to:') }}</p>
+                <ul>
+                    <li>{{ _('Access and download your personal data') }}</li>
+                    <li>{{ _('Correct inaccurate information') }}</li>
+                    <li>{{ _('Request deletion of your account and data') }}</li>
+                    <li>{{ _('Opt out of non-essential communications') }}</li>
+                    <li>{{ _('Withdraw consent at any time') }}</li>
+                </ul>
+
+                <h2>6. {{ _('Cookies') }}</h2>
+                <p>{{ _('We use essential cookies to maintain your session and preferences (such as language). We do not use tracking cookies or third-party advertising cookies.') }}</p>
+
+                <h2>7. {{ _('Children\'s Privacy') }}</h2>
+                <p>{{ _('Our platform is not intended for users under the age of 16. We do not knowingly collect personal information from children.') }}</p>
+
+                <h2>8. {{ _('Changes to This Policy') }}</h2>
+                <p>{{ _('We may update this Privacy Policy from time to time. We will notify you of any significant changes through the platform or via email.') }}</p>
+
+                <h2>9. {{ _('Contact Us') }}</h2>
+                <p>{{ _('If you have questions or concerns about this Privacy Policy, please contact us at:') }}</p>
+                <p><strong>{{ _('Email') }}:</strong> privacy@weilightharbor.org</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

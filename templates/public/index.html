@@ -1,0 +1,222 @@
+{% extends 'public/base.html' %}
+
+{% block title %}Weilight Harbor - {{ _('A Harbor of Faint Lights') }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="wl-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1>{{ _('You are not alone in the dark') }}</h1>
+                <p class="lead">{{ _('A warm harbor for caregivers and families facing serious illness. Share your story, find support, and discover that even the faintest light can guide the way.') }}</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="/auth/register" class="btn btn-wl-primary btn-lg">
+                        <i data-lucide="anchor" style="width:18px;height:18px"></i>
+                        {{ _('Join the Harbor') }}
+                    </a>
+                    <a href="/crowdfunding/" class="btn btn-wl-secondary btn-lg">{{ _('Browse Stories') }}</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div style="font-size: 12rem; line-height: 1; opacity: 0.15; color: var(--color-primary);">
+                    <i data-lucide="lighthouse" style="width:280px;height:280px"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Ribbon -->
+<section class="wl-stats">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-4">
+                <div class="stat-number">{{ "{:,}".format(user_count|default(0)) }}</div>
+                <div class="stat-label">{{ _('Families Supported') }}</div>
+            </div>
+            <div class="col-4">
+                <div class="stat-number">{{ "{:,}".format(campaign_count|default(0)) }}</div>
+                <div class="stat-label">{{ _('Active Campaigns') }}</div>
+            </div>
+            <div class="col-4">
+                <div class="stat-number">&yen;{{ "{:,.0f}".format(total_raised|default(0)) }}</div>
+                <div class="stat-label">{{ _('Funds Raised') }}</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="wl-section-title text-center">{{ _('How It Works') }}</h2>
+        <p class="wl-section-subtitle text-center">{{ _('Four simple steps to join our caring community') }}</p>
+        <div class="row g-4 mt-2">
+            <div class="col-md-3 col-6">
+                <div class="wl-card text-center h-100">
+                    <div class="card-body py-4">
+                        <div class="mb-3" style="color: var(--color-primary);">
+                            <i data-lucide="user-plus" style="width:40px;height:40px"></i>
+                        </div>
+                        <h6>{{ _('Register') }}</h6>
+                        <p class="small text-muted mb-0">{{ _('Create your free account in seconds') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="wl-card text-center h-100">
+                    <div class="card-body py-4">
+                        <div class="mb-3" style="color: var(--color-success);">
+                            <i data-lucide="shield-check" style="width:40px;height:40px"></i>
+                        </div>
+                        <h6>{{ _('Get Certified') }}</h6>
+                        <p class="small text-muted mb-0">{{ _('Verify your caregiver status for full access') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="wl-card text-center h-100">
+                    <div class="card-body py-4">
+                        <div class="mb-3" style="color: var(--color-info);">
+                            <i data-lucide="heart-handshake" style="width:40px;height:40px"></i>
+                        </div>
+                        <h6>{{ _('Share Your Story') }}</h6>
+                        <p class="small text-muted mb-0">{{ _('Connect with others who understand') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="wl-card text-center h-100">
+                    <div class="card-body py-4">
+                        <div class="mb-3" style="color: var(--color-primary-light);">
+                            <i data-lucide="sparkles" style="width:40px;height:40px"></i>
+                        </div>
+                        <h6>{{ _('Find Support') }}</h6>
+                        <p class="small text-muted mb-0">{{ _('Fundraise, find respite, and heal together') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Stories -->
+<section class="py-5" style="background-color: var(--color-bg-subtle);">
+    <div class="container">
+        <h2 class="wl-section-title text-center">{{ _('Their Stories') }}</h2>
+        <p class="wl-section-subtitle text-center">{{ _('Real families, real journeys, real lights') }}</p>
+        <div class="row g-4">
+            {% if featured_campaigns %}
+            {% for c in featured_campaigns %}
+            <div class="col-md-4">
+                <div class="wl-card campaign-card h-100">
+                    {% if c.cover_image %}
+                    <img src="{{ c.cover_image }}" alt="{{ c.title }}" style="height:180px;width:100%;object-fit:cover;">
+                    {% else %}
+                    <div style="height:180px;background:linear-gradient(135deg, var(--color-bg-subtle), var(--color-primary-bg));display:flex;align-items:center;justify-content:center;color:var(--color-text-disabled);">
+                        <i data-lucide="image" style="width:48px;height:48px"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        {% if c.category %}
+                        <span class="wl-tag mb-2">{{ c.category }}</span>
+                        {% endif %}
+                        <h6 class="mt-2">{{ c.title }}</h6>
+                        <p class="small text-muted">{{ c.description[:100] }}{% if c.description|length > 100 %}...{% endif %}</p>
+                        {% set pct = ((c.current_amount / c.funding_goal * 100) if c.funding_goal else 0)|int %}
+                        <div class="wl-progress mb-2">
+                            <div class="wl-progress-bar" style="width: {{ [pct, 100]|min }}%"></div>
+                        </div>
+                        <div class="campaign-meta">
+                            <span>{{ pct }}% {{ _('funded') }}</span>
+                            <span>&yen;{{ "{:,.0f}".format(c.current_amount|float) }} / &yen;{{ "{:,.0f}".format(c.funding_goal|float) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            {% for i in range(3) %}
+            <div class="col-md-4">
+                <div class="wl-card campaign-card h-100">
+                    <div style="height:180px;background:linear-gradient(135deg, var(--color-bg-subtle), var(--color-primary-bg));display:flex;align-items:center;justify-content:center;color:var(--color-text-disabled);">
+                        <i data-lucide="image" style="width:48px;height:48px"></i>
+                    </div>
+                    <div class="card-body">
+                        <span class="wl-tag mb-2">{{ _('Medical') }}</span>
+                        <h6 class="mt-2">{{ _('Help a Family in Need') }}</h6>
+                        <p class="small text-muted">{{ _('Every contribution brings hope to those facing their darkest hours.') }}</p>
+                        <div class="wl-progress mb-2">
+                            <div class="wl-progress-bar" style="width: {{ [45, 72, 28][i] }}%"></div>
+                        </div>
+                        <div class="campaign-meta">
+                            <span>{{ _('%(percent)s%% funded', percent=[45, 72, 28][i]) }}</span>
+                            <span>{{ [15, 8, 22][i] }} {{ _('days left') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="/crowdfunding/" class="btn btn-wl-secondary">{{ _('View All Campaigns') }} &rarr;</a>
+        </div>
+    </div>
+</section>
+
+<!-- Community Voices -->
+{% if recent_posts %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="wl-section-title text-center">{{ _('Community Voices') }}</h2>
+        <p class="wl-section-subtitle text-center">{{ _('Stories and reflections from our community') }}</p>
+        <div class="row g-4">
+            {% for post in recent_posts %}
+            <div class="col-md-6 col-lg-3">
+                <a href="/community/post/{{ post.id }}" class="text-decoration-none">
+                    <div class="wl-card h-100" style="transition: transform 0.2s;">
+                        <div class="card-body">
+                            {% if post.category %}
+                            <span class="wl-tag mb-2" style="font-size:0.7rem;">{{ post.category }}</span>
+                            {% endif %}
+                            <h6 class="mt-2" style="color:var(--color-text-primary);">{{ post.title }}</h6>
+                            <p class="small text-muted mb-2">{{ post.content[:80] }}{% if post.content|length > 80 %}...{% endif %}</p>
+                            <div class="d-flex align-items-center gap-3 small text-muted">
+                                <span><i data-lucide="eye" style="width:14px;height:14px"></i> {{ post.view_count }}</span>
+                                <span><i data-lucide="heart" style="width:14px;height:14px"></i> {{ post.like_count }}</span>
+                                <span><i data-lucide="message-circle" style="width:14px;height:14px"></i> {{ post.comment_count }}</span>
+                            </div>
+                            <div class="small text-muted mt-2">
+                                {% if post.is_anonymous %}{{ _('Anonymous') }}{% else %}{{ post.user.username if post.user else _('Anonymous') }}{% endif %}
+                                &middot; {{ post.create_at.strftime('%m/%d') if post.create_at else '' }}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="/community/" class="btn btn-wl-secondary">{{ _('Join the Conversation') }} &rarr;</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Testimonial -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div style="font-size: 3rem; color: var(--color-primary); opacity: 0.3; margin-bottom: 1rem;">&ldquo;</div>
+                <blockquote style="font-size: 1.25rem; line-height: 2; color: var(--color-text-primary); font-style: italic;">
+                    {{ _('I thought I was the only one awake at 3 AM, crying in the hallway so my mother wouldn\'t hear. Then I found this harbor, and discovered a thousand other lights in the dark.') }}
+                </blockquote>
+                <p class="text-muted mt-3">&mdash; {{ _('Anonymous Caregiver, 3 years') }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

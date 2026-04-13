@@ -1,0 +1,183 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('About') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-hero {
+        background: linear-gradient(135deg, #FDF8F3 0%, #FEF5EB 100%);
+        padding: 5rem 1rem 3rem;
+        text-align: center;
+    }
+    .about-hero h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-bottom: 1rem;
+    }
+    .about-hero p {
+        font-size: 1.125rem;
+        color: var(--color-text-secondary);
+        max-width: 640px;
+        margin: 0 auto;
+    }
+    .about-section {
+        padding: 4rem 0;
+    }
+    .about-section:nth-child(even) {
+        background: var(--color-bg-subtle);
+    }
+    .value-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        box-shadow: var(--shadow-sm);
+        height: 100%;
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .value-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+    }
+    .value-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        background: linear-gradient(135deg, #FEF5EB, #F2B872);
+        color: var(--color-primary-dark);
+    }
+    .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.125rem;
+        flex-shrink: 0;
+    }
+    .step-item {
+        display: flex;
+        gap: 1.25rem;
+        margin-bottom: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<div class="about-hero">
+    <div style="color:var(--color-primary);margin-bottom:1.5rem;">
+        <i data-lucide="lighthouse" style="width:64px;height:64px;"></i>
+    </div>
+    <h1>{{ _('About Weilight Harbor') }}</h1>
+    <p>{{ _('A warm digital harbor for caregivers and families navigating the journey of serious illness. Here, no one walks alone.') }}</p>
+</div>
+
+<!-- Mission -->
+<div class="about-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="text-center mb-4" style="font-weight:700;">{{ _('Our Mission') }}</h2>
+                <p class="text-center" style="font-size:1.0625rem;color:var(--color-text-secondary);line-height:1.8;">
+                    {{ _('Weilight Harbor was born from a simple belief: caregivers and families facing serious illness deserve a safe space to share, connect, and find support. We provide a platform where empathy flows freely, where stories illuminate the path for others, and where practical help is always within reach.') }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Values -->
+<div class="about-section" style="background: var(--color-bg-subtle);">
+    <div class="container">
+        <h2 class="text-center mb-5" style="font-weight:700;">{{ _('Our Values') }}</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i data-lucide="heart" style="width:28px;height:28px;"></i>
+                    </div>
+                    <h5 style="font-weight:600;">{{ _('Compassion') }}</h5>
+                    <p style="color:var(--color-text-secondary);font-size:0.9375rem;">{{ _('Every interaction is grounded in empathy and understanding. We listen without judgment and support without conditions.') }}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-card">
+                    <div class="value-icon" style="background:linear-gradient(135deg, #E8F5E9, #81C784);color:#2E7D32;">
+                        <i data-lucide="shield" style="width:28px;height:28px;"></i>
+                    </div>
+                    <h5 style="font-weight:600;">{{ _('Safety') }}</h5>
+                    <p style="color:var(--color-text-secondary);font-size:0.9375rem;">{{ _('This is a safe harbor. We protect privacy, moderate content sensitively, and maintain a space free from harm.') }}</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="value-card">
+                    <div class="value-icon" style="background:linear-gradient(135deg, #E3F2FD, #64B5F6);color:#1565C0;">
+                        <i data-lucide="users" style="width:28px;height:28px;"></i>
+                    </div>
+                    <h5 style="font-weight:600;">{{ _('Community') }}</h5>
+                    <p style="color:var(--color-text-secondary);font-size:0.9375rem;">{{ _('Strength comes from connection. We bring together families, volunteers, and organizations to form a caring community.') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works -->
+<div class="about-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <h2 class="text-center mb-5" style="font-weight:700;">{{ _('How It Works') }}</h2>
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h5 style="font-weight:600;margin-bottom:0.25rem;">{{ _('Create an Account') }}</h5>
+                        <p style="color:var(--color-text-secondary);margin:0;">{{ _('Sign up for free and join our community. Optionally get certified to unlock more features.') }}</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h5 style="font-weight:600;margin-bottom:0.25rem;">{{ _('Connect and Share') }}</h5>
+                        <p style="color:var(--color-text-secondary);margin:0;">{{ _('Share your story in the community, keep a private life journal, or find support at the respite station.') }}</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h5 style="font-weight:600;margin-bottom:0.25rem;">{{ _('Give and Receive Help') }}</h5>
+                        <p style="color:var(--color-text-secondary);margin:0;">{{ _('Launch or support crowdfunding campaigns, volunteer your time, or simply be there for someone who needs it.') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Team -->
+<div class="about-section" style="background: var(--color-bg-subtle);">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h2 class="mb-4" style="font-weight:700;">{{ _('Our Team') }}</h2>
+                <p style="font-size:1.0625rem;color:var(--color-text-secondary);line-height:1.8;">
+                    {{ _('Weilight Harbor is built by a small team of designers, developers, and social workers who have been personally touched by the caregiving journey. We understand the challenges because we have lived them. Every feature is crafted with real needs in mind.') }}
+                </p>
+                <div class="mt-4">
+                    <a href="/community/" class="btn btn-wl-primary me-2">{{ _('Join the Community') }}</a>
+                    <a href="/help" class="btn btn-wl-secondary">{{ _('Get Help') }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

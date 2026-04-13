@@ -1,0 +1,527 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Create Post') }} - {{ _('Community') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+.create-post-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+.category-tag-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.category-tag-pill {
+    display: inline-block;
+    background-color: var(--color-bg-subtle);
+    color: var(--color-text-secondary);
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+.category-tag-pill.selected {
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+.category-tag-pill:hover {
+    background-color: var(--color-primary-bg);
+}
+.post-preview-section {
+    margin-top: 1.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    background: var(--color-bg-subtle);
+}
+.post-preview-section .preview-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-disabled);
+    margin-bottom: 1rem;
+}
+.post-preview-section .preview-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    min-height: 1.6em;
+}
+.post-preview-section .preview-content {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2em;
+}
+.post-preview-section .preview-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-top: 0.75rem;
+}
+.post-preview-section .preview-tag {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+}
+.post-preview-section .preview-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--color-text-disabled);
+}
+.create-form .form-label {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+.create-form .wl-form-control {
+    width: 100%;
+}
+.content-textarea {
+    min-height: 200px;
+    resize: vertical;
+    line-height: 1.8;
+}
+.image-upload-zone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--color-bg-subtle);
+    position: relative;
+}
+.image-upload-zone:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+}
+.image-upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.image-upload-zone .upload-icon {
+    color: var(--color-text-disabled);
+    margin-bottom: 0.5rem;
+}
+.image-upload-zone .upload-text {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+.image-upload-zone .upload-hint {
+    font-size: 0.75rem;
+    color: var(--color-text-disabled);
+    margin-top: 0.25rem;
+}
+.image-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+.image-preview-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+.image-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.image-preview-item .remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+.image-preview-item .remove-btn:hover {
+    background: var(--color-error);
+}
+.anonymous-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--color-bg-subtle);
+    border-radius: var(--radius-md);
+}
+.anonymous-toggle .form-check-input {
+    width: 2.5rem;
+    height: 1.25rem;
+}
+.anonymous-toggle .form-check-input:checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+.anonymous-toggle .toggle-info {
+    flex: 1;
+}
+.anonymous-toggle .toggle-label {
+    font-weight: 600;
+    font-size: 0.9375rem;
+}
+.anonymous-toggle .toggle-hint {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+}
+.sensitive-warning {
+    display: none;
+    background: #FFF3CD;
+    border: 1px solid #FFEEBA;
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: #856404;
+    margin-top: 0.5rem;
+}
+.sensitive-warning.show {
+    display: block;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="create-post-container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb" style="font-size:0.875rem">
+                <li class="breadcrumb-item"><a href="{{ url_for('community.index') }}" style="color:var(--color-text-secondary);text-decoration:none">{{ _('Community') }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ _('New Post') }}</li>
+            </ol>
+        </nav>
+
+        <div class="wl-card">
+            <div class="card-body" style="padding:2rem">
+                <h2 style="font-size:1.375rem;font-weight:700;margin-bottom:1.5rem">{{ _('Create a New Post') }}</h2>
+
+                <form class="create-form" method="POST" enctype="multipart/form-data"
+                      action="{{ url_for('community.create_post') }}">
+
+                    <!-- Category (multi-select tag pills) -->
+                    <div class="mb-4">
+                        <label class="form-label">{{ _('Category') }} <span style="font-weight:400;color:var(--color-text-disabled)">({{ _('select one or more') }})</span></label>
+                        <input type="hidden" name="category" id="categoryHidden" value="">
+                        <div class="category-tag-pills" id="categoryPills">
+                            {% for key, label in categories %}
+                            <span class="category-tag-pill" data-value="{{ key }}">{{ _(label) }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <div class="mb-4">
+                        <label class="form-label" for="postTitle">{{ _('Title') }}</label>
+                        <input type="text" class="wl-form-control" id="postTitle" name="title"
+                               placeholder="{{ _('Give your post a title...') }}"
+                               maxlength="200" required>
+                    </div>
+
+                    <!-- Content -->
+                    <div class="mb-4">
+                        <label class="form-label" for="postContent">{{ _('Content') }}</label>
+                        <textarea class="wl-form-control content-textarea" id="postContent" name="content"
+                                  placeholder="{{ _('Share your story, thoughts, or questions...') }}"
+                                  required></textarea>
+                        <div class="sensitive-warning" id="sensitiveWarning">
+                            <i data-lucide="alert-triangle" style="width:16px;height:16px;vertical-align:-2px"></i>
+                            <span id="sensitiveWarningText"></span>
+                        </div>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="mb-4">
+                        <label class="form-label">{{ _('Images') }} <span style="font-weight:400;color:var(--color-text-disabled)">({{ _('optional, max 9') }})</span></label>
+                        <div class="image-upload-zone" id="imageUploadZone">
+                            <input type="file" name="images" id="imageInput" multiple accept="image/*">
+                            <div class="upload-icon">
+                                <i data-lucide="image-plus" style="width:32px;height:32px"></i>
+                            </div>
+                            <div class="upload-text">{{ _('Click or drag images here') }}</div>
+                            <div class="upload-hint">{{ _('Supports JPG, PNG, GIF, WebP') }}</div>
+                        </div>
+                        <div class="image-preview-grid" id="imagePreviewGrid"></div>
+                    </div>
+
+                    <!-- Anonymous Toggle -->
+                    <div class="mb-4">
+                        <div class="anonymous-toggle">
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" id="anonymousToggle" name="is_anonymous">
+                            </div>
+                            <div class="toggle-info">
+                                <div class="toggle-label">{{ _('Post Anonymously') }}</div>
+                                <div class="toggle-hint">{{ _('Your name and avatar will be hidden. Other users will see "Anonymous" instead. Admins can still see your identity for moderation purposes.') }}</div>
+                            </div>
+                            <i data-lucide="eye-off" style="width:20px;height:20px;color:var(--color-text-disabled)"></i>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('community.index') }}" class="btn btn-wl-secondary">{{ _('Cancel') }}</a>
+                        <button type="submit" class="btn btn-wl-primary">
+                            <i data-lucide="send" style="width:16px;height:16px;vertical-align:-2px"></i>
+                            {{ _('Publish') }}
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Live Preview -->
+                <div class="post-preview-section" id="postPreviewSection">
+                    <div class="preview-label">
+                        <i data-lucide="eye" style="width:14px;height:14px;vertical-align:-2px"></i>
+                        {{ _('Preview') }}
+                    </div>
+                    <div class="preview-meta">
+                        <span id="previewAuthor">{{ current_user.username if current_user.is_authenticated else 'You' }}</span>
+                        <span>&middot;</span>
+                        <span>{{ _('Just now') }}</span>
+                    </div>
+                    <div class="preview-title" id="previewTitle">{{ _('Your title will appear here...') }}</div>
+                    <div class="preview-content" id="previewContent">{{ _('Your content will appear here...') }}</div>
+                    <div class="preview-tags" id="previewTags"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='public/js/community.js') }}"></script>
+<script>
+    lucide.createIcons();
+
+    // ========================================
+    // Multi-select Category Tag Pills
+    // ========================================
+    const categoryPills = document.getElementById('categoryPills');
+    const categoryHidden = document.getElementById('categoryHidden');
+    const selectedCategories = new Set();
+
+    // Category labels map for preview
+    const categoryLabels = {};
+    {% for key, label in categories %}
+    categoryLabels['{{ key }}'] = '{{ _(label) }}';
+    {% endfor %}
+
+    categoryPills.querySelectorAll('.category-tag-pill').forEach(function(pill) {
+        pill.addEventListener('click', function() {
+            const val = this.dataset.value;
+            if (selectedCategories.has(val)) {
+                selectedCategories.delete(val);
+                this.classList.remove('selected');
+            } else {
+                selectedCategories.add(val);
+                this.classList.add('selected');
+            }
+            // Store first selected as primary category (form sends single value)
+            // Join multiple with comma for backend
+            categoryHidden.value = Array.from(selectedCategories).join(',');
+            updatePreview();
+        });
+    });
+
+    // Select the first category by default
+    (function() {
+        const firstPill = categoryPills.querySelector('.category-tag-pill');
+        if (firstPill) {
+            firstPill.classList.add('selected');
+            selectedCategories.add(firstPill.dataset.value);
+            categoryHidden.value = firstPill.dataset.value;
+        }
+    })();
+
+    // ========================================
+    // Live Preview
+    // ========================================
+    const postTitleInput = document.getElementById('postTitle');
+    const postContentInput = document.getElementById('postContent');
+    const anonymousToggle = document.getElementById('anonymousToggle');
+    const previewTitle = document.getElementById('previewTitle');
+    const previewContent = document.getElementById('previewContent');
+    const previewTags = document.getElementById('previewTags');
+    const previewAuthor = document.getElementById('previewAuthor');
+
+    function updatePreview() {
+        // Title
+        const title = postTitleInput.value.trim();
+        previewTitle.textContent = title || '{{ _("Your title will appear here...") }}';
+        previewTitle.style.opacity = title ? '1' : '0.5';
+
+        // Content
+        const content = postContentInput.value.trim();
+        previewContent.textContent = content || '{{ _("Your content will appear here...") }}';
+        previewContent.style.opacity = content ? '1' : '0.5';
+
+        // Tags
+        previewTags.innerHTML = '';
+        selectedCategories.forEach(function(cat) {
+            const tag = document.createElement('span');
+            tag.className = 'preview-tag';
+            tag.textContent = categoryLabels[cat] || cat;
+            previewTags.appendChild(tag);
+        });
+
+        // Author
+        if (anonymousToggle.checked) {
+            previewAuthor.textContent = '{{ _("Anonymous") }}';
+        } else {
+            previewAuthor.textContent = '{{ current_user.username if current_user.is_authenticated else "You" }}';
+        }
+    }
+
+    postTitleInput.addEventListener('input', updatePreview);
+    postContentInput.addEventListener('input', updatePreview);
+    anonymousToggle.addEventListener('change', updatePreview);
+
+    // Initial preview state
+    updatePreview();
+
+    // ========================================
+    // Image Preview
+    // ========================================
+    const imageInput = document.getElementById('imageInput');
+    const previewGrid = document.getElementById('imagePreviewGrid');
+    let selectedFiles = new DataTransfer();
+
+    imageInput.addEventListener('change', function() {
+        const files = Array.from(this.files);
+        // Limit to 9 total
+        const remaining = 9 - selectedFiles.files.length;
+        const toAdd = files.slice(0, remaining);
+
+        toAdd.forEach(file => {
+            if (!file.type.startsWith('image/')) return;
+            selectedFiles.items.add(file);
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const idx = selectedFiles.files.length - 1;
+                const item = document.createElement('div');
+                item.className = 'image-preview-item';
+                item.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview">
+                    <button type="button" class="remove-btn" data-index="${idx}">&times;</button>
+                `;
+                previewGrid.appendChild(item);
+
+                item.querySelector('.remove-btn').addEventListener('click', function() {
+                    const newDt = new DataTransfer();
+                    const removeIdx = parseInt(this.dataset.index);
+                    for (let i = 0; i < selectedFiles.files.length; i++) {
+                        if (i !== removeIdx) newDt.items.add(selectedFiles.files[i]);
+                    }
+                    selectedFiles = newDt;
+                    imageInput.files = selectedFiles.files;
+                    rebuildPreviews();
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+
+        imageInput.files = selectedFiles.files;
+    });
+
+    function rebuildPreviews() {
+        previewGrid.innerHTML = '';
+        Array.from(selectedFiles.files).forEach((file, idx) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const item = document.createElement('div');
+                item.className = 'image-preview-item';
+                item.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview">
+                    <button type="button" class="remove-btn" data-index="${idx}">&times;</button>
+                `;
+                previewGrid.appendChild(item);
+                item.querySelector('.remove-btn').addEventListener('click', function() {
+                    const newDt = new DataTransfer();
+                    const removeIdx = parseInt(this.dataset.index);
+                    for (let i = 0; i < selectedFiles.files.length; i++) {
+                        if (i !== removeIdx) newDt.items.add(selectedFiles.files[i]);
+                    }
+                    selectedFiles = newDt;
+                    imageInput.files = selectedFiles.files;
+                    rebuildPreviews();
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // ========================================
+    // Sensitive word check (debounced)
+    // ========================================
+    let sensitiveTimer = null;
+    const contentArea = document.getElementById('postContent');
+    const warningEl = document.getElementById('sensitiveWarning');
+    const warningText = document.getElementById('sensitiveWarningText');
+
+    contentArea.addEventListener('input', function() {
+        clearTimeout(sensitiveTimer);
+        sensitiveTimer = setTimeout(() => {
+            const text = contentArea.value.trim();
+            if (text.length < 5) {
+                warningEl.classList.remove('show');
+                return;
+            }
+            fetch('/community/check-sensitive', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: text })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.has_crisis) {
+                    // Show crisis modal
+                    const modal = new bootstrap.Modal(document.getElementById('sensitiveModal'));
+                    modal.show();
+                    warningEl.classList.remove('show');
+                } else if (data.matches && data.matches.length > 0) {
+                    const words = data.matches.map(m => m.word).join(', ');
+                    warningText.textContent = '{{ _("Some words may be sensitive:") }} ' + words;
+                    warningEl.classList.add('show');
+                } else {
+                    warningEl.classList.remove('show');
+                }
+            })
+            .catch(() => {});
+        }, 800);
+    });
+</script>
+{% endblock %}

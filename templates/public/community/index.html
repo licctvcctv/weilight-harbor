@@ -1,0 +1,485 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Community') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+.community-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+.category-pills {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none;
+}
+.category-pills::-webkit-scrollbar { display: none; }
+.sort-tabs {
+    display: flex;
+    gap: 0.25rem;
+    background: var(--color-bg-subtle);
+    border-radius: var(--radius-full);
+    padding: 3px;
+    margin-bottom: 1rem;
+}
+.sort-tabs a {
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+.sort-tabs a.active {
+    background: var(--color-bg-card);
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-sm);
+}
+.post-title-link {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+.post-title-link:hover {
+    color: var(--color-primary);
+}
+.post-content-preview {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.post-images-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+.post-images-row img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+.post-images-row img:hover {
+    transform: scale(1.05);
+}
+.post-username {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--color-text-primary);
+}
+.post-time {
+    font-size: 0.8125rem;
+    color: var(--color-text-disabled);
+}
+.confession-list {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    margin-bottom: 1rem;
+}
+.confession-hug-btn {
+    background: none;
+    border: 1px solid var(--night-glow);
+    color: var(--night-text);
+    border-radius: var(--radius-full);
+    padding: 2px 10px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.confession-hug-btn:hover {
+    background: var(--night-glow);
+    color: white;
+}
+.confession-nickname {
+    font-size: 0.75rem;
+    color: var(--night-accent);
+    margin-bottom: 0.375rem;
+}
+.confession-text-preview {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.confession-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: rgba(212, 208, 224, 0.6);
+}
+.night-submit-btn {
+    background: var(--night-accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    width: 100%;
+    margin-top: 0.5rem;
+}
+.night-submit-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+.community-pagination .page-link {
+    border: none;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-md);
+    margin: 0 2px;
+    padding: 0.5rem 0.875rem;
+}
+.community-pagination .page-item.active .page-link {
+    background-color: var(--color-primary);
+    color: white;
+}
+.community-pagination .page-link:hover {
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+}
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--color-text-disabled);
+}
+.empty-state i {
+    margin-bottom: 1rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="community-header">
+        <div>
+            <h2 class="wl-section-title mb-0">{{ _('Community') }}</h2>
+            <p class="text-muted mb-0 mt-1" style="font-size:0.9375rem">{{ _('Share, support, and connect with others') }}</p>
+        </div>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('community.create_post') }}" class="btn btn-wl-primary d-flex align-items-center gap-2">
+            <i data-lucide="plus" style="width:18px;height:18px"></i>
+            {{ _('New Post') }}
+        </a>
+        {% else %}
+        <a href="/auth/login" class="btn btn-wl-primary d-flex align-items-center gap-2">
+            <i data-lucide="plus" style="width:18px;height:18px"></i>
+            {{ _('New Post') }}
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Category Pills -->
+    <div class="category-pills mb-3">
+        {% for key, label in categories %}
+        <a href="{{ url_for('community.index', category=key, sort=current_sort) }}"
+           class="wl-tag {{ 'active' if current_category == key else '' }}">
+            {{ _(label) }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Sort Tabs -->
+    <div class="sort-tabs">
+        <a href="{{ url_for('community.index', category=current_category, sort='latest') }}"
+           class="{{ 'active' if current_sort == 'latest' else '' }}">
+            <i data-lucide="clock" style="width:14px;height:14px;vertical-align:-2px"></i>
+            {{ _('Latest') }}
+        </a>
+        <a href="{{ url_for('community.index', category=current_category, sort='empathy') }}"
+           class="{{ 'active' if current_sort == 'empathy' else '' }}">
+            <i data-lucide="heart" style="width:14px;height:14px;vertical-align:-2px"></i>
+            {{ _('Most Empathized') }}
+        </a>
+        <a href="{{ url_for('community.index', category=current_category, sort='hot') }}"
+           class="{{ 'active' if current_sort == 'hot' else '' }}">
+            <i data-lucide="flame" style="width:14px;height:14px;vertical-align:-2px"></i>
+            {{ _('Hot') }}
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- LEFT: Post Feed (70%) -->
+        <div class="col-lg-8">
+            <div class="wl-card">
+                {% if posts %}
+                {% for post in posts %}
+                <div class="post-card">
+                    <!-- Post Meta -->
+                    <div class="post-meta">
+                        {% if post.is_anonymous %}
+                        <img src="{{ url_for('static', filename='public/images/default-avatar.svg') }}"
+                             class="post-avatar" alt="Anonymous">
+                        <div>
+                            <span class="post-username">{{ _('Anonymous') }}</span>
+                            <br><span class="post-time">{{ post.create_at.strftime('%Y-%m-%d %H:%M') if post.create_at else '' }}</span>
+                        </div>
+                        {% else %}
+                        <img src="{{ post.user.avatar or url_for('static', filename='public/images/default-avatar.svg') }}"
+                             class="post-avatar" alt="{{ post.user.username }}">
+                        <div>
+                            <span class="post-username">{{ post.user.username }}</span>
+                            {% if post.user.is_certified %}
+                            <span class="badge-certified ms-1">
+                                <i data-lucide="shield-check" style="width:12px;height:12px;vertical-align:-1px"></i>
+                                {{ _('Certified') }}
+                            </span>
+                            {% endif %}
+                            <br><span class="post-time">{{ post.create_at.strftime('%Y-%m-%d %H:%M') if post.create_at else '' }}</span>
+                        </div>
+                        {% endif %}
+                        <span class="wl-tag ms-auto" style="font-size:0.75rem;padding:2px 8px">
+                            {% set cat_labels = {'emotional':'Emotional Support','daily':'Daily Life','medical':'Medical Info','good_news':'Good News','resources':'Resources'} %}
+                            {{ _(cat_labels.get(post.category, post.category)) }}
+                        </span>
+                    </div>
+
+                    <!-- Title & Content -->
+                    <a href="{{ url_for('community.post_detail', post_id=post.id) }}" class="post-title-link">
+                        {{ post.title }}
+                    </a>
+                    <div class="post-content-preview">{{ post.content }}</div>
+
+                    <!-- Image Thumbnails -->
+                    {% set images = post.parsed_images %}
+                    {% if images %}
+                    <div class="post-images-row">
+                        {% for img in images[:3] %}
+                        <img src="{{ img }}" alt="Post image" loading="lazy">
+                        {% endfor %}
+                        {% if images|length > 3 %}
+                        <div style="width:80px;height:80px;border-radius:var(--radius-sm);background:var(--color-bg-subtle);display:flex;align-items:center;justify-content:center;color:var(--color-text-secondary);font-size:0.875rem;">
+                            +{{ images|length - 3 }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Actions -->
+                    <div class="post-actions">
+                        <button class="like-btn" data-post-id="{{ post.id }}">
+                            <i data-lucide="heart" style="width:16px;height:16px"></i>
+                            <span class="like-count">{{ post.like_count or 0 }}</span>
+                        </button>
+                        <button onclick="window.location='{{ url_for('community.post_detail', post_id=post.id) }}#comments'">
+                            <i data-lucide="message-circle" style="width:16px;height:16px"></i>
+                            <span>{{ post.comment_count or 0 }}</span>
+                        </button>
+                        <button>
+                            <i data-lucide="eye" style="width:16px;height:16px"></i>
+                            <span>{{ post.view_count or 0 }}</span>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty-state">
+                    <i data-lucide="inbox" style="width:48px;height:48px"></i>
+                    <p class="mt-2 mb-0">{{ _('No posts yet. Be the first to share!') }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Pagination -->
+            {% if pagination.pages > 1 %}
+            <nav class="mt-4 d-flex justify-content-center">
+                <ul class="pagination community-pagination mb-0">
+                    {% if pagination.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('community.index', page=pagination.prev_num, category=current_category, sort=current_sort) }}">
+                            <i data-lucide="chevron-left" style="width:16px;height:16px"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                        {% if p %}
+                        <li class="page-item {{ 'active' if p == pagination.page else '' }}">
+                            <a class="page-link" href="{{ url_for('community.index', page=p, category=current_category, sort=current_sort) }}">{{ p }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if pagination.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('community.index', page=pagination.next_num, category=current_category, sort=current_sort) }}">
+                            <i data-lucide="chevron-right" style="width:16px;height:16px"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+
+        <!-- RIGHT: Night Confessions Sidebar (30%) -->
+        <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="night-panel" id="nightPanel">
+                <div class="night-title mb-3">
+                    <i data-lucide="moon" style="width:20px;height:20px"></i>
+                    {{ _('Night Confessions') }}
+                    <span id="nightSoulsCount" style="font-size:0.75rem;opacity:0.7;margin-left:auto"></span>
+                </div>
+
+                <!-- Teaser State (shown outside 21:00-06:00) -->
+                <div id="nightTeaser" style="display:none;text-align:center;padding:1.5rem 0.5rem">
+                    <div style="font-size:2.5rem;margin-bottom:0.75rem">&#127769;</div>
+                    <div style="font-size:1rem;font-weight:600;color:var(--night-text);margin-bottom:0.5rem">
+                        {{ _('Night Confessions opens at 21:00') }}
+                    </div>
+                    <div id="nightCountdown" style="font-size:1.5rem;font-weight:700;color:var(--night-accent);margin-bottom:1rem;font-variant-numeric:tabular-nums"></div>
+                    <div style="position:relative;overflow:hidden;border-radius:var(--radius-md);max-height:180px">
+                        <div id="nightBlurredPreview" style="filter:blur(5px);opacity:0.5;pointer-events:none;padding:0.5rem">
+                            {% for c in confessions[:3] %}
+                            <div class="night-card" style="margin-bottom:0.5rem">
+                                <div class="confession-nickname">{{ c.nickname }}</div>
+                                <div class="confession-text-preview">{{ c.content[:60] }}...</div>
+                            </div>
+                            {% endfor %}
+                            {% if not confessions %}
+                            <div style="padding:1rem;font-size:0.875rem;opacity:0.6">{{ _('Confessions will appear here...') }}</div>
+                            {% endif %}
+                        </div>
+                        <div style="position:absolute;inset:0;background:linear-gradient(transparent 30%,var(--night-bg,#1a1425) 90%);pointer-events:none"></div>
+                    </div>
+                </div>
+
+                <!-- Active State (shown between 21:00-06:00) -->
+                <div id="nightActive" style="display:none">
+                    <!-- Confession Input -->
+                    <textarea class="night-input" id="confessionInput" rows="3"
+                              placeholder="{{ _('Share your thoughts anonymously...') }}"
+                              maxlength="500"></textarea>
+                    <button class="night-submit-btn" id="confessionSubmitBtn">
+                        <i data-lucide="send" style="width:14px;height:14px;vertical-align:-2px"></i>
+                        {{ _('Send into the night') }}
+                    </button>
+
+                    <hr style="border-color:var(--night-glow);margin:1rem 0">
+
+                    <!-- Confessions List -->
+                    <div class="confession-list" id="confessionList">
+                        {% for c in confessions %}
+                        <div class="night-card" data-confession-id="{{ c.id }}">
+                            <div class="confession-nickname">{{ c.nickname }}</div>
+                            <div class="confession-text-preview">{{ c.content }}</div>
+                            <div class="confession-meta">
+                                <span>{{ c.create_at.strftime('%m-%d %H:%M') if c.create_at else '' }}</span>
+                                <button class="confession-hug-btn" onclick="hugConfession({{ c.id }}, this)">
+                                    <i data-lucide="hand-heart" style="width:12px;height:12px"></i>
+                                    <span class="hug-count">{{ c.hug_count or 0 }}</span>
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% if not confessions %}
+                        <div class="text-center py-3" style="opacity:0.6;font-size:0.875rem">
+                            {{ _('The night is quiet. Be the first to share.') }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile FAB for new post -->
+<a href="{{ url_for('community.create_post') }}" class="wl-fab d-lg-none" style="bottom:80px">
+    <i data-lucide="plus" style="width:24px;height:24px"></i>
+</a>
+
+<!-- Mobile Moon FAB (Night Confessions) -->
+<button class="wl-fab d-lg-none" id="mobileMoonFab" style="bottom:16px;background:var(--night-accent,#7c5cbf);border:none;color:white;width:56px;height:56px;border-radius:50%;display:none;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(124,92,191,0.4);cursor:pointer;position:fixed;right:16px;z-index:1000">
+    <span style="font-size:1.5rem">&#127769;</span>
+</button>
+
+<!-- Mobile Night Confessions Bottom Sheet -->
+<div id="mobileNightSheet" style="display:none;position:fixed;inset:0;z-index:2000">
+    <div id="mobileNightOverlay" style="position:absolute;inset:0;background:rgba(0,0,0,0.5)"></div>
+    <div id="mobileNightContent" style="position:absolute;bottom:0;left:0;right:0;max-height:85vh;overflow-y:auto;border-radius:20px 20px 0 0;padding:1.5rem;transform:translateY(100%);transition:transform 0.3s ease" class="night-panel">
+        <div style="width:40px;height:4px;background:rgba(255,255,255,0.3);border-radius:2px;margin:0 auto 1rem"></div>
+        <div class="night-title mb-3">
+            <i data-lucide="moon" style="width:20px;height:20px"></i>
+            {{ _('Night Confessions') }}
+            <span id="mobileNightSoulsCount" style="font-size:0.75rem;opacity:0.7;margin-left:auto"></span>
+        </div>
+
+        <!-- Mobile Teaser -->
+        <div id="mobileNightTeaser" style="display:none;text-align:center;padding:1rem 0">
+            <div style="font-size:2rem;margin-bottom:0.5rem">&#127769;</div>
+            <div style="font-size:0.9375rem;font-weight:600;color:var(--night-text)">{{ _('Night Confessions opens at 21:00') }}</div>
+            <div id="mobileNightCountdown" style="font-size:1.25rem;font-weight:700;color:var(--night-accent);margin-top:0.5rem;font-variant-numeric:tabular-nums"></div>
+        </div>
+
+        <!-- Mobile Active -->
+        <div id="mobileNightActive" style="display:none">
+            <textarea class="night-input" id="mobileConfessionInput" rows="3"
+                      placeholder="{{ _('Share your thoughts anonymously...') }}"
+                      maxlength="500"></textarea>
+            <button class="night-submit-btn" id="mobileConfessionSubmitBtn">
+                <i data-lucide="send" style="width:14px;height:14px;vertical-align:-2px"></i>
+                {{ _('Send into the night') }}
+            </button>
+            <hr style="border-color:var(--night-glow);margin:1rem 0">
+            <div class="confession-list" id="mobileConfessionList">
+                {% for c in confessions %}
+                <div class="night-card" data-confession-id="{{ c.id }}">
+                    <div class="confession-nickname">{{ c.nickname }}</div>
+                    <div class="confession-text-preview">{{ c.content }}</div>
+                    <div class="confession-meta">
+                        <span>{{ c.create_at.strftime('%m-%d %H:%M') if c.create_at else '' }}</span>
+                        <button class="confession-hug-btn" onclick="hugConfession({{ c.id }}, this)">
+                            <i data-lucide="hand-heart" style="width:12px;height:12px"></i>
+                            <span class="hug-count">{{ c.hug_count or 0 }}</span>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+                {% if not confessions %}
+                <div class="text-center py-3" style="opacity:0.6;font-size:0.875rem">
+                    {{ _('The night is quiet. Be the first to share.') }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='public/js/community.js') }}"></script>
+<script>
+    lucide.createIcons();
+    // Initialize Night Confessions time gate
+    if (window.initNightConfessionsGate) {
+        window.initNightConfessionsGate();
+    }
+</script>
+{% endblock %}

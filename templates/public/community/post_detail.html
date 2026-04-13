@@ -1,0 +1,377 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ post.title }} - {{ _('Community') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+.post-detail-header {
+    margin-bottom: 2rem;
+}
+.post-detail-author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.post-detail-author img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.post-detail-author .author-info {
+    flex: 1;
+}
+.post-detail-author .author-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+}
+.post-detail-author .author-time {
+    font-size: 0.8125rem;
+    color: var(--color-text-disabled);
+}
+.post-detail-content {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--color-text-primary);
+    margin-bottom: 1.5rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.post-detail-images {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.post-detail-images.grid-1 { grid-template-columns: 1fr; max-width: 500px; }
+.post-detail-images.grid-2 { grid-template-columns: 1fr 1fr; }
+.post-detail-images.grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.post-detail-images.grid-many { grid-template-columns: repeat(3, 1fr); }
+.post-detail-images img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+}
+.post-detail-images img:hover {
+    transform: scale(1.02);
+}
+.empathy-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+}
+.empathy-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.empathy-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+.empathy-btn.liked {
+    background-color: var(--color-primary-bg);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+.empathy-btn .heart-icon {
+    transition: transform 0.3s ease;
+}
+.empathy-btn.liked .heart-icon {
+    fill: var(--color-primary);
+}
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--color-text-disabled);
+    font-size: 0.875rem;
+}
+
+/* Comments */
+.comments-section { margin-top: 0; }
+.comments-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.comment-form textarea {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    font-size: 0.9375rem;
+    transition: border-color var(--transition-fast);
+}
+.comment-form textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(232, 145, 58, 0.15);
+    outline: none;
+}
+.comment-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+.comment-item:last-child { border-bottom: none; }
+.comment-item img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+.comment-item .comment-author {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+}
+.comment-item .comment-time {
+    font-size: 0.75rem;
+    color: var(--color-text-disabled);
+    margin-left: 0.5rem;
+}
+.comment-item .comment-content {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-text-primary);
+    margin-top: 0.25rem;
+}
+.comment-reply-indicator {
+    font-size: 0.8125rem;
+    color: var(--color-text-disabled);
+    margin-bottom: 0.25rem;
+}
+.breadcrumb-item a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+}
+.breadcrumb-item a:hover {
+    color: var(--color-primary);
+}
+.delete-btn {
+    background: none;
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
+    border-radius: var(--radius-md);
+    padding: 0.375rem 1rem;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.delete-btn:hover {
+    background: var(--color-error);
+    color: white;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4" style="max-width:800px">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb" style="font-size:0.875rem">
+            <li class="breadcrumb-item"><a href="{{ url_for('community.index') }}">{{ _('Community') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ post.title|truncate(40) }}</li>
+        </ol>
+    </nav>
+
+    <div class="wl-card">
+        <div class="card-body" style="padding:1.75rem">
+            <!-- Category Tag -->
+            <div class="mb-3">
+                {% set cat_labels = {'emotional':'Emotional Support','daily':'Daily Life','medical':'Medical Info','good_news':'Good News','resources':'Resources'} %}
+                <span class="wl-tag" style="font-size:0.8125rem">{{ _(cat_labels.get(post.category, post.category)) }}</span>
+            </div>
+
+            <!-- Title -->
+            <h1 style="font-size:1.5rem;font-weight:700;line-height:1.4;margin-bottom:1rem">{{ post.title }}</h1>
+
+            <!-- Author Header -->
+            <div class="post-detail-author">
+                {% if post.is_anonymous %}
+                <img src="{{ url_for('static', filename='public/images/default-avatar.svg') }}" alt="Anonymous">
+                <div class="author-info">
+                    <div class="author-name">{{ _('Anonymous') }}</div>
+                    <div class="author-time">{{ post.create_at.strftime('%Y-%m-%d %H:%M') if post.create_at else '' }}</div>
+                </div>
+                {% else %}
+                <img src="{{ post.user.avatar or url_for('static', filename='public/images/default-avatar.svg') }}" alt="{{ post.user.username }}">
+                <div class="author-info">
+                    <div class="author-name">
+                        {{ post.user.username }}
+                        {% if post.user.is_certified %}
+                        <span class="badge-certified ms-1">
+                            <i data-lucide="shield-check" style="width:12px;height:12px;vertical-align:-1px"></i>
+                            {{ _('Certified') }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <div class="author-time">{{ post.create_at.strftime('%Y-%m-%d %H:%M') if post.create_at else '' }}</div>
+                </div>
+                {% endif %}
+
+                {% if current_user.is_authenticated and current_user.id == post.user_id %}
+                <form action="{{ url_for('community.delete_post', post_id=post.id) }}" method="POST"
+                      onsubmit="return confirm('{{ _('Are you sure you want to delete this post?') }}')">
+                    <button type="submit" class="delete-btn">
+                        <i data-lucide="trash-2" style="width:14px;height:14px;vertical-align:-2px"></i>
+                        {{ _('Delete') }}
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+
+            <!-- Content -->
+            <div class="post-detail-content">{{ post.content }}</div>
+
+            <!-- Images -->
+            {% set images = post.parsed_images %}
+            {% if images %}
+            {% set img_count = images|length %}
+            <div class="post-detail-images {{ 'grid-1' if img_count == 1 else 'grid-2' if img_count == 2 else 'grid-3' if img_count == 3 else 'grid-many' }}">
+                {% for img in images %}
+                <img src="{{ img }}" alt="Post image {{ loop.index }}" loading="lazy"
+                     onclick="window.open('{{ img }}', '_blank')">
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Empathy Bar -->
+            <div class="empathy-bar">
+                <button class="empathy-btn {{ 'liked' if user_liked else '' }}" id="empathyBtn" data-post-id="{{ post.id }}">
+                    <i data-lucide="heart" class="heart-icon" style="width:18px;height:18px"></i>
+                    <span id="empathyCount">{{ post.like_count or 0 }}</span>
+                    {{ _('Empathy') }}
+                </button>
+                <span class="stat-item">
+                    <i data-lucide="message-circle" style="width:16px;height:16px"></i>
+                    {{ post.comment_count or 0 }} {{ _('comments') }}
+                </span>
+                <span class="stat-item">
+                    <i data-lucide="eye" style="width:16px;height:16px"></i>
+                    {{ post.view_count or 0 }} {{ _('views') }}
+                </span>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section" id="comments">
+                <div class="comments-title">
+                    <i data-lucide="message-circle" style="width:20px;height:20px"></i>
+                    {{ _('Comments') }} ({{ comments|length }})
+                </div>
+
+                <!-- Comment Form -->
+                {% if current_user.is_authenticated %}
+                <form class="comment-form mb-4" action="{{ url_for('community.add_comment', post_id=post.id) }}" method="POST">
+                    <textarea name="content" placeholder="{{ _('Share your thoughts and support...') }}" required></textarea>
+                    <div class="d-flex justify-content-end mt-2">
+                        <button type="submit" class="btn btn-wl-primary btn-sm">
+                            <i data-lucide="send" style="width:14px;height:14px;vertical-align:-2px"></i>
+                            {{ _('Post Comment') }}
+                        </button>
+                    </div>
+                </form>
+                {% else %}
+                <div class="text-center py-3 mb-3" style="background:var(--color-bg-subtle);border-radius:var(--radius-md)">
+                    <a href="/auth/login" style="font-weight:500">{{ _('Log in to comment') }}</a>
+                </div>
+                {% endif %}
+
+                <!-- Comments List -->
+                {% if comments %}
+                <div class="comments-list">
+                    {% for comment in comments %}
+                    <div class="comment-item">
+                        <img src="{{ comment.user.avatar or url_for('static', filename='public/images/default-avatar.svg') }}"
+                             alt="{{ comment.user.username }}">
+                        <div style="flex:1;min-width:0">
+                            {% if comment.parent %}
+                            <div class="comment-reply-indicator">
+                                <i data-lucide="corner-down-right" style="width:12px;height:12px"></i>
+                                {{ _('replying to') }} {{ comment.parent.user.username }}
+                            </div>
+                            {% endif %}
+                            <div>
+                                <span class="comment-author">{{ comment.user.username }}</span>
+                                {% if comment.user.is_certified %}
+                                <span class="badge-certified" style="font-size:0.625rem;padding:1px 6px">
+                                    <i data-lucide="shield-check" style="width:10px;height:10px;vertical-align:-1px"></i>
+                                </span>
+                                {% endif %}
+                                <span class="comment-time">{{ comment.create_at.strftime('%Y-%m-%d %H:%M') if comment.create_at else '' }}</span>
+                            </div>
+                            <div class="comment-content">{{ comment.content }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4" style="color:var(--color-text-disabled);font-size:0.9375rem">
+                    <i data-lucide="message-circle" style="width:32px;height:32px;opacity:0.4"></i>
+                    <p class="mt-2 mb-0">{{ _('No comments yet. Be the first to show support!') }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='public/js/community.js') }}"></script>
+<script>
+    lucide.createIcons();
+
+    // Empathy button on detail page
+    const empathyBtn = document.getElementById('empathyBtn');
+    if (empathyBtn) {
+        empathyBtn.addEventListener('click', function() {
+            const postId = this.dataset.postId;
+            fetch(`/community/post/${postId}/like`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(r => r.json())
+            .then(data => {
+                const countEl = document.getElementById('empathyCount');
+                countEl.textContent = data.count;
+                if (data.liked) {
+                    empathyBtn.classList.add('liked');
+                    empathyBtn.querySelector('.heart-icon').style.fill = 'var(--color-primary)';
+                } else {
+                    empathyBtn.classList.remove('liked');
+                    empathyBtn.querySelector('.heart-icon').style.fill = 'none';
+                }
+                // Burst animation
+                empathyBtn.classList.add('empathy-active');
+                setTimeout(() => empathyBtn.classList.remove('empathy-active'), 300);
+            })
+            .catch(() => {
+                window.location.href = '/auth/login';
+            });
+        });
+    }
+</script>
+{% endblock %}

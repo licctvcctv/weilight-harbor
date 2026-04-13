@@ -1,0 +1,229 @@
+{% extends 'public/base.html' %}
+{% block title %}New Entry - Life Journal - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+.create-entry-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.create-form .form-label {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+.content-textarea {
+    min-height: 200px;
+    resize: vertical;
+    line-height: 1.8;
+}
+
+/* Mood Selector */
+.mood-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+.mood-selector input[type="radio"] {
+    display: none;
+}
+.mood-selector label {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--color-bg-card);
+}
+.mood-selector label:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+    transform: scale(1.1);
+}
+.mood-selector input[type="radio"]:checked + label {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+    box-shadow: 0 0 0 3px rgba(232,145,58,0.2);
+    transform: scale(1.1);
+}
+
+/* Image Upload */
+.image-upload-zone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--color-bg-subtle);
+    position: relative;
+}
+.image-upload-zone:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-bg);
+}
+.image-upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.image-upload-zone .upload-icon {
+    color: var(--color-text-disabled);
+    margin-bottom: 0.5rem;
+}
+.image-upload-zone .upload-text {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+.image-upload-zone .upload-hint {
+    font-size: 0.75rem;
+    color: var(--color-text-disabled);
+    margin-top: 0.25rem;
+}
+.image-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+.image-preview-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+.image-preview-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.image-preview-item .remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+.image-preview-item .remove-btn:hover {
+    background: var(--color-error);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="create-entry-container">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb" style="font-size:0.875rem">
+                <li class="breadcrumb-item"><a href="{{ url_for('journal.timeline') }}" style="color:var(--color-text-secondary);text-decoration:none">Life Journal</a></li>
+                <li class="breadcrumb-item active" aria-current="page">New Entry</li>
+            </ol>
+        </nav>
+
+        <div class="wl-card">
+            <div class="card-body" style="padding:2rem">
+                <h2 style="font-size:1.375rem;font-weight:700;margin-bottom:1.5rem">New Journal Entry</h2>
+
+                <form class="create-form" method="POST" enctype="multipart/form-data" action="{{ url_for('journal.create_entry') }}">
+
+                    <!-- Date -->
+                    <div class="mb-4">
+                        <label class="form-label" for="entryDate">Date</label>
+                        <input type="date" class="wl-form-control" id="entryDate" name="entry_date"
+                               value="{{ today if today else '' }}" style="width:100%">
+                    </div>
+
+                    <!-- Mood -->
+                    <div class="mb-4">
+                        <label class="form-label">How are you feeling?</label>
+                        <div class="mood-selector" id="moodSelector">
+                            <input type="radio" name="mood" id="mood1" value="&#128543;">
+                            <label for="mood1" title="Sad">&#128543;</label>
+
+                            <input type="radio" name="mood" id="mood2" value="&#128533;">
+                            <label for="mood2" title="Worried">&#128533;</label>
+
+                            <input type="radio" name="mood" id="mood3" value="&#128528;">
+                            <label for="mood3" title="Neutral">&#128528;</label>
+
+                            <input type="radio" name="mood" id="mood4" value="&#128578;">
+                            <label for="mood4" title="Good">&#128578;</label>
+
+                            <input type="radio" name="mood" id="mood5" value="&#128522;">
+                            <label for="mood5" title="Great">&#128522;</label>
+                        </div>
+                    </div>
+
+                    <!-- Title -->
+                    <div class="mb-4">
+                        <label class="form-label" for="entryTitle">Title <span style="font-weight:400;color:var(--color-text-disabled)">(optional)</span></label>
+                        <input type="text" class="wl-form-control" id="entryTitle" name="title"
+                               placeholder="Give this moment a name..." maxlength="200" style="width:100%">
+                    </div>
+
+                    <!-- Content -->
+                    <div class="mb-4">
+                        <label class="form-label" for="entryContent">What happened today?</label>
+                        <textarea class="wl-form-control content-textarea" id="entryContent" name="content"
+                                  placeholder="Write freely... this is your private space." style="width:100%"></textarea>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div class="mb-4">
+                        <label class="form-label">Photos <span style="font-weight:400;color:var(--color-text-disabled)">(optional, max 9)</span></label>
+                        <div class="image-upload-zone" id="imageUploadZone">
+                            <input type="file" name="images" id="imageInput" multiple accept="image/*">
+                            <div class="upload-icon">
+                                <i data-lucide="image-plus" style="width:32px;height:32px"></i>
+                            </div>
+                            <div class="upload-text">Click or drag images here</div>
+                            <div class="upload-hint">Supports JPG, PNG, GIF, WebP</div>
+                        </div>
+                        <div class="image-preview-grid" id="imagePreviewGrid"></div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('journal.timeline') }}" class="btn btn-wl-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-wl-primary">
+                            <i data-lucide="save" style="width:16px;height:16px;vertical-align:-2px"></i>
+                            Save Entry
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='public/js/journal.js') }}"></script>
+<script>
+    lucide.createIcons();
+    // Set default date to today
+    const dateInput = document.getElementById('entryDate');
+    if (!dateInput.value) {
+        dateInput.value = new Date().toISOString().split('T')[0];
+    }
+    // Init image preview
+    initImageUpload('imageInput', 'imagePreviewGrid');
+</script>
+{% endblock %}

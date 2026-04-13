@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Certification Review</title>
+    {% include 'admin/common/header.html' %}
+</head>
+<body class="pear-container">
+{# Filter form #}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form" action="" lay-filter="cert-query-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">Status</label>
+                <div class="layui-input-inline">
+                    <select name="status">
+                        <option value="">All</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="cert-query">
+                    <i class="layui-icon layui-icon-search"></i>
+                    Search
+                </button>
+                <button type="reset" class="pear-btn pear-btn-md">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                    Reset
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{# Table #}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <table id="cert-table" lay-filter="cert-table"></table>
+    </div>
+</div>
+</body>
+
+{# Status badge template #}
+<script type="text/html" id="cert-status">
+    {{ '{{# if(d.status === "pending"){ }}
+    <span class="layui-badge layui-bg-orange">Pending</span>
+    {{# } else if(d.status === "approved"){ }}
+    <span class="layui-badge layui-bg-green">Approved</span>
+    {{# } else if(d.status === "rejected"){ }}
+    <span class="layui-badge">Rejected</span>
+    {{# } }}'|safe }}
+</script>
+
+{# Document link template #}
+<script type="text/html" id="cert-document">
+    {{ '{{# if(d.document_url){ }}
+    <a href="{{d.document_url}}" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal">View Document</a>
+    {{# } else { }}
+    <span style="color:#999">N/A</span>
+    {{# } }}'|safe }}
+</script>
+
+{# Actions template #}
+<script type="text/html" id="cert-bar">
+    {{ '{{# if(d.status === "pending"){ }}
+    <button class="layui-btn layui-btn-xs" lay-event="approve">Approve</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">Reject</button>
+    {{# } else { }}
+    <span style="color:#999">Reviewed</span>
+    {{# } }}'|safe }}
+</script>
+
+{# Toolbar #}
+<script type="text/html" id="cert-toolbar">
+    <button class="pear-btn pear-btn-md" lay-event="refresh">
+        <i class="layui-icon layui-icon-refresh"></i>
+        Refresh
+    </button>
+</script>
+
+{% include 'admin/common/footer.html' %}
+
+<script>
+  layui.use(['table', 'form', 'jquery', 'popup', 'layer'], function () {
+    let table = layui.table
+    let form = layui.form
+    let $ = layui.jquery
+    let popup = layui.popup
+    let layer = layui.layer
+    let MODULE_PATH = '/admin/certification/'
+
+    let cols = [
+      [
+        { title: 'ID', field: 'id', align: 'center', width: 70 },
+        { title: 'Username', field: 'username', align: 'center', width: 120 },
+        { title: 'Type', field: 'cert_type', align: 'center', width: 100 },
+        { title: 'Real Name', field: 'real_name', align: 'center', width: 120 },
+        { title: 'Relation', field: 'relation', align: 'center', width: 120 },
+        { title: 'Document', field: 'document_url', align: 'center', width: 130, templet: '#cert-document' },
+        { title: 'Status', field: 'status', align: 'center', width: 110, templet: '#cert-status' },
+        { title: 'Reject Reason', field: 'reject_reason', align: 'center', minWidth: 150 },
+        { title: 'Created', field: 'create_at', align: 'center', width: 150 },
+        { title: 'Actions', toolbar: '#cert-bar', align: 'center', width: 160, fixed: 'right' }
+      ]
+    ]
+
+    table.render({
+      elem: '#cert-table',
+      url: MODULE_PATH + 'data',
+      page: true,
+      cols: cols,
+      skin: 'line',
+      toolbar: '#cert-toolbar',
+      defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'],
+      text: { none: 'No certification records found' }
+    })
+
+    form.on('submit(cert-query)', function (data) {
+      table.reload('cert-table', { where: data.field })
+      return false
+    })
+
+    table.on('toolbar(cert-table)', function (obj) {
+      if (obj.event === 'refresh') {
+        table.reload('cert-table')
+      }
+    })
+
+    table.on('tool(cert-table)', function (obj) {
+      if (obj.event === 'approve') {
+        layer.confirm('Are you sure you want to approve this certification?', { icon: 3, title: 'Confirm' }, function (index) {
+          layer.close(index)
+          let loading = layer.load()
+          $.ajax({
+            url: MODULE_PATH + 'approve/' + obj.data.id,
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.msg, function () {
+                  table.reload('cert-table')
+                })
+              } else {
+                popup.failure(result.msg)
+              }
+            }
+          })
+        })
+      } else if (obj.event === 'reject') {
+        layer.prompt({
+          formType: 2,
+          title: 'Please enter the rejection reason',
+          area: ['400px', '150px'],
+          value: ''
+        }, function (value, promptIndex) {
+          layer.close(promptIndex)
+          let loading = layer.load()
+          $.ajax({
+            url: MODULE_PATH + 'reject/' + obj.data.id,
+            data: JSON.stringify({ reason: value }),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'put',
+            success: function (result) {
+              layer.close(loading)
+              if (result.success) {
+                popup.success(result.msg, function () {
+                  table.reload('cert-table')
+                })
+              } else {
+                popup.failure(result.msg)
+              }
+            }
+          })
+        })
+      }
+    })
+  })
+</script>
+</html>

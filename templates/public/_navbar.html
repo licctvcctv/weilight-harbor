@@ -1,0 +1,120 @@
+<nav class="navbar navbar-expand-lg wl-navbar">
+    <div class="container">
+        <!-- Language Toggle -->
+        <div class="lang-toggle me-3" id="langToggle">
+            <span class="lang-option {{ 'active' if get_locale() == 'zh' else '' }}" data-lang="zh">中</span>
+            <span class="lang-option {{ 'active' if get_locale() != 'zh' else '' }}" data-lang="en">EN</span>
+        </div>
+
+        <!-- Brand -->
+        <a class="navbar-brand" href="/">
+            <i data-lucide="lighthouse" style="width:24px;height:24px;color:var(--color-primary)"></i>
+            Weilight Harbor
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+            <i data-lucide="menu" style="width:24px;height:24px"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <!-- Center Nav -->
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if request.path == '/' else '' }}" href="/">{{ _('Home') }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if '/community' in request.path else '' }}" href="/community/">{{ _('Community') }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if '/crowdfunding' in request.path else '' }}" href="/crowdfunding/">{{ _('Crowdfunding') }}</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if '/journal' in request.path else '' }}" href="/journal/">{{ _('Life Journal') }}</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link {{ 'active' if '/respite' in request.path else '' }}" href="/respite/">{{ _('Respite Station') }}</a>
+                </li>
+            </ul>
+
+            <!-- Right Nav -->
+            <ul class="navbar-nav align-items-center">
+                <!-- Search Icon -->
+                <li class="nav-item me-2">
+                    <a class="nav-link position-relative" href="#" id="navSearchToggle" title="{{ _('Search') }}">
+                        <i data-lucide="search" style="width:18px;height:18px"></i>
+                    </a>
+                    <div id="navSearchBox" class="position-absolute end-0 bg-white shadow rounded-3 p-2" style="display:none;top:100%;width:280px;z-index:1050;border:1px solid var(--color-border);">
+                        <form action="/community/" method="GET" class="d-flex">
+                            <input type="text" name="q" class="form-control form-control-sm border-0" placeholder="{{ _('Search...') }}" autofocus>
+                            <button type="submit" class="btn btn-sm btn-wl-primary ms-1">
+                                <i data-lucide="search" style="width:14px;height:14px"></i>
+                            </button>
+                        </form>
+                    </div>
+                </li>
+
+                {% if current_user.is_authenticated %}
+                <!-- Notification Bell -->
+                <li class="nav-item me-2">
+                    <a class="nav-link position-relative" href="#" title="{{ _('Notifications') }}">
+                        <i data-lucide="bell" style="width:18px;height:18px"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style="font-size:0.6rem;display:none;" id="notifBadge">0</span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+                        <img src="{{ current_user.avatar or url_for('static', filename='public/images/default-avatar.svg') }}"
+                             class="rounded-circle" style="width:32px;height:32px;object-fit:cover" alt="">
+                        {{ current_user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="border-radius: var(--radius-lg); border: 1px solid var(--color-border);">
+                        <li><a class="dropdown-item" href="/user/profile">
+                            <i data-lucide="user" style="width:16px;height:16px"></i> {{ _('My Profile') }}
+                        </a></li>
+                        <li><a class="dropdown-item" href="/journal/">
+                            <i data-lucide="book-open" style="width:16px;height:16px"></i> {{ _('My Journal') }}
+                        </a></li>
+                        <li><a class="dropdown-item" href="/user/history">
+                            <i data-lucide="heart-handshake" style="width:16px;height:16px"></i> {{ _('My Donations') }}
+                        </a></li>
+                        <li><a class="dropdown-item" href="/crowdfunding/my">
+                            <i data-lucide="megaphone" style="width:16px;height:16px"></i> {{ _('My Campaigns') }}
+                        </a></li>
+                        <li><a class="dropdown-item" href="/user/certification">
+                            <i data-lucide="shield-check" style="width:16px;height:16px"></i> {{ _('Certification Status') }}
+                        </a></li>
+                        <li><a class="dropdown-item text-muted" href="#">
+                            <i data-lucide="settings" style="width:16px;height:16px"></i> {{ _('Settings') }}
+                        </a></li>
+                        {% if current_user.user_type == 'admin' %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/admin" target="_blank">
+                            <i data-lucide="layout-dashboard" style="width:16px;height:16px"></i> {{ _('Admin Panel') }}
+                        </a></li>
+                        {% endif %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form action="/auth/logout" method="POST" style="display:inline">
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i data-lucide="log-out" style="width:16px;height:16px"></i> {{ _('Logout') }}
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/auth/login">{{ _('Login') }}</a>
+                </li>
+                <li class="nav-item ms-2">
+                    <a class="btn btn-wl-primary btn-sm" href="/auth/register">{{ _('Join the Harbor') }}</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

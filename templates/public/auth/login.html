@@ -1,0 +1,30 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Login') }} - Weilight Harbor{% endblock %}
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="text-center mb-4" style="color: var(--color-primary);">
+            <i data-lucide="lighthouse" style="width:48px;height:48px"></i>
+        </div>
+        <h4 class="auth-title">{{ _('Welcome Back') }}</h4>
+        <p class="auth-subtitle">{{ _('Welcome back to the harbor') }}</p>
+        <form method="POST" action="/auth/login{% if request.args.get('next') %}?next={{ request.args.get('next') }}{% endif %}">
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Username or Email') }}</label>
+                <input type="text" name="username" class="form-control wl-form-control" required placeholder="{{ _('Enter your username or email') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Password') }}</label>
+                <input type="password" name="password" class="form-control wl-form-control" required placeholder="{{ _('Enter your password') }}">
+                <div class="text-end mt-1">
+                    <a href="/auth/forgot-password" class="small" style="color: var(--color-primary);">{{ _('Forgot password?') }}</a>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-wl-primary w-100 mb-3">{{ _('Login') }}</button>
+        </form>
+        <p class="text-center small text-muted">
+            {{ _("Don't have an account?") }} <a href="/auth/register">{{ _('Register') }}</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

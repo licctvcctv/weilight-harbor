@@ -1,0 +1,2386 @@
+# Chinese translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-04-13 17:03+0800\n"
+"PO-Revision-Date: 2026-04-13 17:04+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh\n"
+"Language-Team: zh <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: templates/public/_footer.html:9
+msgid ""
+"A warm harbor for caregivers and families facing serious illness. You are"
+" not alone."
+msgstr ""
+"一个为照护者和重病家庭打造的温暖港湾。你并不孤单。"
+
+#: templates/public/_footer.html:12
+msgid "Platform"
+msgstr "平台"
+
+#: templates/public/_footer.html:14 templates/public/_navbar.html:27
+#: templates/public/about.html:126
+#: templates/public/community/create_post.html:2
+#: templates/public/community/create_post.html:222
+#: templates/public/community/index.html:2
+#: templates/public/community/index.html:182
+#: templates/public/community/post_detail.html:2
+#: templates/public/community/post_detail.html:195
+#: templates/public/help.html:126
+msgid "Community"
+msgstr "社区"
+
+#: templates/public/_footer.html:15 templates/public/_navbar.html:30
+#: templates/public/crowdfunding/detail.html:2
+#: templates/public/crowdfunding/detail.html:377
+#: templates/public/crowdfunding/index.html:2 templates/public/help.html:158
+#: templates/public/terms.html:96
+msgid "Crowdfunding"
+msgstr "众筹"
+
+#: templates/public/_footer.html:16 templates/public/_navbar.html:38
+#: templates/public/respite/index.html:2 templates/public/respite/index.html:64
+msgid "Respite Station"
+msgstr "喘息驿站"
+
+#: templates/public/_footer.html:20
+msgid "Support"
+msgstr "支持"
+
+#: templates/public/_footer.html:22 templates/public/about.html:2
+msgid "About"
+msgstr "关于"
+
+#: templates/public/_footer.html:23
+msgid "Help"
+msgstr "帮助"
+
+#: templates/public/_footer.html:24
+msgid "Privacy"
+msgstr "隐私"
+
+#: templates/public/_footer.html:25
+msgid "Terms"
+msgstr "条款"
+
+#: templates/public/_footer.html:29
+msgid "Crisis Support"
+msgstr "危机支持"
+
+#: templates/public/_footer.html:30
+msgid "If you or someone you know is in crisis:"
+msgstr "如果您或您认识的人正处于危机中："
+
+#: templates/public/_footer.html:31
+msgid "National Crisis Hotline"
+msgstr "全国心理援助热线"
+
+#: templates/public/_footer.html:37
+msgid "Made with care."
+msgstr "用心制作。"
+
+#: templates/public/_navbar.html:24
+msgid "Home"
+msgstr "首页"
+
+#: templates/public/_navbar.html:34
+msgid "Life Journal"
+msgstr "生命手账"
+
+#: templates/public/_navbar.html:46
+msgid "Search"
+msgstr "搜索"
+
+#: templates/public/_navbar.html:51
+msgid "Search..."
+msgstr "搜索..."
+
+#: templates/public/_navbar.html:62
+msgid "Notifications"
+msgstr "通知"
+
+#: templates/public/_navbar.html:76 templates/public/user/profile.html:2
+msgid "My Profile"
+msgstr "我的主页"
+
+#: templates/public/_navbar.html:79
+msgid "My Journal"
+msgstr "我的手账"
+
+#: templates/public/_navbar.html:82 templates/public/user/profile.html:231
+msgid "My Donations"
+msgstr "我的捐助"
+
+#: templates/public/_navbar.html:85 templates/public/user/profile.html:225
+msgid "My Campaigns"
+msgstr "我的筹款项目"
+
+#: templates/public/_navbar.html:88
+#: templates/public/user/certification_status.html:2
+#: templates/public/user/certification_status.html:144
+#: templates/public/user/profile.html:198
+msgid "Certification Status"
+msgstr "认证状态"
+
+#: templates/public/_navbar.html:91 templates/public/user/settings.html:2
+#: templates/public/user/settings.html:79
+msgid "Settings"
+msgstr "设置"
+
+#: templates/public/_navbar.html:96
+msgid "Admin Panel"
+msgstr "管理后台"
+
+#: templates/public/_navbar.html:103
+msgid "Logout"
+msgstr "退出登录"
+
+#: templates/public/_navbar.html:111 templates/public/auth/login.html:2
+#: templates/public/auth/login.html:23 templates/public/auth/register.html:37
+msgid "Login"
+msgstr "登录"
+
+#: templates/public/_navbar.html:114 templates/public/index.html:16
+msgid "Join the Harbor"
+msgstr "加入港湾"
+
+#: templates/public/_sensitive_modal.html:6
+msgid "We noticed your words may reflect a difficult moment."
+msgstr "我们注意到您的文字可能反映了一段艰难的时刻。"
+
+#: templates/public/_sensitive_modal.html:7
+msgid "You are not alone. Please know there is help available."
+msgstr "你并不孤单。请知道，有人可以帮助你。"
+
+#: templates/public/_sensitive_modal.html:10
+msgid "Call Now: Crisis Hotline 400-161-9995"
+msgstr "立即拨打：心理援助热线 400-161-9995"
+
+#: templates/public/_sensitive_modal.html:13
+msgid "I'm okay, continue writing"
+msgstr "我没事，继续写"
+
+#: templates/public/_sensitive_modal.html:16
+msgid "Talk to the community"
+msgstr "与社区交流"
+
+#: templates/public/about.html:80
+msgid "About Weilight Harbor"
+msgstr "关于微光港湾"
+
+#: templates/public/about.html:81
+msgid ""
+"A warm digital harbor for caregivers and families navigating the journey "
+"of serious illness. Here, no one walks alone."
+msgstr ""
+"一个为照护者和重病家庭打造的温暖数字港湾。在这里，没有人独行。"
+
+#: templates/public/about.html:89
+msgid "Our Mission"
+msgstr "我们的使命"
+
+#: templates/public/about.html:91
+msgid ""
+"Weilight Harbor was born from a simple belief: caregivers and families "
+"facing serious illness deserve a safe space to share, connect, and find "
+"support. We provide a platform where empathy flows freely, where stories "
+"illuminate the path for others, and where practical help is always within"
+" reach."
+msgstr ""
+"微光港湾源于一个简单的信念：照护者和面对重病的家庭值得拥有一个安全的空间来"
+"分享、连接和寻求支持。我们提供一个让关怀自由流动的平台，在这里，故事为他人"
+"照亮前路，实际的帮助触手可及。"
+
+#: templates/public/about.html:101
+msgid "Our Values"
+msgstr "我们的价值观"
+
+#: templates/public/about.html:108
+msgid "Compassion"
+msgstr "关怀"
+
+#: templates/public/about.html:109
+msgid ""
+"Every interaction is grounded in empathy and understanding. We listen "
+"without judgment and support without conditions."
+msgstr ""
+"每一次互动都建立在共情和理解之上。我们倾听而不评判，支持而不附加条件。"
+
+#: templates/public/about.html:117
+msgid "Safety"
+msgstr "安全"
+
+#: templates/public/about.html:118
+msgid ""
+"This is a safe harbor. We protect privacy, moderate content sensitively, "
+"and maintain a space free from harm."
+msgstr ""
+"这是一个安全的港湾。我们保护隐私，审慎地管理内容，维护一个远离伤害的空间。"
+
+#: templates/public/about.html:127
+msgid ""
+"Strength comes from connection. We bring together families, volunteers, "
+"and organizations to form a caring community."
+msgstr ""
+"力量源于连接。我们将家庭、志愿者和组织聚集在一起，形成一个关爱的社区。"
+
+#: templates/public/about.html:139 templates/public/index.html:53
+msgid "How It Works"
+msgstr "如何使用"
+
+#: templates/public/about.html:143
+msgid "Create an Account"
+msgstr "创建账号"
+
+#: templates/public/about.html:144
+msgid ""
+"Sign up for free and join our community. Optionally get certified to "
+"unlock more features."
+msgstr ""
+"免费注册并加入我们的社区。可选择进行认证以解锁更多功能。"
+
+#: templates/public/about.html:150
+msgid "Connect and Share"
+msgstr "连接与分享"
+
+#: templates/public/about.html:151
+msgid ""
+"Share your story in the community, keep a private life journal, or find "
+"support at the respite station."
+msgstr ""
+"在社区分享你的故事，记录私密的生命手账，或在喘息驿站寻求支持。"
+
+#: templates/public/about.html:157
+msgid "Give and Receive Help"
+msgstr "互助互援"
+
+#: templates/public/about.html:158
+msgid ""
+"Launch or support crowdfunding campaigns, volunteer your time, or simply "
+"be there for someone who needs it."
+msgstr ""
+"发起或支持众筹项目，奉献你的时间做志愿者，或者只是陪伴需要帮助的人。"
+
+#: templates/public/about.html:171
+msgid "Our Team"
+msgstr "我们的团队"
+
+#: templates/public/about.html:173
+msgid ""
+"Weilight Harbor is built by a small team of designers, developers, and "
+"social workers who have been personally touched by the caregiving "
+"journey. We understand the challenges because we have lived them. Every "
+"feature is crafted with real needs in mind."
+msgstr ""
+"微光港湾由一支小型团队打造，成员包括设计师、开发者和社工，他们都亲身经历过"
+"照护之路。我们理解这些挑战，因为我们亲身走过。每一个功能都是基于真实需求精"
+"心设计的。"
+
+#: templates/public/about.html:176
+msgid "Join the Community"
+msgstr "加入社区"
+
+#: templates/public/about.html:177
+msgid "Get Help"
+msgstr "获取帮助"
+
+#: templates/public/help.html:2 templates/public/help.html:70
+msgid "Help Center"
+msgstr "帮助中心"
+
+#: templates/public/help.html:71
+msgid "Find answers to common questions about using Weilight Harbor."
+msgstr "查找关于使用微光港湾的常见问题解答。"
+
+#: templates/public/help.html:82
+msgid "Getting Started"
+msgstr "开始使用"
+
+#: templates/public/help.html:88
+msgid "How do I create an account?"
+msgstr "如何创建账号？"
+
+#: templates/public/help.html:93
+msgid ""
+"Click \"Join the Harbor\" in the top navigation bar. Fill in your "
+"username, email, and password. After registration, you will be "
+"automatically logged in and can start using all basic features right "
+"away."
+msgstr ""
+"点击顶部导航栏中的\"加入港湾\"。填写您的用户名、邮箱和密码。注册后，您将自"
+"动登录，并可以立即开始使用所有基本功能。"
+
+#: templates/public/help.html:100
+msgid "What is certification and do I need it?"
+msgstr "什么是认证？我需要认证吗？"
+
+#: templates/public/help.html:105
+msgid ""
+"Certification verifies your identity as a family caregiver or volunteer. "
+"While not required for basic features like browsing and posting, "
+"certification unlocks advanced features such as creating crowdfunding "
+"campaigns and builds trust within the community. You can apply from your "
+"profile page."
+msgstr ""
+"认证可以验证您作为家庭照护者或志愿者的身份。虽然浏览和发帖等基本功能不需要"
+"认证，但认证可以解锁创建众筹项目等高级功能，并在社区中建立信任。您可以在个"
+"人主页中申请认证。"
+
+#: templates/public/help.html:112
+msgid "Is the platform free to use?"
+msgstr "平台免费使用吗？"
+
+#: templates/public/help.html:117
+msgid ""
+"Yes, Weilight Harbor is completely free for all users. We are a non-"
+"profit platform dedicated to helping caregivers and families. All "
+"donations through crowdfunding go directly to the campaign recipients."
+msgstr ""
+"是的，微光港湾对所有用户完全免费。我们是一个致力于帮助照护者和家庭的非营利"
+"平台。通过众筹的所有捐助都将直接到达筹款项目的接收人。"
+
+#: templates/public/help.html:132
+msgid "How do I create a post?"
+msgstr "如何发帖？"
+
+#: templates/public/help.html:137
+msgid ""
+"Navigate to the Community page and click \"Create Post.\" You can share "
+"your experiences, ask questions, or offer support. Posts are moderated to"
+" keep the community safe and respectful."
+msgstr ""
+"进入社区页面并点击\"发帖\"。您可以分享经历、提出问题或提供支持。帖子会经过审"
+"核，以确保社区的安全和尊重。"
+
+#: templates/public/help.html:144
+msgid "Can I post anonymously?"
+msgstr "我可以匿名发帖吗？"
+
+#: templates/public/help.html:149
+msgid ""
+"Yes, you can choose to post anonymously when creating a post. Anonymous "
+"posts will show a generic username to protect your privacy while still "
+"allowing you to share and connect."
+msgstr ""
+"可以，您在发帖时可以选择匿名发布。匿名帖子会显示通用用户名，以保护您的隐私"
+"，同时仍然允许您分享和互动。"
+
+#: templates/public/help.html:164
+msgid "How do I start a crowdfunding campaign?"
+msgstr "如何发起众筹项目？"
+
+#: templates/public/help.html:169
+msgid ""
+"You need to be a certified user to create a campaign. Once certified, go "
+"to the Crowdfunding page and click \"Create Campaign.\" Fill in the "
+"details about the patient, the funding goal, and your story. Campaigns "
+"are reviewed before going live."
+msgstr ""
+"您需要成为认证用户才能创建筹款项目。认证后，前往众筹页面并点击\"创建筹款项目"
+"\"。填写患者的详细信息、筹款目标和您的故事。项目在上线前会经过审核。"
+
+#: templates/public/help.html:176
+msgid "How are funds distributed?"
+msgstr "资金如何分配？"
+
+#: templates/public/help.html:181
+msgid ""
+"This is a demo platform. In a production environment, funds would be "
+"transferred directly to the verified recipient after the campaign ends or"
+" when withdrawal is requested. All transactions would be transparent and "
+"auditable."
+msgstr ""
+"这是一个演示平台。在正式环境中，资金将在筹款项目结束后或申请提现时直接转给"
+"经过验证的接收人。所有交易都将透明且可审计。"
+
+#: templates/public/help.html:190
+msgid "Account & Privacy"
+msgstr "账户与隐私"
+
+#: templates/public/help.html:196
+msgid "How is my personal information protected?"
+msgstr "我的个人信息如何受到保护？"
+
+#: templates/public/help.html:201
+msgid ""
+"We take privacy seriously. Personal information submitted during "
+"certification is encrypted and only accessible to authorized reviewers. "
+"We never share your data with third parties. See our Privacy Policy for "
+"full details."
+msgstr ""
+"我们非常重视隐私保护。认证过程中提交的个人信息会被加密，且仅授权审核人员可"
+"以访问。我们绝不会与第三方共享您的数据。详情请参阅我们的隐私政策。"
+
+#: templates/public/help.html:208
+msgid "How do I reset my password?"
+msgstr "如何重置密码？"
+
+#: templates/public/help.html:213
+msgid ""
+"Click \"Forgot password?\" on the login page and enter your registered "
+"email address. You will receive a password reset link. Note: this is a "
+"demo feature in the current version."
+msgstr ""
+"在登录页面点击\"忘记密码？\"，然后输入您注册时使用的邮箱地址。您将收到一个密"
+"码重置链接。注意：在当前版本中这是一个演示功能。"
+
+#: templates/public/help.html:222
+msgid "Still need help?"
+msgstr "仍需帮助？"
+
+#: templates/public/help.html:223
+msgid ""
+"If you could not find an answer to your question, feel free to reach out "
+"to our support team."
+msgstr ""
+"如果您未能找到问题的答案，请随时联系我们的支持团队。"
+
+#: templates/public/auth/register.html:17 templates/public/help.html:225
+#: templates/public/privacy.html:121 templates/public/terms.html:124
+#: templates/public/user/edit_profile.html:100
+msgid "Email"
+msgstr "邮箱"
+
+#: templates/public/index.html:3
+msgid "A Harbor of Faint Lights"
+msgstr "微光港湾"
+
+#: templates/public/index.html:11
+msgid "You are not alone in the dark"
+msgstr "黑暗中你并不孤单"
+
+#: templates/public/index.html:12
+msgid ""
+"A warm harbor for caregivers and families facing serious illness. Share "
+"your story, find support, and discover that even the faintest light can "
+"guide the way."
+msgstr ""
+"一个为照护者和重病家庭打造的温暖港湾。分享你的故事，寻找支持，发现哪怕最微"
+"弱的光也能照亮前行的路。"
+
+#: templates/public/index.html:18
+msgid "Browse Stories"
+msgstr "浏览故事"
+
+#: templates/public/index.html:36
+msgid "Families Supported"
+msgstr "受助家庭"
+
+#: templates/public/index.html:40
+msgid "Active Campaigns"
+msgstr "进行中的项目"
+
+#: templates/public/index.html:44
+msgid "Funds Raised"
+msgstr "已筹资金"
+
+#: templates/public/index.html:54
+msgid "Four simple steps to join our caring community"
+msgstr "四个简单步骤加入我们的关爱社区"
+
+#: templates/public/auth/login.html:26 templates/public/auth/register.html:2
+#: templates/public/index.html:62
+msgid "Register"
+msgstr "注册"
+
+#: templates/public/index.html:63
+msgid "Create your free account in seconds"
+msgstr "几秒钟即可免费创建账号"
+
+#: templates/public/index.html:73 templates/public/user/profile.html:158
+msgid "Get Certified"
+msgstr "申请认证"
+
+#: templates/public/index.html:74
+msgid "Verify your caregiver status for full access"
+msgstr "验证您的照护者身份以获得完整权限"
+
+#: templates/public/index.html:84
+msgid "Share Your Story"
+msgstr "分享你的故事"
+
+#: templates/public/index.html:85
+msgid "Connect with others who understand"
+msgstr "与能理解你的人连接"
+
+#: templates/public/index.html:95
+msgid "Find Support"
+msgstr "寻找支持"
+
+#: templates/public/index.html:96
+msgid "Fundraise, find respite, and heal together"
+msgstr "筹款、喘息、共同疗愈"
+
+#: templates/public/index.html:107
+msgid "Their Stories"
+msgstr "他们的故事"
+
+#: templates/public/index.html:108
+msgid "Real families, real journeys, real lights"
+msgstr "真实的家庭，真实的旅程，真实的光"
+
+#: templates/public/index.html:132 templates/public/user/history.html:274
+msgid "funded"
+msgstr "已筹"
+
+#: templates/public/index.html:147
+msgid "Medical"
+msgstr "医疗"
+
+#: templates/public/index.html:148
+msgid "Help a Family in Need"
+msgstr "帮助困难家庭"
+
+#: templates/public/index.html:149
+msgid "Every contribution brings hope to those facing their darkest hours."
+msgstr "每一份贡献都为身处至暗时刻的人们带来希望。"
+
+#: templates/public/index.html:154
+#, python-format
+msgid "%(percent)s%% funded"
+msgstr "已筹 %(percent)s%%"
+
+#: templates/public/index.html:155
+msgid "days left"
+msgstr "天剩余"
+
+#: templates/public/index.html:164
+msgid "View All Campaigns"
+msgstr "查看所有筹款项目"
+
+#: templates/public/index.html:173
+msgid "Community Voices"
+msgstr "社区心声"
+
+#: templates/public/index.html:174
+msgid "Stories and reflections from our community"
+msgstr "来自社区的故事与感悟"
+
+#: templates/public/community/create_post.html:402
+#: templates/public/community/index.html:240
+#: templates/public/community/post_detail.html:216
+#: templates/public/crowdfunding/detail.html:455
+#: templates/public/index.html:192 templates/public/user/history.html:233
+#: templates/public/user/history.html:310
+#: templates/public/user/profile.html:313
+msgid "Anonymous"
+msgstr "匿名"
+
+#: templates/public/index.html:202
+msgid "Join the Conversation"
+msgstr "加入讨论"
+
+#: templates/public/index.html:215
+msgid ""
+"I thought I was the only one awake at 3 AM, crying in the hallway so my "
+"mother wouldn't hear. Then I found this harbor, and discovered a thousand"
+" other lights in the dark."
+msgstr ""
+"我以为凌晨三点只有我一个人醒着，在走廊里哭泣，怕妈妈听到。后来我找到了这个"
+"港湾，发现黑暗中还有千百盏其他的微光。"
+
+#: templates/public/index.html:217
+msgid "Anonymous Caregiver, 3 years"
+msgstr "匿名照护者，3年"
+
+#: templates/public/privacy.html:2 templates/public/privacy.html:51
+msgid "Privacy Policy"
+msgstr "隐私政策"
+
+#: templates/public/privacy.html:52 templates/public/terms.html:52
+msgid "Last updated"
+msgstr "最后更新"
+
+#: templates/public/privacy.html:60
+msgid ""
+"At Weilight Harbor, your privacy is of utmost importance to us. This "
+"Privacy Policy explains how we collect, use, protect, and share your "
+"personal information when you use our platform."
+msgstr ""
+"在微光港湾，您的隐私对我们至关重要。本隐私政策说明了当您使用我们的平台时，"
+"我们如何收集、使用、保护和共享您的个人信息。"
+
+#: templates/public/privacy.html:62
+msgid "Information We Collect"
+msgstr "我们收集的信息"
+
+#: templates/public/privacy.html:63
+msgid "We collect the following types of information:"
+msgstr "我们收集以下类型的信息："
+
+#: templates/public/privacy.html:65
+msgid "Account Information"
+msgstr "账户信息"
+
+#: templates/public/privacy.html:65
+msgid "Username, email address, and password when you register."
+msgstr "注册时的用户名、邮箱地址和密码。"
+
+#: templates/public/privacy.html:66
+msgid "Profile Information"
+msgstr "个人资料信息"
+
+#: templates/public/privacy.html:66
+msgid "Optional details such as your real name, phone number, bio, and avatar."
+msgstr "可选的详细信息，如真实姓名、电话号码、个人简介和头像。"
+
+#: templates/public/privacy.html:67
+msgid "Certification Data"
+msgstr "认证数据"
+
+#: templates/public/privacy.html:67
+msgid ""
+"Identity documents, patient information, and medical records submitted "
+"for certification."
+msgstr ""
+"为认证而提交的身份证件、患者信息和医疗记录。"
+
+#: templates/public/privacy.html:68
+msgid "Usage Data"
+msgstr "使用数据"
+
+#: templates/public/privacy.html:68
+msgid ""
+"Information about how you interact with our platform, including pages "
+"visited and features used."
+msgstr ""
+"关于您如何与我们平台互动的信息，包括访问的页面和使用的功能。"
+
+#: templates/public/community/create_post.html:255
+#: templates/public/privacy.html:69
+msgid "Content"
+msgstr "内容"
+
+#: templates/public/privacy.html:69
+msgid ""
+"Posts, comments, journal entries, and other content you create on the "
+"platform."
+msgstr ""
+"您在平台上创建的帖子、评论、手账记录和其他内容。"
+
+#: templates/public/privacy.html:72
+msgid "How We Use Your Information"
+msgstr "我们如何使用您的信息"
+
+#: templates/public/privacy.html:74
+msgid "To provide, maintain, and improve our services"
+msgstr "提供、维护和改进我们的服务"
+
+#: templates/public/privacy.html:75
+msgid "To verify your identity during the certification process"
+msgstr "在认证过程中验证您的身份"
+
+#: templates/public/privacy.html:76
+msgid "To facilitate crowdfunding campaigns and donations"
+msgstr "促进众筹项目和捐助"
+
+#: templates/public/privacy.html:77
+msgid "To communicate with you about your account and our services"
+msgstr "就您的账户和我们的服务与您沟通"
+
+#: templates/public/privacy.html:78
+msgid "To ensure the safety and security of our community"
+msgstr "确保我们社区的安全"
+
+#: templates/public/privacy.html:79
+msgid "To comply with legal obligations"
+msgstr "遵守法律义务"
+
+#: templates/public/privacy.html:82
+msgid "Data Protection"
+msgstr "数据保护"
+
+#: templates/public/privacy.html:83
+msgid ""
+"We implement industry-standard security measures to protect your personal"
+" information:"
+msgstr ""
+"我们采用行业标准的安全措施来保护您的个人信息："
+
+#: templates/public/privacy.html:85
+msgid "Passwords are hashed and never stored in plain text"
+msgstr "密码经过哈希处理，绝不以明文存储"
+
+#: templates/public/privacy.html:86
+msgid "Sensitive certification documents are stored with restricted access"
+msgstr "敏感的认证文件以受限访问方式存储"
+
+#: templates/public/privacy.html:87
+msgid "All data transmission uses encrypted connections"
+msgstr "所有数据传输均使用加密连接"
+
+#: templates/public/privacy.html:88
+msgid "Regular security audits and monitoring"
+msgstr "定期安全审计和监控"
+
+#: templates/public/privacy.html:91
+msgid "Information Sharing"
+msgstr "信息共享"
+
+#: templates/public/privacy.html:92
+msgid ""
+"We do not sell, trade, or rent your personal information to third "
+"parties. We may share information only in the following circumstances:"
+msgstr ""
+"我们不会向第三方出售、交易或出租您的个人信息。我们仅在以下情况下共享信息："
+
+#: templates/public/privacy.html:94
+msgid "With your explicit consent"
+msgstr "在您明确同意的情况下"
+
+#: templates/public/privacy.html:95
+msgid "With authorized certification reviewers (certification data only)"
+msgstr "与授权的认证审核人员共享（仅限认证数据）"
+
+#: templates/public/privacy.html:96
+msgid "When required by law or legal process"
+msgstr "当法律或法律程序要求时"
+
+#: templates/public/privacy.html:97
+msgid "To protect the safety of our users and the public"
+msgstr "为保护我们用户和公众的安全"
+
+#: templates/public/privacy.html:100
+msgid "Your Rights"
+msgstr "您的权利"
+
+#: templates/public/privacy.html:101
+msgid "You have the right to:"
+msgstr "您有权："
+
+#: templates/public/privacy.html:103
+msgid "Access and download your personal data"
+msgstr "访问和下载您的个人数据"
+
+#: templates/public/privacy.html:104
+msgid "Correct inaccurate information"
+msgstr "更正不准确的信息"
+
+#: templates/public/privacy.html:105
+msgid "Request deletion of your account and data"
+msgstr "请求删除您的账户和数据"
+
+#: templates/public/privacy.html:106
+msgid "Opt out of non-essential communications"
+msgstr "退出非必要的通讯"
+
+#: templates/public/privacy.html:107
+msgid "Withdraw consent at any time"
+msgstr "随时撤回同意"
+
+#: templates/public/privacy.html:110
+msgid "Cookies"
+msgstr "Cookie"
+
+#: templates/public/privacy.html:111
+msgid ""
+"We use essential cookies to maintain your session and preferences (such "
+"as language). We do not use tracking cookies or third-party advertising "
+"cookies."
+msgstr ""
+"我们使用必要的 Cookie 来维护您的会话和偏好设置（如语言）。我们不使用追踪 "
+"Cookie 或第三方广告 Cookie。"
+
+#: templates/public/privacy.html:113
+msgid "Children's Privacy"
+msgstr "儿童隐私"
+
+#: templates/public/privacy.html:114
+msgid ""
+"Our platform is not intended for users under the age of 16. We do not "
+"knowingly collect personal information from children."
+msgstr ""
+"我们的平台不面向16岁以下的用户。我们不会故意收集儿童的个人信息。"
+
+#: templates/public/privacy.html:116
+msgid "Changes to This Policy"
+msgstr "政策变更"
+
+#: templates/public/privacy.html:117
+msgid ""
+"We may update this Privacy Policy from time to time. We will notify you "
+"of any significant changes through the platform or via email."
+msgstr ""
+"我们可能会不时更新本隐私政策。如有重大变更，我们将通过平台或邮件通知您。"
+
+#: templates/public/privacy.html:119
+msgid "Contact Us"
+msgstr "联系我们"
+
+#: templates/public/privacy.html:120
+msgid ""
+"If you have questions or concerns about this Privacy Policy, please "
+"contact us at:"
+msgstr ""
+"如果您对本隐私政策有任何疑问或顾虑，请通过以下方式联系我们："
+
+#: templates/public/terms.html:2 templates/public/terms.html:51
+msgid "Terms of Service"
+msgstr "服务条款"
+
+#: templates/public/terms.html:60
+msgid ""
+"Welcome to Weilight Harbor. By accessing or using our platform, you agree"
+" to be bound by these Terms of Service. Please read them carefully."
+msgstr ""
+"欢迎来到微光港湾。访问或使用我们的平台，即表示您同意受本服务条款的约束。请"
+"仔细阅读。"
+
+#: templates/public/terms.html:62
+msgid "Acceptance of Terms"
+msgstr "条款接受"
+
+#: templates/public/terms.html:63
+msgid ""
+"By creating an account or using Weilight Harbor, you agree to these Terms"
+" of Service and our Privacy Policy. If you do not agree, please do not "
+"use the platform."
+msgstr ""
+"创建账户或使用微光港湾，即表示您同意本服务条款和我们的隐私政策。如果您不同"
+"意，请勿使用本平台。"
+
+#: templates/public/terms.html:65
+msgid "Eligibility"
+msgstr "使用资格"
+
+#: templates/public/terms.html:66
+msgid ""
+"You must be at least 16 years old to use Weilight Harbor. By using the "
+"platform, you represent that you meet this age requirement."
+msgstr ""
+"您必须年满16周岁才能使用微光港湾。使用本平台即表示您声明满足此年龄要求。"
+
+#: templates/public/terms.html:68
+msgid "Account Responsibilities"
+msgstr "账户责任"
+
+#: templates/public/terms.html:70
+msgid ""
+"You are responsible for maintaining the security of your account "
+"credentials."
+msgstr ""
+"您有责任维护账户凭据的安全。"
+
+#: templates/public/terms.html:71
+msgid ""
+"You must provide accurate information during registration and "
+"certification."
+msgstr ""
+"注册和认证时必须提供准确的信息。"
+
+#: templates/public/terms.html:72
+msgid "You are responsible for all activity that occurs under your account."
+msgstr "您对账户下发生的所有活动负责。"
+
+#: templates/public/terms.html:73
+msgid "You must notify us immediately of any unauthorized access to your account."
+msgstr "如发现账户被未经授权访问，您必须立即通知我们。"
+
+#: templates/public/terms.html:76
+msgid "Community Guidelines"
+msgstr "社区准则"
+
+#: templates/public/terms.html:77
+msgid "When using Weilight Harbor, you agree to:"
+msgstr "使用微光港湾时，您同意："
+
+#: templates/public/terms.html:79
+msgid "Treat all community members with respect and compassion"
+msgstr "以尊重和关怀对待所有社区成员"
+
+#: templates/public/terms.html:80
+msgid "Not post false, misleading, or defamatory content"
+msgstr "不发布虚假、误导或诽谤性内容"
+
+#: templates/public/terms.html:81
+msgid "Not harass, bully, or threaten other users"
+msgstr "不骚扰、欺凌或威胁其他用户"
+
+#: templates/public/terms.html:82
+msgid "Not share others' personal information without consent"
+msgstr "未经同意不分享他人的个人信息"
+
+#: templates/public/terms.html:83
+msgid "Not use the platform for commercial advertising or spam"
+msgstr "不将平台用于商业广告或垃圾信息"
+
+#: templates/public/terms.html:84
+msgid "Not attempt to circumvent security or moderation measures"
+msgstr "不试图绕过安全或审核措施"
+
+#: templates/public/terms.html:85
+msgid "Report any content that violates these guidelines"
+msgstr "举报任何违反这些准则的内容"
+
+#: templates/public/terms.html:88 templates/public/user/certification.html:2
+#: templates/public/user/certification.html:161
+msgid "Certification"
+msgstr "认证"
+
+#: templates/public/terms.html:89
+msgid ""
+"The certification process is designed to verify identities and build "
+"community trust. By applying:"
+msgstr ""
+"认证流程旨在验证身份并建立社区信任。提交申请即表示："
+
+#: templates/public/terms.html:91
+msgid "You confirm that all submitted information and documents are authentic"
+msgstr "您确认所提交的所有信息和文件均为真实"
+
+#: templates/public/terms.html:92
+msgid ""
+"You understand that providing false information may result in account "
+"suspension"
+msgstr ""
+"您了解提供虚假信息可能导致账户被暂停"
+
+#: templates/public/terms.html:93
+msgid "You consent to our team reviewing your submitted documents"
+msgstr "您同意我们的团队审核您提交的文件"
+
+#: templates/public/terms.html:98
+msgid "Campaign creators must provide truthful and accurate information"
+msgstr "筹款项目发起者必须提供真实准确的信息"
+
+#: templates/public/terms.html:99
+msgid "Funds raised must be used for the stated purpose"
+msgstr "筹集的资金必须用于所述目的"
+
+#: templates/public/terms.html:100
+msgid ""
+"We reserve the right to review, pause, or terminate campaigns that "
+"violate our guidelines"
+msgstr ""
+"我们保留审查、暂停或终止违反我们准则的筹款项目的权利"
+
+#: templates/public/terms.html:101
+msgid ""
+"Donors understand that contributions are voluntary and at their own "
+"discretion"
+msgstr ""
+"捐助者了解捐款是自愿的，由其自行决定"
+
+#: templates/public/terms.html:104
+msgid "Content Ownership"
+msgstr "内容所有权"
+
+#: templates/public/terms.html:105
+msgid ""
+"You retain ownership of content you create on the platform. By posting "
+"content, you grant Weilight Harbor a non-exclusive license to display and"
+" distribute that content within the platform for the purpose of providing"
+" our services."
+msgstr ""
+"您保留在平台上创建的内容的所有权。发布内容即表示您授予微光港湾非独占许可，"
+"允许在平台内展示和分发该内容，以提供我们的服务。"
+
+#: templates/public/terms.html:107
+msgid "Content Moderation"
+msgstr "内容审核"
+
+#: templates/public/terms.html:108
+msgid ""
+"We reserve the right to review, edit, or remove any content that violates"
+" these terms or our community guidelines. Content involving sensitive "
+"topics is filtered to maintain a safe environment. We may also employ "
+"automated tools to detect harmful content."
+msgstr ""
+"我们保留审查、编辑或删除任何违反本条款或社区准则的内容的权利。涉及敏感话题"
+"的内容会被过滤，以维护安全的环境。我们也可能使用自动化工具来检测有害内容。"
+
+#: templates/public/terms.html:110
+msgid "Disclaimer"
+msgstr "免责声明"
+
+#: templates/public/terms.html:111
+msgid ""
+"Weilight Harbor is provided \"as is\" without warranties of any kind. We "
+"do not provide medical, legal, or financial advice. Information shared on"
+" the platform is for peer support purposes and should not replace "
+"professional guidance."
+msgstr ""
+"微光港湾按\"原样\"提供，不作任何形式的保证。我们不提供医疗、法律或财务建议。"
+"平台上分享的信息仅用于同伴支持目的，不应取代专业指导。"
+
+#: templates/public/terms.html:113
+msgid "Limitation of Liability"
+msgstr "责任限制"
+
+#: templates/public/terms.html:114
+msgid ""
+"To the maximum extent permitted by law, Weilight Harbor shall not be "
+"liable for any indirect, incidental, special, or consequential damages "
+"arising from your use of the platform."
+msgstr ""
+"在法律允许的最大范围内，微光港湾不对因您使用本平台而产生的任何间接、附带、"
+"特殊或后果性损害承担责任。"
+
+#: templates/public/terms.html:116
+msgid "Account Termination"
+msgstr "账户终止"
+
+#: templates/public/terms.html:117
+msgid ""
+"We reserve the right to suspend or terminate accounts that violate these "
+"terms. You may also delete your account at any time by contacting our "
+"support team."
+msgstr ""
+"我们保留暂停或终止违反本条款的账户的权利。您也可以随时联系我们的支持团队来"
+"删除您的账户。"
+
+#: templates/public/terms.html:119
+msgid "Changes to Terms"
+msgstr "条款变更"
+
+#: templates/public/terms.html:120
+msgid ""
+"We may update these Terms of Service from time to time. Continued use of "
+"the platform after changes constitutes acceptance of the updated terms."
+msgstr ""
+"我们可能会不时更新本服务条款。变更后继续使用平台即表示接受更新后的条款。"
+
+#: templates/public/terms.html:122
+msgid "Contact"
+msgstr "联系"
+
+#: templates/public/terms.html:123
+msgid "For questions about these Terms of Service, please contact us at:"
+msgstr "如对本服务条款有疑问，请通过以下方式联系我们："
+
+#: templates/public/auth/forgot_password.html:2
+#: templates/public/auth/forgot_password.html:9
+msgid "Forgot Password"
+msgstr "忘记密码"
+
+#: templates/public/auth/forgot_password.html:10
+msgid "Enter your email address and we will send you a reset link"
+msgstr "输入您的邮箱地址，我们将向您发送重置链接"
+
+#: templates/public/auth/forgot_password.html:14
+msgid ""
+"This is a demo feature. No actual email will be sent, but the flow is "
+"fully functional."
+msgstr ""
+"这是一个演示功能。不会发送实际的邮件，但流程完全可用。"
+
+#: templates/public/auth/forgot_password.html:19
+msgid "Email Address"
+msgstr "邮箱地址"
+
+#: templates/public/auth/forgot_password.html:20
+msgid "Enter your registered email"
+msgstr "输入您注册时使用的邮箱"
+
+#: templates/public/auth/forgot_password.html:24
+msgid "Send Reset Link"
+msgstr "发送重置链接"
+
+#: templates/public/auth/forgot_password.html:28
+msgid "Back to Login"
+msgstr "返回登录"
+
+#: templates/public/auth/login.html:9
+msgid "Welcome Back"
+msgstr "欢迎回来"
+
+#: templates/public/auth/login.html:10
+msgid "Welcome back to the harbor"
+msgstr "欢迎回到港湾"
+
+#: templates/public/auth/login.html:13
+msgid "Username or Email"
+msgstr "用户名或邮箱"
+
+#: templates/public/auth/login.html:14
+msgid "Enter your username or email"
+msgstr "输入您的用户名或邮箱"
+
+#: templates/public/auth/login.html:17 templates/public/auth/register.html:21
+msgid "Password"
+msgstr "密码"
+
+#: templates/public/auth/login.html:18
+msgid "Enter your password"
+msgstr "输入您的密码"
+
+#: templates/public/auth/login.html:20
+msgid "Forgot password?"
+msgstr "忘记密码？"
+
+#: templates/public/auth/login.html:26
+msgid "Don't have an account?"
+msgstr "还没有账号？"
+
+#: templates/public/auth/register.html:9
+msgid "Light Your First Light"
+msgstr "点亮你的第一盏灯"
+
+#: templates/public/auth/register.html:10
+msgid "Join our caring community"
+msgstr "加入我们的关爱社区"
+
+#: templates/public/auth/register.html:13
+msgid "Username"
+msgstr "用户名"
+
+#: templates/public/auth/register.html:14
+msgid "Choose a username"
+msgstr "选择一个用户名"
+
+#: templates/public/auth/register.html:18
+msgid "Your email address"
+msgstr "您的邮箱地址"
+
+#: templates/public/auth/register.html:22
+msgid "Create a password"
+msgstr "创建密码"
+
+#: templates/public/auth/register.html:25
+msgid "Confirm Password"
+msgstr "确认密码"
+
+#: templates/public/auth/register.html:26
+msgid "Confirm your password"
+msgstr "再次输入密码"
+
+#: templates/public/auth/register.html:31
+msgid "I agree to the Terms of Service and Privacy Policy"
+msgstr "我同意服务条款和隐私政策"
+
+#: templates/public/auth/register.html:34
+msgid "Create Account"
+msgstr "创建账号"
+
+#: templates/public/auth/register.html:37
+msgid "Already have an account?"
+msgstr "已有账号？"
+
+#: templates/public/community/create_post.html:2
+msgid "Create Post"
+msgstr "发帖"
+
+#: templates/public/community/create_post.html:223
+#: templates/public/community/index.html:188
+#: templates/public/community/index.html:193
+msgid "New Post"
+msgstr "发新帖"
+
+#: templates/public/community/create_post.html:229
+msgid "Create a New Post"
+msgstr "创建新帖子"
+
+#: templates/public/community/create_post.html:236
+#: templates/public/crowdfunding/create.html:259
+msgid "Category"
+msgstr "分类"
+
+#: templates/public/community/create_post.html:236
+msgid "select one or more"
+msgstr "选择一个或多个"
+
+#: templates/public/community/create_post.html:247
+#: templates/public/respite/index.html:164
+msgid "Title"
+msgstr "标题"
+
+#: templates/public/community/create_post.html:249
+msgid "Give your post a title..."
+msgstr "给你的帖子起个标题..."
+
+#: templates/public/community/create_post.html:257
+msgid "Share your story, thoughts, or questions..."
+msgstr "分享你的故事、想法或问题..."
+
+#: templates/public/community/create_post.html:267
+msgid "Images"
+msgstr "图片"
+
+#: templates/public/community/create_post.html:267
+msgid "optional, max 9"
+msgstr "可选，最多9张"
+
+#: templates/public/community/create_post.html:273
+msgid "Click or drag images here"
+msgstr "点击或拖拽图片到此处"
+
+#: templates/public/community/create_post.html:274
+msgid "Supports JPG, PNG, GIF, WebP"
+msgstr "支持 JPG、PNG、GIF、WebP"
+
+#: templates/public/community/create_post.html:286
+msgid "Post Anonymously"
+msgstr "匿名发布"
+
+#: templates/public/community/create_post.html:287
+msgid ""
+"Your name and avatar will be hidden. Other users will see \"Anonymous\" "
+"instead. Admins can still see your identity for moderation purposes."
+msgstr ""
+"您的姓名和头像将被隐藏。其他用户将看到\"匿名\"。管理员仍可看到您的身份以用于"
+"审核目的。"
+
+#: templates/public/community/create_post.html:295
+#: templates/public/respite/index.html:219
+#: templates/public/user/certification.html:362
+#: templates/public/user/edit_profile.html:120
+msgid "Cancel"
+msgstr "取消"
+
+#: templates/public/community/create_post.html:298
+msgid "Publish"
+msgstr "发布"
+
+#: templates/public/community/create_post.html:307
+msgid "Preview"
+msgstr "预览"
+
+#: templates/public/community/create_post.html:312
+msgid "Just now"
+msgstr "刚刚"
+
+#: templates/public/community/create_post.html:314
+#: templates/public/community/create_post.html:383
+msgid "Your title will appear here..."
+msgstr "你的标题将显示在这里..."
+
+#: templates/public/community/create_post.html:315
+#: templates/public/community/create_post.html:388
+msgid "Your content will appear here..."
+msgstr "你的内容将显示在这里..."
+
+#: templates/public/community/create_post.html:517
+msgid "Some words may be sensitive:"
+msgstr "部分词语可能比较敏感："
+
+#: templates/public/community/index.html:183
+msgid "Share, support, and connect with others"
+msgstr "分享、支持、与他人连接"
+
+#: templates/public/community/index.html:213
+msgid "Latest"
+msgstr "最新"
+
+#: templates/public/community/index.html:218
+msgid "Most Empathized"
+msgstr "最多共鸣"
+
+#: templates/public/community/index.html:223
+msgid "Hot"
+msgstr "热门"
+
+#: templates/public/community/index.html:251
+#: templates/public/community/post_detail.html:227
+#: templates/public/crowdfunding/detail.html:543
+#: templates/public/user/profile.html:142
+msgid "Certified"
+msgstr "已认证"
+
+#: templates/public/community/index.html:304
+msgid "No posts yet. Be the first to share!"
+msgstr "还没有帖子。快来第一个分享吧！"
+
+#: templates/public/community/index.html:346
+#: templates/public/community/index.html:430
+msgid "Night Confessions"
+msgstr "深夜独白"
+
+#: templates/public/community/index.html:354
+#: templates/public/community/index.html:437
+msgid "Night Confessions opens at 21:00"
+msgstr "深夜独白于21:00开放"
+
+#: templates/public/community/index.html:366
+msgid "Confessions will appear here..."
+msgstr "独白将显示在这里..."
+
+#: templates/public/community/index.html:377
+#: templates/public/community/index.html:444
+msgid "Share your thoughts anonymously..."
+msgstr "匿名分享你的心声..."
+
+#: templates/public/community/index.html:381
+#: templates/public/community/index.html:448
+msgid "Send into the night"
+msgstr "送入夜色"
+
+#: templates/public/community/index.html:403
+#: templates/public/community/index.html:467
+msgid "The night is quiet. Be the first to share."
+msgstr "夜很静。来做第一个分享的人吧。"
+
+#: templates/public/community/post_detail.html:237
+msgid "Are you sure you want to delete this post?"
+msgstr "确定要删除这篇帖子吗？"
+
+#: templates/public/community/post_detail.html:240
+#: templates/public/journal/view_entry.html:158
+msgid "Delete"
+msgstr "删除"
+
+#: templates/public/community/post_detail.html:266
+msgid "Empathy"
+msgstr "我也是"
+
+#: templates/public/community/post_detail.html:270
+msgid "comments"
+msgstr "评论"
+
+#: templates/public/community/post_detail.html:274
+msgid "views"
+msgstr "浏览"
+
+#: templates/public/community/post_detail.html:282
+#: templates/public/crowdfunding/detail.html:420
+msgid "Comments"
+msgstr "评论"
+
+#: templates/public/community/post_detail.html:288
+msgid "Share your thoughts and support..."
+msgstr "分享你的想法和支持..."
+
+#: templates/public/community/post_detail.html:292
+msgid "Post Comment"
+msgstr "发表评论"
+
+#: templates/public/community/post_detail.html:298
+msgid "Log in to comment"
+msgstr "登录后评论"
+
+#: templates/public/community/post_detail.html:313
+msgid "replying to"
+msgstr "回复"
+
+#: templates/public/community/post_detail.html:333
+msgid "No comments yet. Be the first to show support!"
+msgstr "还没有评论。来第一个表达支持吧！"
+
+#: templates/public/crowdfunding/create.html:2
+msgid "Create Campaign"
+msgstr "创建筹款项目"
+
+#: templates/public/crowdfunding/create.html:215
+msgid "Start a Crowdfunding Campaign"
+msgstr "发起众筹项目"
+
+#: templates/public/crowdfunding/create.html:216
+msgid "Share your story and let the community help."
+msgstr "分享你的故事，让社区来帮助你。"
+
+#: templates/public/crowdfunding/create.html:223
+#: templates/public/crowdfunding/detail.html:418
+msgid "Story"
+msgstr "故事"
+
+#: templates/public/crowdfunding/create.html:228
+#: templates/public/user/history.html:260
+#: templates/public/user/profile.html:272
+msgid "Goal"
+msgstr "目标"
+
+#: templates/public/crowdfunding/create.html:233
+msgid "Verification"
+msgstr "验证"
+
+#: templates/public/crowdfunding/create.html:238
+msgid "Submit"
+msgstr "提交"
+
+#: templates/public/crowdfunding/create.html:247
+msgid "Tell Your Story"
+msgstr "讲述你的故事"
+
+#: templates/public/crowdfunding/create.html:249
+msgid "Share the story of the person who needs help."
+msgstr "分享需要帮助的人的故事。"
+
+#: templates/public/crowdfunding/create.html:252
+msgid "Campaign Title"
+msgstr "项目标题"
+
+#: templates/public/crowdfunding/create.html:254
+msgid "e.g. Help Xiao Ming fight leukemia"
+msgstr "例如：帮助小明抗击白血病"
+
+#: templates/public/crowdfunding/create.html:255
+msgid "Keep it clear and compelling. Max 200 characters."
+msgstr "保持简洁有力。最多200个字符。"
+
+#: templates/public/crowdfunding/create.html:268
+msgid "Description"
+msgstr "详情描述"
+
+#: templates/public/crowdfunding/create.html:270
+msgid ""
+"Describe the situation, medical condition, treatment needed, and how the "
+"funds will be used..."
+msgstr ""
+"描述具体情况、病情、所需治疗方案以及资金的用途..."
+
+#: templates/public/crowdfunding/create.html:271
+msgid "Be detailed and honest. This helps donors understand the situation."
+msgstr "请详细且如实填写。这有助于捐助者了解情况。"
+
+#: templates/public/crowdfunding/create.html:275
+msgid "Cover Image"
+msgstr "封面图片"
+
+#: templates/public/crowdfunding/create.html:281
+msgid "Click or drag to upload cover image"
+msgstr "点击或拖拽上传封面图片"
+
+#: templates/public/crowdfunding/create.html:282
+msgid "JPG, PNG, or WebP. Recommended: 16:9 ratio."
+msgstr "JPG、PNG 或 WebP。建议：16:9 比例。"
+
+#: templates/public/crowdfunding/create.html:288
+msgid "Patient Photo"
+msgstr "患者照片"
+
+#: templates/public/crowdfunding/create.html:294
+msgid "Click or drag to upload patient photo"
+msgstr "点击或拖拽上传患者照片"
+
+#: templates/public/crowdfunding/create.html:295
+msgid "Optional. Helps build trust with donors."
+msgstr "可选。有助于建立捐助者的信任。"
+
+#: templates/public/crowdfunding/create.html:305
+msgid "Set Your Goal"
+msgstr "设定目标"
+
+#: templates/public/crowdfunding/create.html:307
+msgid "How much do you need to raise?"
+msgstr "您需要筹集多少？"
+
+#: templates/public/crowdfunding/create.html:310
+msgid "Funding Goal"
+msgstr "筹款目标"
+
+#: templates/public/crowdfunding/create.html:316
+msgid "Set a realistic goal. Minimum: 100 yuan."
+msgstr "设定一个合理的目标。最低：100元。"
+
+#: templates/public/crowdfunding/create.html:324
+msgid "Verification Materials"
+msgstr "验证材料"
+
+#: templates/public/crowdfunding/create.html:326
+msgid "Upload a payment QR code for admin review purposes."
+msgstr "上传收款二维码，供管理员审核。"
+
+#: templates/public/crowdfunding/create.html:329
+msgid "Payment QR Code"
+msgstr "收款二维码"
+
+#: templates/public/crowdfunding/create.html:335
+msgid "Click or drag to upload QR code"
+msgstr "点击或拖拽上传二维码"
+
+#: templates/public/crowdfunding/create.html:336
+msgid "Optional. WeChat or Alipay QR code."
+msgstr "可选。微信或支付宝二维码。"
+
+#: templates/public/crowdfunding/create.html:346
+msgid ""
+"Your campaign will be reviewed by our team within 24 hours before it "
+"becomes visible to the public. We take privacy seriously and will handle "
+"your information with care."
+msgstr ""
+"您的筹款项目将在24小时内由我们的团队审核，审核通过后才会对公众可见。我们非"
+"常重视隐私，会谨慎处理您的信息。"
+
+#: templates/public/crowdfunding/create.html:354
+msgid "Submit for Review"
+msgstr "提交审核"
+
+#: templates/public/crowdfunding/create.html:356
+msgid "You can edit your campaign before it is approved."
+msgstr "在审核通过之前，您可以编辑您的筹款项目。"
+
+#: templates/public/crowdfunding/create.html:429
+msgid "Please fill in all required fields. Minimum goal is 100 yuan."
+msgstr "请填写所有必填项。最低目标金额为100元。"
+
+#: templates/public/crowdfunding/detail.html:386
+msgid ""
+"This campaign is pending review. It will be visible to the public once "
+"approved."
+msgstr ""
+"此筹款项目正在等待审核。审核通过后将对公众可见。"
+
+#: templates/public/crowdfunding/detail.html:391
+msgid "This campaign was rejected."
+msgstr "此筹款项目已被拒绝。"
+
+#: templates/public/crowdfunding/detail.html:392
+msgid "Reason:"
+msgstr "原因："
+
+#: templates/public/crowdfunding/detail.html:402
+#: templates/public/crowdfunding/detail.html:519
+#: templates/public/crowdfunding/index.html:327
+#: templates/public/user/history.html:266
+msgid "Fully Funded"
+msgstr "已筹满"
+
+#: templates/public/crowdfunding/detail.html:419
+#: templates/public/crowdfunding/detail.html:437
+#: templates/public/crowdfunding/detail.html:503
+msgid "Donors"
+msgstr "捐助者"
+
+#: templates/public/crowdfunding/detail.html:428
+msgid "Patient photo"
+msgstr "患者照片"
+
+#: templates/public/crowdfunding/detail.html:469
+msgid "No donations yet. Be the first to help!"
+msgstr "还没有捐助。来做第一个帮助者吧！"
+
+#: templates/public/crowdfunding/detail.html:479
+msgid "Comments coming soon"
+msgstr "评论功能即将上线"
+
+#: templates/public/crowdfunding/detail.html:480
+msgid "We are working on adding comments. Stay tuned!"
+msgstr "我们正在开发评论功能，敬请期待！"
+
+#: templates/public/crowdfunding/detail.html:490
+msgid "raised of"
+msgstr "已筹，目标"
+
+#: templates/public/crowdfunding/detail.html:490
+msgid "goal"
+msgstr "目标"
+
+#: templates/public/crowdfunding/detail.html:499
+msgid "Funded"
+msgstr "已筹"
+
+#: templates/public/crowdfunding/detail.html:506
+msgid "Ongoing"
+msgstr "进行中"
+
+#: templates/public/crowdfunding/detail.html:507
+#: templates/public/user/certification_status.html:205
+msgid "Status"
+msgstr "状态"
+
+#: templates/public/crowdfunding/detail.html:514
+msgid "Donate Now"
+msgstr "立即捐助"
+
+#: templates/public/crowdfunding/detail.html:523
+msgid "Not Accepting Donations"
+msgstr "暂不接受捐助"
+
+#: templates/public/crowdfunding/detail.html:531
+msgid "Copy Link"
+msgstr "复制链接"
+
+#: templates/public/crowdfunding/detail.html:547
+msgid "Campaign organizer"
+msgstr "项目发起人"
+
+#: templates/public/crowdfunding/detail.html:565
+msgid "Make a Donation"
+msgstr "捐助"
+
+#: templates/public/crowdfunding/detail.html:571
+msgid "Choose an amount to donate to"
+msgstr "选择捐助金额"
+
+#: templates/public/crowdfunding/detail.html:580
+msgid "Custom"
+msgstr "自定义"
+
+#: templates/public/crowdfunding/detail.html:586
+msgid "Enter amount"
+msgstr "输入金额"
+
+#: templates/public/crowdfunding/detail.html:591
+msgid "Leave a message of support (optional)"
+msgstr "留下一句鼓励的话（可选）"
+
+#: templates/public/crowdfunding/detail.html:598
+msgid "Donate anonymously"
+msgstr "匿名捐助"
+
+#: templates/public/crowdfunding/detail.html:603
+msgid "Confirm Donation"
+msgstr "确认捐助"
+
+#: templates/public/crowdfunding/detail.html:607
+msgid "This is a simulated donation for demonstration purposes."
+msgstr "这是一个用于演示目的的模拟捐助。"
+
+#: templates/public/crowdfunding/detail.html:619
+msgid "Thank You!"
+msgstr "感谢您！"
+
+#: templates/public/crowdfunding/detail.html:621
+msgid "Your kindness brings warmth and hope."
+msgstr "您的善意带来温暖和希望。"
+
+#: templates/public/crowdfunding/detail.html:625
+msgid "Done"
+msgstr "完成"
+
+#: templates/public/crowdfunding/index.html:247
+msgid "Every penny is a point of light"
+msgstr "每一分钱都是一点光"
+
+#: templates/public/crowdfunding/index.html:248
+msgid ""
+"Help families in need. Your donation, no matter how small, brings warmth "
+"and hope to those facing medical hardships."
+msgstr ""
+"帮助有需要的家庭。您的每一份捐助，无论多少，都为面临医疗困难的人们带来温暖"
+"和希望。"
+
+#: templates/public/crowdfunding/index.html:252
+msgid "Search campaigns..."
+msgstr "搜索筹款项目..."
+
+#: templates/public/crowdfunding/index.html:263
+#: templates/public/crowdfunding/index.html:440
+msgid "Start a Campaign"
+msgstr "发起筹款项目"
+
+#: templates/public/crowdfunding/index.html:266
+msgid "Get certified to start a campaign"
+msgstr "通过认证后即可发起筹款项目"
+
+#: templates/public/crowdfunding/index.html:268
+msgid "Get Certified to Start"
+msgstr "先认证再发起"
+
+#: templates/public/crowdfunding/index.html:273
+msgid "Login to Start a Campaign"
+msgstr "登录后发起筹款项目"
+
+#: templates/public/crowdfunding/index.html:300
+msgid "Sort:"
+msgstr "排序："
+
+#: templates/public/crowdfunding/index.html:303
+msgid "Newest"
+msgstr "最新"
+
+#: templates/public/crowdfunding/index.html:304
+msgid "Most Urgent"
+msgstr "最紧急"
+
+#: templates/public/crowdfunding/index.html:305
+msgid "By Progress"
+msgstr "按进度"
+
+#: templates/public/crowdfunding/index.html:344
+msgid "Verified"
+msgstr "已验证"
+
+#: templates/public/crowdfunding/index.html:372
+msgid "Raised:"
+msgstr "已筹："
+
+#: templates/public/crowdfunding/index.html:373
+msgid "Goal:"
+msgstr "目标："
+
+#: templates/public/crowdfunding/index.html:380
+msgid "donors"
+msgstr "位捐助者"
+
+#: templates/public/crowdfunding/index.html:384
+msgid "Donate"
+msgstr "捐助"
+
+#: templates/public/crowdfunding/index.html:436
+#: templates/public/user/history.html:282
+msgid "No campaigns yet"
+msgstr "暂无筹款项目"
+
+#: templates/public/crowdfunding/index.html:437
+msgid "Be the first to start a crowdfunding campaign and help someone in need."
+msgstr "成为第一个发起众筹项目的人，帮助有需要的人。"
+
+#: templates/public/journal/view_entry.html:119
+msgid "Back to Timeline"
+msgstr "返回时间线"
+
+#: templates/public/journal/view_entry.html:144
+msgid "Journal image"
+msgstr "手账图片"
+
+#: templates/public/journal/view_entry.html:152
+msgid "Edit"
+msgstr "编辑"
+
+#: templates/public/journal/view_entry.html:155
+msgid "Are you sure you want to delete this entry?"
+msgstr "确定要删除这条记录吗？"
+
+#: templates/public/respite/index.html:71
+msgid "All"
+msgstr "全部"
+
+#: templates/public/respite/index.html:72
+msgid "Need Help"
+msgstr "需要帮助"
+
+#: templates/public/respite/index.html:73
+msgid "Equipment"
+msgstr "设备"
+
+#: templates/public/respite/index.html:77
+msgid "Radius:"
+msgstr "范围："
+
+#: templates/public/respite/index.html:84
+msgid "Search location..."
+msgstr "搜索位置..."
+
+#: templates/public/respite/index.html:89
+msgid "Loading nearby requests..."
+msgstr "正在加载附近的请求..."
+
+#: templates/public/respite/index.html:108
+#: templates/public/respite/index.html:220
+msgid "Post Request"
+msgstr "发布请求"
+
+#: templates/public/respite/index.html:136
+msgid "Post a Request"
+msgstr "发布一个请求"
+
+#: templates/public/respite/index.html:142
+msgid "What would you like to post?"
+msgstr "您想发布什么？"
+
+#: templates/public/respite/index.html:148
+msgid "I Need Help"
+msgstr "我需要帮助"
+
+#: templates/public/respite/index.html:149
+msgid "Request caregiving or volunteer service"
+msgstr "请求照护或志愿服务"
+
+#: templates/public/respite/index.html:156
+msgid "I Have Equipment"
+msgstr "我有设备"
+
+#: templates/public/respite/index.html:157
+msgid "Lend medical equipment to others"
+msgstr "向他人出借医疗设备"
+
+#: templates/public/respite/index.html:165
+msgid "Brief description of your need"
+msgstr "简要描述您的需求"
+
+#: templates/public/respite/index.html:168
+#: templates/public/user/profile.html:207
+msgid "Details"
+msgstr "详情"
+
+#: templates/public/respite/index.html:169
+msgid "Provide more details..."
+msgstr "提供更多详情..."
+
+#: templates/public/respite/index.html:175
+msgid "Service Category"
+msgstr "服务类别"
+
+#: templates/public/respite/index.html:177
+msgid "Companionship"
+msgstr "陪伴"
+
+#: templates/public/respite/index.html:178
+msgid "Daily Care"
+msgstr "日常护理"
+
+#: templates/public/respite/index.html:179
+msgid "Medical Watch"
+msgstr "医疗看护"
+
+#: templates/public/respite/index.html:180
+msgid "Errands"
+msgstr "跑腿代办"
+
+#: templates/public/respite/index.html:181
+#: templates/public/respite/index.html:199
+#: templates/public/user/certification.html:296
+msgid "Other"
+msgstr "其他"
+
+#: templates/public/respite/index.html:185
+msgid "Time Needed"
+msgstr "所需时间"
+
+#: templates/public/respite/index.html:186
+msgid "e.g., Saturday afternoon, 4 hours"
+msgstr "例如：周六下午，4小时"
+
+#: templates/public/respite/index.html:193
+msgid "Equipment Type"
+msgstr "设备类型"
+
+#: templates/public/respite/index.html:195
+msgid "Wheelchair"
+msgstr "轮椅"
+
+#: templates/public/respite/index.html:196
+msgid "Oxygen Equipment"
+msgstr "制氧设备"
+
+#: templates/public/respite/index.html:197
+msgid "Hospital Bed"
+msgstr "医疗床"
+
+#: templates/public/respite/index.html:198
+msgid "Walker"
+msgstr "助行器"
+
+#: templates/public/respite/index.html:203
+msgid "Condition"
+msgstr "状况"
+
+#: templates/public/respite/index.html:205
+msgid "Good"
+msgstr "良好"
+
+#: templates/public/respite/index.html:206
+msgid "Fair"
+msgstr "一般"
+
+#: templates/public/respite/index.html:207
+msgid "Worn but usable"
+msgstr "有磨损但可使用"
+
+#: templates/public/respite/index.html:213
+msgid "City"
+msgstr "城市"
+
+#: templates/public/respite/index.html:214
+msgid "e.g., Beijing"
+msgstr "例如：北京"
+
+#: templates/public/respite/index.html:216
+msgid "Click on the map to set the location after posting."
+msgstr "发布后可在地图上点击设置位置。"
+
+#: templates/public/user/certification.html:163
+msgid "Get certified to unlock more features and build trust in the community"
+msgstr "通过认证解锁更多功能，并在社区中建立信任"
+
+#: templates/public/user/certification.html:171
+msgid "Application Under Review"
+msgstr "申请审核中"
+
+#: templates/public/user/certification.html:173
+msgid ""
+"Your certification application is being reviewed. This usually takes "
+"24-48 hours."
+msgstr ""
+"您的认证申请正在审核中。通常需要24-48小时。"
+
+#: templates/public/user/certification.html:176
+#: templates/public/user/certification.html:197
+#: templates/public/user/certification_status.html:219
+#: templates/public/user/profile.html:203
+msgid "Type"
+msgstr "类型"
+
+#: templates/public/user/certification.html:177
+msgid "Name"
+msgstr "姓名"
+
+#: templates/public/user/certification.html:178
+#: templates/public/user/profile.html:204
+msgid "Applied"
+msgstr "已申请"
+
+#: templates/public/user/certification.html:182
+msgid "View Status"
+msgstr "查看状态"
+
+#: templates/public/user/certification.html:183
+#: templates/public/user/certification.html:203
+#: templates/public/user/certification_status.html:265
+#: templates/public/user/settings.html:77
+msgid "Back to Profile"
+msgstr "返回个人主页"
+
+#: templates/public/user/certification.html:192
+msgid "Certification Approved!"
+msgstr "认证已通过！"
+
+#: templates/public/user/certification.html:194
+msgid "Congratulations! Your identity has been verified."
+msgstr "恭喜！您的身份已通过验证。"
+
+#: templates/public/user/certification.html:198
+msgid "Verified Name"
+msgstr "已验证姓名"
+
+#: templates/public/user/certification.html:199
+#: templates/public/user/certification_status.html:183
+#: templates/public/user/certification_status.html:211
+msgid "Approved"
+msgstr "已通过"
+
+#: templates/public/user/certification.html:213
+msgid "Previous Application Rejected"
+msgstr "上次申请已被拒绝"
+
+#: templates/public/user/certification.html:216
+msgid "Reason"
+msgstr "原因"
+
+#: templates/public/user/certification.html:218
+msgid "Please review the requirements and try again."
+msgstr "请查看要求后重新申请。"
+
+#: templates/public/user/certification.html:227
+msgid "Certification Type"
+msgstr "认证类型"
+
+#: templates/public/user/certification.html:234
+msgid "Family Member"
+msgstr "家属"
+
+#: templates/public/user/certification.html:235
+msgid "Family or caregiver of a patient"
+msgstr "患者的家属或照护者"
+
+#: templates/public/user/certification.html:244
+msgid "Volunteer"
+msgstr "志愿者"
+
+#: templates/public/user/certification.html:245
+msgid "Volunteer wanting to help families"
+msgstr "希望帮助家庭的志愿者"
+
+#: templates/public/user/certification.html:253
+msgid "Personal Information"
+msgstr "个人信息"
+
+#: templates/public/user/certification.html:257
+#: templates/public/user/edit_profile.html:86
+msgid "Real Name"
+msgstr "真实姓名"
+
+#: templates/public/user/certification.html:259
+msgid "Enter your legal name"
+msgstr "输入您的法定姓名"
+
+#: templates/public/user/certification.html:263
+msgid "ID Number"
+msgstr "身份证号"
+
+#: templates/public/user/certification.html:265
+msgid "Enter your ID card number"
+msgstr "输入您的身份证号码"
+
+#: templates/public/user/certification.html:269
+msgid "Relationship to Patient"
+msgstr "与患者的关系"
+
+#: templates/public/user/certification.html:271
+msgid "e.g., Parent, Spouse, Child"
+msgstr "例如：父母、配偶、子女"
+
+#: templates/public/user/certification.html:278
+msgid "Patient Information"
+msgstr "患者信息"
+
+#: templates/public/user/certification.html:282
+msgid "Patient Name"
+msgstr "患者姓名"
+
+#: templates/public/user/certification.html:284
+msgid "Enter the patient's name"
+msgstr "输入患者姓名"
+
+#: templates/public/user/certification.html:288
+msgid "Patient Illness"
+msgstr "患者病症"
+
+#: templates/public/user/certification.html:290
+msgid "Select illness type"
+msgstr "选择病症类型"
+
+#: templates/public/user/certification.html:291
+msgid "Alzheimer's"
+msgstr "阿尔茨海默症"
+
+#: templates/public/user/certification.html:292
+msgid "ALS"
+msgstr "渐冻症"
+
+#: templates/public/user/certification.html:293
+msgid "Cancer"
+msgstr "癌症"
+
+#: templates/public/user/certification.html:294
+msgid "Rare Disease"
+msgstr "罕见病"
+
+#: templates/public/user/certification.html:295
+msgid "Mental Health"
+msgstr "精神健康"
+
+#: templates/public/user/certification.html:301
+msgid "Hospital Name"
+msgstr "医院名称"
+
+#: templates/public/user/certification.html:303
+msgid "Enter the hospital name"
+msgstr "输入医院名称"
+
+#: templates/public/user/certification.html:307
+msgid "Diagnosis Date"
+msgstr "确诊日期"
+
+#: templates/public/user/certification.html:315
+msgid "Document Upload"
+msgstr "文件上传"
+
+#: templates/public/user/certification.html:319
+msgid "Main Supporting Document"
+msgstr "主要证明文件"
+
+#: templates/public/user/certification.html:323
+msgid "Click to upload ID photo or medical certificate"
+msgstr "点击上传身份证照片或医疗证明"
+
+#: templates/public/user/certification.html:325
+msgid "Max 5MB"
+msgstr "最大5MB"
+
+#: templates/public/user/certification.html:332
+msgid "Additional Documents"
+msgstr "补充文件"
+
+#: templates/public/user/certification.html:332
+msgid "Optional, up to 3"
+msgstr "可选，最多3份"
+
+#: templates/public/user/certification.html:338
+msgid "Document"
+msgstr "文件"
+
+#: templates/public/user/certification.html:351
+msgid "Your privacy is protected"
+msgstr "您的隐私受到保护"
+
+#: templates/public/user/certification.html:352
+msgid ""
+"All personal information is encrypted and stored securely. It will only "
+"be used for identity verification and will never be shared with third "
+"parties."
+msgstr ""
+"所有个人信息均经过加密并安全存储。这些信息仅用于身份验证，绝不会与第三方共"
+"享。"
+
+#: templates/public/user/certification.html:360
+msgid "Submit Application"
+msgstr "提交申请"
+
+#: templates/public/user/certification_status.html:155
+#: templates/public/user/certification_status.html:227
+msgid "Submitted"
+msgstr "已提交"
+
+#: templates/public/user/certification_status.html:166
+msgid "Under Review"
+msgstr "审核中"
+
+#: templates/public/user/certification_status.html:171
+msgid "Reviewed"
+msgstr "已审核"
+
+#: templates/public/user/certification_status.html:188
+#: templates/public/user/certification_status.html:213
+msgid "Rejected"
+msgstr "已拒绝"
+
+#: templates/public/user/certification_status.html:193
+msgid "Result"
+msgstr "结果"
+
+#: templates/public/user/certification_status.html:201
+msgid "Application ID"
+msgstr "申请编号"
+
+#: templates/public/user/certification_status.html:209
+msgid "Pending Review"
+msgstr "等待审核"
+
+#: templates/public/user/certification_status.html:223
+msgid "Applicant"
+msgstr "申请人"
+
+#: templates/public/user/certification_status.html:232
+msgid "Estimated Review Time"
+msgstr "预计审核时间"
+
+#: templates/public/user/certification_status.html:233
+msgid "hours"
+msgstr "小时"
+
+#: templates/public/user/certification_status.html:238
+msgid "Reviewed At"
+msgstr "审核时间"
+
+#: templates/public/user/certification_status.html:248
+msgid "Rejection Reason"
+msgstr "拒绝原因"
+
+#: templates/public/user/certification_status.html:251
+msgid "No specific reason provided. Please review the requirements and try again."
+msgstr "未提供具体原因。请查看要求后重新申请。"
+
+#: templates/public/user/certification_status.html:257
+msgid "Re-apply"
+msgstr "重新申请"
+
+#: templates/public/user/certification_status.html:275
+msgid "No Certification Application"
+msgstr "尚无认证申请"
+
+#: templates/public/user/certification_status.html:276
+msgid "You have not submitted a certification application yet."
+msgstr "您尚未提交认证申请。"
+
+#: templates/public/user/certification_status.html:279
+msgid "Apply Now"
+msgstr "立即申请"
+
+#: templates/public/user/edit_profile.html:2
+#: templates/public/user/edit_profile.html:71
+#: templates/public/user/profile.html:153
+msgid "Edit Profile"
+msgstr "编辑资料"
+
+#: templates/public/user/edit_profile.html:72
+msgid "Update your personal information"
+msgstr "更新您的个人信息"
+
+#: templates/public/user/edit_profile.html:78
+#: templates/public/user/profile.html:135
+msgid "Avatar"
+msgstr "头像"
+
+#: templates/public/user/edit_profile.html:81
+msgid "Click to change avatar"
+msgstr "点击更换头像"
+
+#: templates/public/user/edit_profile.html:88
+msgid "Enter your real name"
+msgstr "输入您的真实姓名"
+
+#: templates/public/user/edit_profile.html:93
+msgid "Phone"
+msgstr "电话"
+
+#: templates/public/user/edit_profile.html:95
+msgid "Enter your phone number"
+msgstr "输入您的电话号码"
+
+#: templates/public/user/edit_profile.html:102
+msgid "Enter your email"
+msgstr "输入您的邮箱"
+
+#: templates/public/user/edit_profile.html:107
+msgid "Bio"
+msgstr "个人简介"
+
+#: templates/public/user/edit_profile.html:109
+msgid "Tell us about yourself..."
+msgstr "介绍一下自己..."
+
+#: templates/public/user/edit_profile.html:110
+msgid "Max 500 characters"
+msgstr "最多500个字符"
+
+#: templates/public/user/edit_profile.html:117
+msgid "Save Changes"
+msgstr "保存更改"
+
+#: templates/public/user/history.html:2 templates/public/user/history.html:172
+msgid "My History"
+msgstr "我的记录"
+
+#: templates/public/user/history.html:173
+msgid "Track all your activities and contributions"
+msgstr "追踪您的所有活动和贡献"
+
+#: templates/public/user/history.html:184
+#: templates/public/user/profile.html:173
+msgid "Posts"
+msgstr "帖子"
+
+#: templates/public/user/history.html:191
+#: templates/public/user/profile.html:177
+msgid "Campaigns"
+msgstr "筹款项目"
+
+#: templates/public/user/history.html:198
+#: templates/public/user/profile.html:181
+msgid "Donations"
+msgstr "捐助"
+
+#: templates/public/user/history.html:205
+msgid "Respite Requests"
+msgstr "喘息请求"
+
+#: templates/public/user/history.html:241
+msgid "No posts yet"
+msgstr "暂无帖子"
+
+#: templates/public/user/history.html:242
+msgid ""
+"Share your story, ask questions, or offer support to others in the "
+"community."
+msgstr ""
+"分享你的故事，提出问题，或为社区中的他人提供支持。"
+
+#: templates/public/user/history.html:243
+msgid "Write a Post"
+msgstr "写一篇帖子"
+
+#: templates/public/user/history.html:261
+#: templates/public/user/profile.html:273
+msgid "Raised"
+msgstr "已筹"
+
+#: templates/public/user/history.html:283
+msgid "Start a fundraising campaign to receive support from the community."
+msgstr "发起筹款项目，获得社区的支持。"
+
+#: templates/public/user/history.html:299
+msgid "To"
+msgstr "捐给"
+
+#: templates/public/user/history.html:318
+msgid "No donations yet"
+msgstr "暂无捐助"
+
+#: templates/public/user/history.html:319
+msgid ""
+"Every contribution, no matter how small, brings warmth and hope to "
+"families in need."
+msgstr ""
+"每一份贡献，无论多少，都为有需要的家庭带来温暖和希望。"
+
+#: templates/public/user/history.html:350
+msgid "No respite requests yet"
+msgstr "暂无喘息请求"
+
+#: templates/public/user/history.html:351
+msgid ""
+"Need help? Submit a respite request and connect with volunteers in your "
+"area."
+msgstr ""
+"需要帮助？提交喘息请求，与您所在地区的志愿者建立联系。"
+
+#: templates/public/user/profile.html:185
+msgid "Days Active"
+msgstr "活跃天数"
+
+#: templates/public/user/profile.html:219
+msgid "My Posts"
+msgstr "我的帖子"
+
+#: templates/public/user/profile.html:253
+#: templates/public/user/profile.html:289
+#: templates/public/user/profile.html:319
+msgid "View All"
+msgstr "查看全部"
+
+#: templates/public/user/profile.html:258
+msgid "No posts yet. Share your story with the community!"
+msgstr "暂无帖子。快来与社区分享你的故事吧！"
+
+#: templates/public/user/profile.html:294
+msgid "No campaigns yet. Start one to get support from the community!"
+msgstr "暂无筹款项目。发起一个项目，获得社区的支持吧！"
+
+#: templates/public/user/profile.html:324
+msgid "No donations yet. Every little bit of kindness matters!"
+msgstr "暂无捐助。每一份善意都很重要！"
+
+#: templates/public/user/settings.html:85
+msgid "Change Password"
+msgstr "修改密码"
+
+#: templates/public/user/settings.html:90
+msgid "Current Password"
+msgstr "当前密码"
+
+#: templates/public/user/settings.html:92
+msgid "Enter current password"
+msgstr "输入当前密码"
+
+#: templates/public/user/settings.html:95
+msgid "New Password"
+msgstr "新密码"
+
+#: templates/public/user/settings.html:97
+msgid "At least 6 characters"
+msgstr "至少6个字符"
+
+#: templates/public/user/settings.html:100
+msgid "Confirm New Password"
+msgstr "确认新密码"
+
+#: templates/public/user/settings.html:102
+msgid "Repeat new password"
+msgstr "再次输入新密码"
+
+#: templates/public/user/settings.html:104
+msgid "Passwords do not match."
+msgstr "两次输入的密码不一致。"
+
+#: templates/public/user/settings.html:108
+msgid "Update Password"
+msgstr "更新密码"
+
+#: templates/public/user/settings.html:117
+msgid "Language Preference"
+msgstr "语言偏好"
+
+#: templates/public/user/settings.html:119
+msgid "Choose your preferred language for the interface."
+msgstr "选择您偏好的界面语言。"
+
+#: templates/public/user/settings.html:136
+msgid "Account"
+msgstr "账户"
+
+#: templates/public/user/settings.html:138
+msgid ""
+"Once your account is deleted, all data will be permanently removed. This "
+"action cannot be undone."
+msgstr ""
+"账户删除后，所有数据将被永久移除。此操作无法撤销。"
+
+#: templates/public/user/settings.html:141
+msgid "Delete Account"
+msgstr "删除账户"
+
+#: templates/public/user/settings.html:143
+msgid "Please contact admin to delete your account."
+msgstr "请联系管理员删除您的账户。"

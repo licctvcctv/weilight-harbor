@@ -1,0 +1,658 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ campaign.title }} - {{ _('Crowdfunding') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detail-hero-img {
+        width: 100%;
+        max-height: 480px;
+        object-fit: cover;
+        border-radius: var(--radius-lg);
+        margin-bottom: 1.5rem;
+    }
+    .detail-hero-placeholder {
+        width: 100%;
+        height: 320px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--color-bg-subtle), var(--color-primary-bg));
+        border-radius: var(--radius-lg);
+        margin-bottom: 1.5rem;
+        color: var(--color-text-disabled);
+    }
+    .story-content {
+        font-size: 1.0625rem;
+        line-height: 2;
+        color: var(--color-text-primary);
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+    .patient-photo {
+        max-width: 100%;
+        border-radius: var(--radius-lg);
+        margin-top: 1.5rem;
+    }
+
+    /* Sidebar */
+    .sidebar-sticky {
+        position: sticky;
+        top: 80px;
+    }
+    .funding-card {
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+    }
+    .funding-card .amount-raised {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+    .funding-card .amount-goal {
+        font-size: 0.9375rem;
+        color: var(--color-text-secondary);
+    }
+    .funding-card .wl-progress {
+        height: 12px;
+        margin: 1rem 0;
+    }
+    .funding-stats {
+        display: flex;
+        justify-content: space-around;
+        text-align: center;
+        padding: 1rem 0;
+        border-top: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+        margin: 1rem 0;
+    }
+    .funding-stats .stat-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+    }
+    .funding-stats .stat-label {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    .creator-card {
+        background: var(--color-bg-subtle);
+        border-radius: var(--radius-lg);
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+    .creator-card img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .creator-card .creator-name {
+        font-weight: 600;
+        font-size: 0.9375rem;
+    }
+    .creator-card .creator-type {
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+    }
+
+    .share-section {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+    .share-btn {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        padding: 0.5rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        background: none;
+        color: var(--color-text-secondary);
+        font-size: 0.8125rem;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+    .share-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+        background: var(--color-primary-bg);
+    }
+
+    /* Donate button */
+    .btn-donate-lg {
+        width: 100%;
+        padding: 0.875rem;
+        font-size: 1.125rem;
+        font-weight: 600;
+        border-radius: var(--radius-lg);
+        border: none;
+        transition: all var(--transition-base);
+    }
+    .btn-donate-lg.active-donate {
+        background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+        color: white;
+    }
+    .btn-donate-lg.active-donate:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(232,145,58,0.35);
+    }
+    .btn-donate-lg.disabled-donate {
+        background: var(--color-bg-subtle);
+        color: var(--color-text-disabled);
+        cursor: not-allowed;
+    }
+
+    /* Donor list */
+    .donor-list {
+        margin-top: 2rem;
+    }
+    .donor-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+    .donor-item:last-child {
+        border-bottom: none;
+    }
+    .donor-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+    .donor-anon-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--color-bg-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-disabled);
+        flex-shrink: 0;
+    }
+    .donor-name {
+        font-weight: 600;
+        font-size: 0.9375rem;
+    }
+    .donor-amount {
+        color: var(--color-primary);
+        font-weight: 600;
+    }
+    .donor-message {
+        font-size: 0.875rem;
+        color: var(--color-text-secondary);
+        margin-top: 0.25rem;
+        font-style: italic;
+    }
+    .donor-time {
+        font-size: 0.75rem;
+        color: var(--color-text-disabled);
+    }
+
+    /* Breadcrumb */
+    .breadcrumb-wrapper {
+        padding: 1rem 0;
+    }
+    .breadcrumb-wrapper .breadcrumb {
+        margin-bottom: 0;
+        font-size: 0.875rem;
+    }
+    .breadcrumb-wrapper .breadcrumb-item a {
+        color: var(--color-text-secondary);
+    }
+    .breadcrumb-wrapper .breadcrumb-item.active {
+        color: var(--color-text-primary);
+    }
+
+    /* Pending notice */
+    .status-notice {
+        padding: 0.75rem 1rem;
+        border-radius: var(--radius-md);
+        margin-bottom: 1.5rem;
+        font-size: 0.9375rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .status-notice.pending {
+        background: #FEF3CD;
+        color: #856404;
+    }
+    .status-notice.rejected {
+        background: #F8D7DA;
+        color: #842029;
+    }
+
+    /* Donate Modal */
+    .amount-presets {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    .amount-preset-btn {
+        padding: 0.875rem;
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        background: white;
+        font-size: 1.125rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        text-align: center;
+    }
+    .amount-preset-btn:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+    .amount-preset-btn.selected {
+        border-color: var(--color-primary);
+        background: var(--color-primary-bg);
+        color: var(--color-primary);
+    }
+    .custom-amount-input {
+        position: relative;
+    }
+    .custom-amount-input .currency-sign {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+    }
+    .custom-amount-input input {
+        padding-left: 2.5rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    /* Thank you animation */
+    .thank-you-screen {
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+    .thank-you-screen .heart-icon {
+        font-size: 4rem;
+        color: var(--color-primary);
+        animation: thankYouPulse 1s ease infinite;
+    }
+    @keyframes thankYouPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.15); }
+    }
+    .confetti-piece {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        animation: confettiFall 2s ease-out forwards;
+        pointer-events: none;
+    }
+    @keyframes confettiFall {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
+    }
+
+    .fully-funded-detail-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        background: var(--color-success);
+        color: white;
+        padding: 0.375rem 1rem;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Detail Tabs */
+    .detail-tabs {
+        display: flex;
+        gap: 0;
+        border-bottom: 2px solid var(--color-border);
+        margin-bottom: 1.5rem;
+    }
+    .detail-tab {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -2px;
+        transition: all var(--transition-fast);
+        background: none;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+    }
+    .detail-tab:hover {
+        color: var(--color-primary);
+    }
+    .detail-tab.active {
+        color: var(--color-primary);
+        border-bottom-color: var(--color-primary);
+    }
+    .tab-panel {
+        display: none;
+    }
+    .tab-panel.active {
+        display: block;
+    }
+    .comments-placeholder {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: var(--color-text-secondary);
+    }
+    .comments-placeholder i {
+        display: block;
+        margin-bottom: 0.75rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-wrapper">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('crowdfunding.index') }}">{{ _('Crowdfunding') }}</a></li>
+                <li class="breadcrumb-item active">{{ campaign.title[:40] }}{% if campaign.title|length > 40 %}...{% endif %}</li>
+            </ol>
+        </nav>
+    </div>
+
+    {% if campaign.status == 'pending' %}
+    <div class="status-notice pending">
+        <i data-lucide="clock" style="width:20px;height:20px"></i>
+        {{ _('This campaign is pending review. It will be visible to the public once approved.') }}
+    </div>
+    {% elif campaign.status == 'rejected' %}
+    <div class="status-notice rejected">
+        <i data-lucide="x-circle" style="width:20px;height:20px"></i>
+        {{ _('This campaign was rejected.') }}
+        {% if campaign.reject_reason %}{{ _('Reason:') }} {{ campaign.reject_reason }}{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="row" style="padding-bottom:3rem">
+        <!-- Left Column: Story -->
+        <div class="col-lg-8 pe-lg-4">
+            {% if campaign.is_fully_funded %}
+            <div class="fully-funded-detail-badge">
+                <i data-lucide="check-circle" style="width:18px;height:18px"></i>
+                {{ _('Fully Funded') }}
+            </div>
+            {% endif %}
+
+            <h1 style="font-size:1.75rem;font-weight:700;margin-bottom:1rem;line-height:1.4">{{ campaign.title }}</h1>
+
+            {% if campaign.cover_image %}
+            <img src="{{ campaign.cover_image }}" alt="{{ campaign.title }}" class="detail-hero-img">
+            {% else %}
+            <div class="detail-hero-placeholder">
+                <i data-lucide="image" style="width:64px;height:64px"></i>
+            </div>
+            {% endif %}
+
+            <!-- Tab Bar -->
+            <div class="detail-tabs">
+                <button class="detail-tab active" data-tab="story">{{ _('Story') }}</button>
+                <button class="detail-tab" data-tab="donors">{{ _('Donors') }} ({{ donor_count }})</button>
+                <button class="detail-tab" data-tab="comments">{{ _('Comments') }}</button>
+            </div>
+
+            <!-- Story Tab -->
+            <div class="tab-panel active" id="tab-story">
+                <div class="story-content">{{ campaign.description }}</div>
+
+                {% if campaign.patient_photo %}
+                <img src="{{ campaign.patient_photo }}" alt="{{ _('Patient photo') }}" class="patient-photo">
+                {% endif %}
+            </div>
+
+            <!-- Donors Tab -->
+            <div class="tab-panel" id="tab-donors">
+                <div class="donor-list" style="margin-top:0">
+                    <h4 style="font-weight:600;margin-bottom:1rem">
+                        <i data-lucide="users" style="width:20px;height:20px;margin-right:6px;color:var(--color-primary)"></i>
+                        {{ _('Donors') }} ({{ donor_count }})
+                    </h4>
+
+                    {% if donations %}
+                        {% for donation in donations %}
+                        <div class="donor-item">
+                            {% if donation.is_anonymous %}
+                            <div class="donor-anon-avatar">
+                                <i data-lucide="user" style="width:20px;height:20px"></i>
+                            </div>
+                            {% else %}
+                            <img src="{{ donation.user.avatar or url_for('static', filename='public/images/default-avatar.svg') }}"
+                                 class="donor-avatar" alt="">
+                            {% endif %}
+                            <div style="flex:1;min-width:0">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <span class="donor-name">
+                                            {% if donation.is_anonymous %}{{ _('Anonymous') }}{% else %}{{ donation.user.username }}{% endif %}
+                                        </span>
+                                        <span class="donor-amount">&yen;{{ "%.2f"|format(donation.amount|float) }}</span>
+                                    </div>
+                                    <span class="donor-time">{{ donation.create_at.strftime('%Y-%m-%d %H:%M') if donation.create_at else '' }}</span>
+                                </div>
+                                {% if donation.message %}
+                                <div class="donor-message">"{{ donation.message }}"</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <p style="color:var(--color-text-secondary);text-align:center;padding:2rem 0">
+                        {{ _('No donations yet. Be the first to help!') }}
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Comments Tab -->
+            <div class="tab-panel" id="tab-comments">
+                <div class="comments-placeholder">
+                    <i data-lucide="message-circle" style="width:48px;height:48px;color:var(--color-text-disabled)"></i>
+                    <h5 style="font-weight:600;margin-bottom:0.5rem">{{ _('Comments coming soon') }}</h5>
+                    <p style="font-size:0.9375rem">{{ _('We are working on adding comments. Stay tuned!') }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Sidebar -->
+        <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="sidebar-sticky">
+                <div class="funding-card">
+                    <div class="amount-raised" id="amountRaised">&yen;{{ "%.2f"|format(campaign.current_amount|float) }}</div>
+                    <div class="amount-goal">{{ _('raised of') }} &yen;{{ "%.2f"|format(campaign.funding_goal|float) }} {{ _('goal') }}</div>
+
+                    <div class="wl-progress">
+                        <div class="wl-progress-bar" data-progress="{{ progress }}" style="width:0%"></div>
+                    </div>
+
+                    <div class="funding-stats">
+                        <div>
+                            <div class="stat-value" id="progressPct">{{ progress }}%</div>
+                            <div class="stat-label">{{ _('Funded') }}</div>
+                        </div>
+                        <div>
+                        <div class="stat-value" id="donorCount">{{ donor_count }}</div>
+                            <div class="stat-label">{{ _('Donors') }}</div>
+                        </div>
+                        <div>
+                            <div class="stat-value">{{ _('Ongoing') }}</div>
+                            <div class="stat-label">{{ _('Status') }}</div>
+                        </div>
+                    </div>
+
+                    {% if campaign.status == 'approved' and not campaign.is_fully_funded %}
+                    <button class="btn-donate-lg active-donate" data-bs-toggle="modal" data-bs-target="#donateModal" id="openDonateBtn">
+                        <i data-lucide="heart" style="width:20px;height:20px;margin-right:6px"></i>
+                        {{ _('Donate Now') }}
+                    </button>
+                    {% elif campaign.is_fully_funded %}
+                    <button class="btn-donate-lg disabled-donate" disabled>
+                        <i data-lucide="check-circle" style="width:20px;height:20px;margin-right:6px"></i>
+                        {{ _('Fully Funded') }}
+                    </button>
+                    {% else %}
+                    <button class="btn-donate-lg disabled-donate" disabled>
+                        {{ _('Not Accepting Donations') }}
+                    </button>
+                    {% endif %}
+
+                    <!-- Share -->
+                    <div class="share-section">
+                        <button class="share-btn" onclick="copyLink()">
+                            <i data-lucide="link" style="width:16px;height:16px"></i>
+                            {{ _('Copy Link') }}
+                        </button>
+                    </div>
+
+                    <!-- Creator -->
+                    <div class="creator-card">
+                        <img src="{{ campaign.user.avatar or url_for('static', filename='public/images/default-avatar.svg') }}" alt="">
+                        <div>
+                            <div class="creator-name">
+                                {{ campaign.user.username }}
+                                {% if campaign.user.is_certified %}
+                                <span class="badge-certified" style="font-size:0.625rem;padding:1px 6px;margin-left:4px">
+                                    {{ _('Certified') }}
+                                </span>
+                                {% endif %}
+                            </div>
+                            <div class="creator-type">{{ _('Campaign organizer') }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Donate Modal -->
+<div class="modal fade" id="donateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius:var(--radius-xl)">
+            <!-- Step 1: Amount -->
+            <div id="donateStep1">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" style="font-weight:700">
+                        <i data-lucide="heart" style="width:20px;height:20px;color:var(--color-primary);margin-right:6px"></i>
+                        {{ _('Make a Donation') }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p style="color:var(--color-text-secondary);font-size:0.9375rem;margin-bottom:1.25rem">
+                        {{ _('Choose an amount to donate to') }} <strong>{{ campaign.title[:50] }}</strong>
+                    </p>
+
+                    <div class="amount-presets">
+                        <button class="amount-preset-btn" data-amount="10">&yen;10</button>
+                        <button class="amount-preset-btn" data-amount="50">&yen;50</button>
+                        <button class="amount-preset-btn selected" data-amount="100">&yen;100</button>
+                        <button class="amount-preset-btn" data-amount="200">&yen;200</button>
+                        <button class="amount-preset-btn" data-amount="500">&yen;500</button>
+                        <button class="amount-preset-btn" data-amount="custom">{{ _('Custom') }}</button>
+                    </div>
+
+                    <div class="custom-amount-input" id="customAmountWrapper" style="display:none;margin-bottom:1rem">
+                        <span class="currency-sign">&yen;</span>
+                        <input type="number" class="form-control wl-form-control" id="customAmountInput"
+                               min="1" step="0.01" placeholder="{{ _('Enter amount') }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <textarea class="form-control wl-form-control" id="donateMessage" rows="2"
+                                  placeholder="{{ _('Leave a message of support (optional)') }}"
+                                  maxlength="200"></textarea>
+                    </div>
+
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="donateAnonymous">
+                        <label class="form-check-label" for="donateAnonymous" style="font-size:0.9375rem;color:var(--color-text-secondary)">
+                            {{ _('Donate anonymously') }}
+                        </label>
+                    </div>
+
+                    <button class="btn btn-wl-primary w-100 py-2" id="confirmDonateBtn" style="font-size:1.0625rem;font-weight:600">
+                        {{ _('Confirm Donation') }} <span id="confirmAmount">&yen;100</span>
+                    </button>
+
+                    <p style="font-size:0.75rem;color:var(--color-text-disabled);text-align:center;margin-top:0.75rem">
+                        {{ _('This is a simulated donation for demonstration purposes.') }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 2: Thank You -->
+            <div id="donateStep2" style="display:none">
+                <div class="modal-body position-relative overflow-hidden">
+                    <div class="thank-you-screen" id="thankYouScreen">
+                        <div class="heart-icon" style="display:inline-block">
+                            <i data-lucide="heart" style="width:64px;height:64px;fill:var(--color-primary);color:var(--color-primary)"></i>
+                        </div>
+                        <h3 style="font-weight:700;margin:1rem 0 0.5rem">{{ _('Thank You!') }}</h3>
+                        <p style="color:var(--color-text-secondary);font-size:1rem">
+                            {{ _('Your kindness brings warmth and hope.') }}
+                        </p>
+                        <div id="donationSummary" style="background:var(--color-primary-bg);border-radius:var(--radius-lg);padding:1rem;margin:1rem 0">
+                        </div>
+                        <button class="btn btn-wl-primary px-4 mt-2" data-bs-dismiss="modal">{{ _('Done') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='public/js/crowdfunding.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initCrowdfundingDetail({
+        campaignId: {{ campaign.id }},
+        isAuthenticated: {{ 'true' if current_user.is_authenticated else 'false' }},
+        loginUrl: '{{ url_for("auth.login_page") }}',
+        donateUrl: '{{ url_for("crowdfunding.donate", campaign_id=campaign.id) }}'
+    });
+
+    // Tab switching
+    document.querySelectorAll('.detail-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.detail-tab').forEach(function(t) { t.classList.remove('active'); });
+            document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+            tab.classList.add('active');
+            var panel = document.getElementById('tab-' + tab.getAttribute('data-tab'));
+            if (panel) panel.classList.add('active');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    });
+});
+</script>
+{% endblock %}

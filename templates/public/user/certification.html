@@ -1,0 +1,389 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Certification') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cert-container {
+        min-height: calc(100vh - 64px);
+        padding: 3rem 1rem;
+        background: linear-gradient(135deg, #FDF8F3 0%, #FEF5EB 100%);
+    }
+    .cert-card {
+        width: 100%;
+        max-width: 680px;
+        margin: 0 auto;
+        background: white;
+        border-radius: var(--radius-xl);
+        padding: 2.5rem;
+        box-shadow: var(--shadow-lg);
+    }
+    .cert-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    .cert-subtitle {
+        text-align: center;
+        color: var(--color-text-secondary);
+        margin-bottom: 2rem;
+        font-size: 0.9375rem;
+    }
+    .form-label-wl {
+        font-weight: 500;
+        color: var(--color-text-primary);
+        margin-bottom: 0.375rem;
+        font-size: 0.9375rem;
+    }
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+    .section-header {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin: 1.75rem 0 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--color-primary-bg);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .cert-type-option {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        border: 2px solid var(--color-border);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        margin-bottom: 0.5rem;
+    }
+    .cert-type-option:hover {
+        border-color: var(--color-primary-light);
+        background-color: var(--color-primary-bg);
+    }
+    .cert-type-option.selected {
+        border-color: var(--color-primary);
+        background-color: var(--color-primary-bg);
+    }
+    .cert-type-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .cert-type-icon.family {
+        background: linear-gradient(135deg, #FEF5EB, #F2B872);
+        color: var(--color-primary-dark);
+    }
+    .cert-type-icon.volunteer {
+        background: linear-gradient(135deg, #E8F5E9, #81C784);
+        color: #2E7D32;
+    }
+    .status-card {
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        text-align: center;
+    }
+    .status-card.pending {
+        background: linear-gradient(135deg, #FFF8E1, #FFF3C4);
+        border: 1px solid var(--color-warning);
+    }
+    .status-card.approved {
+        background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+        border: 1px solid var(--color-success);
+    }
+    .status-card.rejected {
+        background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+        border: 1px solid var(--color-error);
+    }
+    .status-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+    .status-icon.pending { background: var(--color-warning); color: white; }
+    .status-icon.approved { background: var(--color-success); color: white; }
+    .status-icon.rejected { background: var(--color-error); color: white; }
+    .privacy-notice {
+        background-color: var(--color-bg-subtle);
+        border-radius: var(--radius-md);
+        padding: 1rem 1.25rem;
+        font-size: 0.8125rem;
+        color: var(--color-text-secondary);
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    .file-upload-area {
+        border: 2px dashed var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        background: var(--color-bg-subtle);
+    }
+    .file-upload-area:hover {
+        border-color: var(--color-primary);
+        background: var(--color-primary-bg);
+    }
+    .file-upload-area.compact {
+        padding: 1rem;
+    }
+    .additional-docs-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+    }
+    @media (max-width: 576px) {
+        .additional-docs-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cert-container">
+    <div class="cert-card">
+        <h2 class="cert-title">
+            <i data-lucide="shield-check" style="width:28px;height:28px;color:var(--color-primary);vertical-align:middle;"></i>
+            {{ _('Certification') }}
+        </h2>
+        <p class="cert-subtitle">{{ _('Get certified to unlock more features and build trust in the community') }}</p>
+
+        {% if cert and cert.status == 'pending' %}
+        <!-- Pending Status -->
+        <div class="status-card pending">
+            <div class="status-icon pending">
+                <i data-lucide="clock" style="width:32px;height:32px;"></i>
+            </div>
+            <h4 style="font-weight:600;color:var(--color-text-primary);">{{ _('Application Under Review') }}</h4>
+            <p style="color:var(--color-text-secondary);margin-bottom:1rem;">
+                {{ _('Your certification application is being reviewed. This usually takes 24-48 hours.') }}
+            </p>
+            <div style="font-size:0.875rem;color:var(--color-text-secondary);">
+                <div><strong>{{ _('Type') }}:</strong> {{ cert.cert_type|capitalize }}</div>
+                <div><strong>{{ _('Name') }}:</strong> {{ cert.real_name }}</div>
+                <div><strong>{{ _('Applied') }}:</strong> {{ cert.create_at.strftime('%Y-%m-%d %H:%M') if cert.create_at else '—' }}</div>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <a href="{{ url_for('user_center.certification_status') }}" class="btn btn-wl-primary me-2">{{ _('View Status') }}</a>
+            <a href="{{ url_for('user_center.profile') }}" class="btn btn-wl-secondary">{{ _('Back to Profile') }}</a>
+        </div>
+
+        {% elif cert and cert.status == 'approved' %}
+        <!-- Approved Status -->
+        <div class="status-card approved">
+            <div class="status-icon approved">
+                <i data-lucide="check-circle" style="width:32px;height:32px;"></i>
+            </div>
+            <h4 style="font-weight:600;color:var(--color-text-primary);">{{ _('Certification Approved!') }}</h4>
+            <p style="color:var(--color-text-secondary);margin-bottom:1rem;">
+                {{ _('Congratulations! Your identity has been verified.') }}
+            </p>
+            <div style="font-size:0.875rem;color:var(--color-text-secondary);">
+                <div><strong>{{ _('Type') }}:</strong> {{ cert.cert_type|capitalize }}</div>
+                <div><strong>{{ _('Verified Name') }}:</strong> {{ cert.real_name }}</div>
+                <div><strong>{{ _('Approved') }}:</strong> {{ cert.reviewed_at.strftime('%Y-%m-%d') if cert.reviewed_at else '—' }}</div>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <a href="{{ url_for('user_center.profile') }}" class="btn btn-wl-primary">{{ _('Back to Profile') }}</a>
+        </div>
+
+        {% else %}
+        <!-- Application Form (no cert, or rejected) -->
+        {% if cert and cert.status == 'rejected' %}
+        <div class="status-card rejected mb-4">
+            <div class="status-icon rejected">
+                <i data-lucide="x-circle" style="width:32px;height:32px;"></i>
+            </div>
+            <h4 style="font-weight:600;color:var(--color-text-primary);">{{ _('Previous Application Rejected') }}</h4>
+            <p style="color:var(--color-text-secondary);">
+                {% if cert.reject_reason %}
+                    {{ _('Reason') }}: {{ cert.reject_reason }}
+                {% else %}
+                    {{ _('Please review the requirements and try again.') }}
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('user_center.certification') }}">
+            <!-- Certification Type -->
+            <div class="form-group">
+                <label class="form-label-wl">{{ _('Certification Type') }}</label>
+                <label class="cert-type-option" id="opt-family" onclick="selectType('family')">
+                    <input type="radio" name="cert_type" value="family" checked style="display:none;">
+                    <div class="cert-type-icon family">
+                        <i data-lucide="home" style="width:20px;height:20px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:600;">{{ _('Family Member') }}</div>
+                        <div style="font-size:0.8125rem;color:var(--color-text-secondary);">{{ _('Family or caregiver of a patient') }}</div>
+                    </div>
+                </label>
+                <label class="cert-type-option" id="opt-volunteer" onclick="selectType('volunteer')">
+                    <input type="radio" name="cert_type" value="volunteer" style="display:none;">
+                    <div class="cert-type-icon volunteer">
+                        <i data-lucide="heart-handshake" style="width:20px;height:20px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:600;">{{ _('Volunteer') }}</div>
+                        <div style="font-size:0.8125rem;color:var(--color-text-secondary);">{{ _('Volunteer wanting to help families') }}</div>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Personal Information -->
+            <div class="section-header">
+                <i data-lucide="user" style="width:18px;height:18px;color:var(--color-primary);"></i>
+                {{ _('Personal Information') }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label-wl" for="real_name">{{ _('Real Name') }} <span style="color:var(--color-error);">*</span></label>
+                <input type="text" class="form-control wl-form-control" id="real_name" name="real_name" required
+                       placeholder="{{ _('Enter your legal name') }}">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label-wl" for="id_card">{{ _('ID Number') }} <span style="color:var(--color-error);">*</span></label>
+                <input type="text" class="form-control wl-form-control" id="id_card" name="id_card" required
+                       placeholder="{{ _('Enter your ID card number') }}">
+            </div>
+
+            <div class="form-group" id="relation-group">
+                <label class="form-label-wl" for="relation">{{ _('Relationship to Patient') }}</label>
+                <input type="text" class="form-control wl-form-control" id="relation" name="relation"
+                       placeholder="{{ _('e.g., Parent, Spouse, Child') }}">
+            </div>
+
+            <!-- Patient Information -->
+            <div id="patient-section">
+                <div class="section-header">
+                    <i data-lucide="heart-pulse" style="width:18px;height:18px;color:var(--color-primary);"></i>
+                    {{ _('Patient Information') }}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label-wl" for="patient_name">{{ _('Patient Name') }}</label>
+                    <input type="text" class="form-control wl-form-control" id="patient_name" name="patient_name"
+                           placeholder="{{ _('Enter the patient\'s name') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label-wl" for="patient_illness">{{ _('Patient Illness') }}</label>
+                    <select class="form-select wl-form-control" id="patient_illness" name="patient_illness">
+                        <option value="">{{ _('Select illness type') }}</option>
+                        <option value="Alzheimer's">{{ _("Alzheimer's") }}</option>
+                        <option value="ALS">{{ _('ALS') }}</option>
+                        <option value="Cancer">{{ _('Cancer') }}</option>
+                        <option value="Rare Disease">{{ _('Rare Disease') }}</option>
+                        <option value="Mental Health">{{ _('Mental Health') }}</option>
+                        <option value="Other">{{ _('Other') }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label-wl" for="hospital_name">{{ _('Hospital Name') }}</label>
+                    <input type="text" class="form-control wl-form-control" id="hospital_name" name="hospital_name"
+                           placeholder="{{ _('Enter the hospital name') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label-wl" for="diagnosis_date">{{ _('Diagnosis Date') }}</label>
+                    <input type="date" class="form-control wl-form-control" id="diagnosis_date" name="diagnosis_date">
+                </div>
+            </div>
+
+            <!-- Document Upload -->
+            <div class="section-header">
+                <i data-lucide="file-up" style="width:18px;height:18px;color:var(--color-primary);"></i>
+                {{ _('Document Upload') }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label-wl">{{ _('Main Supporting Document') }} <span style="color:var(--color-error);">*</span></label>
+                <div class="file-upload-area" onclick="document.getElementById('docInput').click();">
+                    <i data-lucide="upload-cloud" style="width:32px;height:32px;color:var(--color-text-disabled);"></i>
+                    <p style="margin:0.5rem 0 0;color:var(--color-text-secondary);font-size:0.875rem;" id="fileLabel">
+                        {{ _('Click to upload ID photo or medical certificate') }}
+                    </p>
+                    <span style="font-size:0.75rem;color:var(--color-text-disabled);">JPG, PNG, PDF ({{ _('Max 5MB') }})</span>
+                </div>
+                <input type="file" name="document" id="docInput" accept=".jpg,.jpeg,.png,.pdf" style="display:none;"
+                       onchange="updateFileLabel(this, 'fileLabel');">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label-wl">{{ _('Additional Documents') }} <span style="font-weight:400;color:var(--color-text-secondary);">({{ _('Optional, up to 3') }})</span></label>
+                <div class="additional-docs-grid">
+                    {% for i in range(1, 4) %}
+                    <div class="file-upload-area compact" onclick="document.getElementById('additionalDoc{{ i }}').click();">
+                        <i data-lucide="plus" style="width:20px;height:20px;color:var(--color-text-disabled);"></i>
+                        <p style="margin:0.25rem 0 0;font-size:0.75rem;color:var(--color-text-secondary);" id="extraLabel{{ i }}">
+                            {{ _('Document') }} {{ i }}
+                        </p>
+                    </div>
+                    <input type="file" name="additional_doc_{{ i }}" id="additionalDoc{{ i }}" accept=".jpg,.jpeg,.png,.pdf" style="display:none;"
+                           onchange="updateFileLabel(this, 'extraLabel{{ i }}');">
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Privacy Notice -->
+            <div class="privacy-notice mb-4">
+                <i data-lucide="lock" style="width:20px;height:20px;flex-shrink:0;color:var(--color-primary);"></i>
+                <div>
+                    <strong>{{ _('Your privacy is protected') }}</strong><br>
+                    {{ _('All personal information is encrypted and stored securely. It will only be used for identity verification and will never be shared with third parties.') }}
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-wl-primary flex-grow-1">
+                    <i data-lucide="send" style="width:16px;height:16px;"></i>
+                    {{ _('Submit Application') }}
+                </button>
+                <a href="{{ url_for('user_center.profile') }}" class="btn btn-wl-secondary">{{ _('Cancel') }}</a>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function selectType(type) {
+    document.querySelectorAll('.cert-type-option').forEach(el => el.classList.remove('selected'));
+    document.getElementById('opt-' + type).classList.add('selected');
+    document.querySelector('input[name="cert_type"][value="' + type + '"]').checked = true;
+    document.getElementById('relation-group').style.display = type === 'family' ? 'block' : 'none';
+    document.getElementById('patient-section').style.display = type === 'family' ? 'block' : 'none';
+}
+selectType('family');
+
+function updateFileLabel(input, labelId) {
+    var label = document.getElementById(labelId);
+    if (input.files && input.files[0]) {
+        label.textContent = input.files[0].name;
+        label.style.color = 'var(--color-primary)';
+    }
+}
+</script>
+{% endblock %}

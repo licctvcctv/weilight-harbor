@@ -1,0 +1,130 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ _('Terms of Service') }} - Weilight Harbor{% endblock %}
+
+{% block extra_css %}
+<style>
+    .terms-hero {
+        background: linear-gradient(135deg, #FDF8F3 0%, #FEF5EB 100%);
+        padding: 4rem 1rem 3rem;
+        text-align: center;
+    }
+    .terms-hero h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-bottom: 0.5rem;
+    }
+    .terms-content {
+        padding: 3rem 0 4rem;
+    }
+    .terms-content h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin: 2rem 0 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--color-primary-bg);
+    }
+    .terms-content p, .terms-content li {
+        color: var(--color-text-secondary);
+        font-size: 0.9375rem;
+        line-height: 1.8;
+    }
+    .terms-content ul, .terms-content ol {
+        padding-left: 1.25rem;
+    }
+    .terms-content li {
+        margin-bottom: 0.5rem;
+    }
+    .last-updated {
+        font-size: 0.875rem;
+        color: var(--color-text-disabled);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="terms-hero">
+    <div style="color:var(--color-primary);margin-bottom:1rem;">
+        <i data-lucide="file-text" style="width:48px;height:48px;"></i>
+    </div>
+    <h1>{{ _('Terms of Service') }}</h1>
+    <p class="last-updated">{{ _('Last updated') }}: 2026-04-01</p>
+</div>
+
+<div class="terms-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <p>{{ _('Welcome to Weilight Harbor. By accessing or using our platform, you agree to be bound by these Terms of Service. Please read them carefully.') }}</p>
+
+                <h2>1. {{ _('Acceptance of Terms') }}</h2>
+                <p>{{ _('By creating an account or using Weilight Harbor, you agree to these Terms of Service and our Privacy Policy. If you do not agree, please do not use the platform.') }}</p>
+
+                <h2>2. {{ _('Eligibility') }}</h2>
+                <p>{{ _('You must be at least 16 years old to use Weilight Harbor. By using the platform, you represent that you meet this age requirement.') }}</p>
+
+                <h2>3. {{ _('Account Responsibilities') }}</h2>
+                <ul>
+                    <li>{{ _('You are responsible for maintaining the security of your account credentials.') }}</li>
+                    <li>{{ _('You must provide accurate information during registration and certification.') }}</li>
+                    <li>{{ _('You are responsible for all activity that occurs under your account.') }}</li>
+                    <li>{{ _('You must notify us immediately of any unauthorized access to your account.') }}</li>
+                </ul>
+
+                <h2>4. {{ _('Community Guidelines') }}</h2>
+                <p>{{ _('When using Weilight Harbor, you agree to:') }}</p>
+                <ul>
+                    <li>{{ _('Treat all community members with respect and compassion') }}</li>
+                    <li>{{ _('Not post false, misleading, or defamatory content') }}</li>
+                    <li>{{ _('Not harass, bully, or threaten other users') }}</li>
+                    <li>{{ _('Not share others\' personal information without consent') }}</li>
+                    <li>{{ _('Not use the platform for commercial advertising or spam') }}</li>
+                    <li>{{ _('Not attempt to circumvent security or moderation measures') }}</li>
+                    <li>{{ _('Report any content that violates these guidelines') }}</li>
+                </ul>
+
+                <h2>5. {{ _('Certification') }}</h2>
+                <p>{{ _('The certification process is designed to verify identities and build community trust. By applying:') }}</p>
+                <ul>
+                    <li>{{ _('You confirm that all submitted information and documents are authentic') }}</li>
+                    <li>{{ _('You understand that providing false information may result in account suspension') }}</li>
+                    <li>{{ _('You consent to our team reviewing your submitted documents') }}</li>
+                </ul>
+
+                <h2>6. {{ _('Crowdfunding') }}</h2>
+                <ul>
+                    <li>{{ _('Campaign creators must provide truthful and accurate information') }}</li>
+                    <li>{{ _('Funds raised must be used for the stated purpose') }}</li>
+                    <li>{{ _('We reserve the right to review, pause, or terminate campaigns that violate our guidelines') }}</li>
+                    <li>{{ _('Donors understand that contributions are voluntary and at their own discretion') }}</li>
+                </ul>
+
+                <h2>7. {{ _('Content Ownership') }}</h2>
+                <p>{{ _('You retain ownership of content you create on the platform. By posting content, you grant Weilight Harbor a non-exclusive license to display and distribute that content within the platform for the purpose of providing our services.') }}</p>
+
+                <h2>8. {{ _('Content Moderation') }}</h2>
+                <p>{{ _('We reserve the right to review, edit, or remove any content that violates these terms or our community guidelines. Content involving sensitive topics is filtered to maintain a safe environment. We may also employ automated tools to detect harmful content.') }}</p>
+
+                <h2>9. {{ _('Disclaimer') }}</h2>
+                <p>{{ _('Weilight Harbor is provided "as is" without warranties of any kind. We do not provide medical, legal, or financial advice. Information shared on the platform is for peer support purposes and should not replace professional guidance.') }}</p>
+
+                <h2>10. {{ _('Limitation of Liability') }}</h2>
+                <p>{{ _('To the maximum extent permitted by law, Weilight Harbor shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the platform.') }}</p>
+
+                <h2>11. {{ _('Account Termination') }}</h2>
+                <p>{{ _('We reserve the right to suspend or terminate accounts that violate these terms. You may also delete your account at any time by contacting our support team.') }}</p>
+
+                <h2>12. {{ _('Changes to Terms') }}</h2>
+                <p>{{ _('We may update these Terms of Service from time to time. Continued use of the platform after changes constitutes acceptance of the updated terms.') }}</p>
+
+                <h2>13. {{ _('Contact') }}</h2>
+                <p>{{ _('For questions about these Terms of Service, please contact us at:') }}</p>
+                <p><strong>{{ _('Email') }}:</strong> legal@weilightharbor.org</p>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
