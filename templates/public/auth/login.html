@@ -10,8 +10,8 @@
         <p class="auth-subtitle">{{ _('Welcome back to the harbor') }}</p>
         <form method="POST" action="/auth/login{% if request.args.get('next') %}?next={{ request.args.get('next') }}{% endif %}">
             <div class="mb-3">
-                <label class="form-label small fw-medium">{{ _('Username or Email') }}</label>
-                <input type="text" name="username" class="form-control wl-form-control" required placeholder="{{ _('Enter your username or email') }}">
+                <label class="form-label small fw-medium">{{ _('Username, Email, or Phone') }}</label>
+                <input type="text" name="username" class="form-control wl-form-control" required placeholder="{{ _('Enter your username, email, or phone') }}">
             </div>
             <div class="mb-3">
                 <label class="form-label small fw-medium">{{ _('Password') }}</label>

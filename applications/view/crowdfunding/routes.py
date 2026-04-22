@@ -74,6 +74,12 @@ def search():
                            search_query=q)
 
 
+@crowdfunding_bp.route('/my')
+@login_required
+def my_campaigns():
+    return redirect(url_for('user_center.history', tab='campaigns'))
+
+
 @crowdfunding_bp.route('/campaign/<int:campaign_id>')
 def detail(campaign_id):
     campaign = Campaign.query.options(joinedload(Campaign.user)).get_or_404(campaign_id)
@@ -104,19 +110,30 @@ def create_campaign():
         return redirect(url_for('user_center.certification'))
 
     if request.method == 'POST':
-        title = request.form.get('title', '').strip()
-        description = request.form.get('description', '').strip()
+        title = request.form.get('title', '').strip()[:200]
+        description = request.form.get('description', '').strip()[:5000]
         category = request.form.get('category', 'other')
         funding_goal = request.form.get('funding_goal', 0, type=float)
+        if category not in dict(CAMPAIGN_CATEGORIES):
+            category = 'other'
 
-        if not title or not description or funding_goal <= 0:
-            flash('Please fill in all required fields.', 'error')
+        if not title or not description or funding_goal < 100:
+            flash('Please fill in all required fields. Minimum goal is 100 yuan.', 'error')
+            return render_template('public/crowdfunding/create.html',
+                                   categories=CAMPAIGN_CATEGORIES)
+
+        qr_code_url = save_upload(
+            request.files.get('qr_code'), 'campaigns', 'qr'
+        )
+        if not qr_code_url:
+            flash('A valid payment QR code is required for campaign review.', 'error')
             return render_template('public/crowdfunding/create.html',
                                    categories=CAMPAIGN_CATEGORIES)
 
         campaign = Campaign(
             user_id=current_user.id, title=title, description=description,
-            category=category, funding_goal=funding_goal, status='pending'
+            category=category, funding_goal=funding_goal, status='pending',
+            qr_code_url=qr_code_url
         )
 
         if 'cover_image' in request.files:
@@ -125,10 +142,6 @@ def create_campaign():
         if 'patient_photo' in request.files:
             campaign.patient_photo = save_upload(
                 request.files['patient_photo'], 'campaigns', 'patient')
-        if 'qr_code' in request.files:
-            campaign.qr_code_url = save_upload(
-                request.files['qr_code'], 'campaigns', 'qr')
-
         db.session.add(campaign)
         db.session.commit()
         flash('Campaign submitted for review! We will review it within 24 hours.', 'success')
@@ -144,9 +157,17 @@ def donate(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
     if campaign.status != 'approved' or campaign.is_fully_funded:
         return jsonify({'error': 'This campaign is not accepting donations.'}), 400
+    if not campaign.qr_code_url:
+        return jsonify({'error': 'Payment QR code is not available for this campaign.'}), 400
+
+    data = request.get_json(silent=True) or {}
+    payment_method = data.get('payment_method', 'wechat')
+    if payment_method not in ['wechat', 'alipay']:
+        return jsonify({'error': 'Invalid payment method.'}), 400
+    if data.get('payment_confirmed') is not True:
+        return jsonify({'error': 'Please complete the payment confirmation before recording the donation.'}), 402
 
     try:
-        data = request.get_json(silent=True) or {}
         amount = float(data.get('amount', 0))
     except (ValueError, TypeError):
         return jsonify({'error': 'Invalid amount.'}), 400
@@ -157,8 +178,8 @@ def donate(campaign_id):
     db.session.add(Donation(
         campaign_id=campaign_id, user_id=current_user.id,
         amount=amount,
-        message=data.get('message', '').strip(),
-        is_anonymous=data.get('is_anonymous', False)
+        message=data.get('message', '').strip()[:200],
+        is_anonymous=bool(data.get('is_anonymous', False))
     ))
 
     campaign.current_amount = float(campaign.current_amount) + amount

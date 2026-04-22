@@ -53,6 +53,8 @@ def approve(campaign_id):
     campaign = Campaign.query.get(campaign_id)
     if not campaign:
         return fail_api(msg="Not found")
+    if not campaign.qr_code_url:
+        return fail_api(msg="Payment QR code is required before approval")
     campaign.status = 'approved'
     campaign.reviewer_id = current_user.id
     campaign.reviewed_at = datetime.datetime.now()
@@ -67,7 +69,8 @@ def reject(campaign_id):
     if not campaign:
         return fail_api(msg="Not found")
     campaign.status = 'rejected'
-    campaign.reject_reason = request.json.get('reason', 'Campaign rejected')
+    data = request.get_json(silent=True) or {}
+    campaign.reject_reason = data.get('reason', 'Campaign rejected')
     campaign.reviewer_id = current_user.id
     campaign.reviewed_at = datetime.datetime.now()
     db.session.commit()

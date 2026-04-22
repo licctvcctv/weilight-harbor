@@ -177,6 +177,12 @@
 // Night Confessions Time Gate
 // ========================================
 window.initNightConfessionsGate = function() {
+    function escapeNightHtml(text) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(text || ''));
+        return div.innerHTML;
+    }
+
     var nightTeaser = document.getElementById('nightTeaser');
     var nightActive = document.getElementById('nightActive');
     var nightCountdown = document.getElementById('nightCountdown');
@@ -295,9 +301,9 @@ window.initNightConfessionsGate = function() {
                     var card = document.createElement('div');
                     card.className = 'night-card';
                     card.innerHTML =
-                        '<div class="confession-nickname">' + data.nickname + '</div>' +
-                        '<div class="confession-text-preview">' + data.content + '</div>' +
-                        '<div class="confession-meta"><span>' + data.create_at + '</span>' +
+                        '<div class="confession-nickname">' + escapeNightHtml(data.nickname) + '</div>' +
+                        '<div class="confession-text-preview">' + escapeNightHtml(data.content) + '</div>' +
+                        '<div class="confession-meta"><span>' + escapeNightHtml(data.create_at) + '</span>' +
                         '<button class="confession-hug-btn" onclick="hugConfession(' + data.id + ', this)">' +
                         '<i data-lucide="hand-heart" style="width:12px;height:12px"></i> <span class="hug-count">0</span></button></div>';
                     var empty = mobileList.querySelector('.text-center');

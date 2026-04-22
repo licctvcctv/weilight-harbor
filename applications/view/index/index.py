@@ -1,5 +1,6 @@
-from flask import render_template, request, session, jsonify, Blueprint
+from flask import render_template, request, session, jsonify, Blueprint, redirect, url_for
 from flask_login import current_user
+from sqlalchemy.orm import joinedload
 from applications.extensions import db
 
 index_bp = Blueprint('Index', __name__, url_prefix='/')
@@ -39,6 +40,29 @@ def about():
 @index_bp.route('/help')
 def help_page():
     return render_template('public/help.html')
+
+
+@index_bp.route('/search')
+def search():
+    q = request.args.get('q', '').strip()
+    if not q:
+        return redirect(url_for('Index.index'))
+
+    from applications.models.campaign import Campaign
+    from applications.models.post import Post
+
+    campaigns = Campaign.query.options(joinedload(Campaign.user)).filter(
+        Campaign.status == 'approved',
+        db.or_(Campaign.title.ilike(f'%{q}%'), Campaign.description.ilike(f'%{q}%'))
+    ).order_by(Campaign.create_at.desc()).limit(12).all()
+
+    posts = Post.query.options(joinedload(Post.user)).filter(
+        Post.status == 1,
+        Post.delete_at.is_(None),
+        db.or_(Post.title.ilike(f'%{q}%'), Post.content.ilike(f'%{q}%'))
+    ).order_by(Post.create_at.desc()).limit(12).all()
+
+    return render_template('public/search.html', q=q, campaigns=campaigns, posts=posts)
 
 
 @index_bp.route('/privacy')

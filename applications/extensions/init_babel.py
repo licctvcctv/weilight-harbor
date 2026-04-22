@@ -13,6 +13,9 @@ def get_locale():
             return current_user.locale
     except Exception:
         pass
+    cookie_locale = request.cookies.get('locale')
+    if cookie_locale in ['en', 'zh']:
+        return cookie_locale
     return request.accept_languages.best_match(['en', 'zh'], default='en')
 
 

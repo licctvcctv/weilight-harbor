@@ -111,7 +111,6 @@ function showInfoWindow(req) {
     fetch('/respite/request/' + req.id)
         .then(function(r) { return r.json(); })
         .then(function(data) {
-            var isOwn = data.user_id === (window.currentUserId || 0);
             var content = '<div style="min-width:250px;">';
             content += '<span class="badge mb-2" style="background:' + (data.request_type === 'service' ? '#E8913A' : '#5B9A6B') + ';">' + (data.request_type === 'service' ? '\uD83D\uDFE0 Need Help' : '\uD83D\uDFE2 Equipment') + '</span>';
             if (data.is_certified) content += ' <span class="badge badge-certified">\u2713 Verified</span>';
@@ -119,10 +118,19 @@ function showInfoWindow(req) {
             content += '<p class="small text-muted">' + escapeHtml(data.username) + ' \u00B7 ' + data.create_at + '</p>';
             if (data.description) content += '<p class="small">' + escapeHtml(data.description) + '</p>';
             if (data.time_limit) content += '<p class="small"><strong>Time:</strong> ' + escapeHtml(data.time_limit) + '</p>';
+            if (data.acceptor_username) {
+                content += '<p class="small"><strong>Status:</strong> Accepted by ' + escapeHtml(data.acceptor_username) + '</p>';
+            }
+            if (data.acceptor_contact) {
+                content += renderContactBlock('Helper contact', data.acceptor_contact);
+            }
+            if (data.requester_contact) {
+                content += renderContactBlock('Requester contact', data.requester_contact);
+            }
 
-            if (data.status === 'pending' && !isOwn && window.isCertified) {
+            if (data.status === 'pending' && !data.is_requester && window.isCertified) {
                 content += '<button class="btn btn-wl-primary btn-sm w-100 mt-2" onclick="acceptRequest(' + data.id + ')">I Can Help</button>';
-            } else if (data.status === 'in_progress' && isOwn) {
+            } else if (data.can_complete) {
                 content += '<button class="btn btn-sm w-100 mt-2" style="background:var(--color-success);color:white;" onclick="completeRequest(' + data.id + ')">Mark Completed</button>';
             } else if (!window.isCertified && data.status === 'pending') {
                 content += '<button class="btn btn-sm w-100 mt-2" disabled style="opacity:0.5;">Certification Required</button>';
@@ -134,6 +142,18 @@ function showInfoWindow(req) {
                 .setContent(content)
                 .openOn(map);
         });
+}
+
+function renderContactBlock(title, contact) {
+    var lines = [];
+    if (contact.phone) lines.push('Phone: ' + escapeHtml(contact.phone));
+    if (contact.email) lines.push('Email: ' + escapeHtml(contact.email));
+    if (!lines.length) lines.push('No contact details on profile.');
+    return '<div class="small mt-2 p-2" style="background:var(--color-bg-subtle);border-radius:var(--radius-sm);">' +
+        '<strong>' + escapeHtml(title) + '</strong><br>' +
+        '<span>' + escapeHtml(contact.username || '') + '</span><br>' +
+        lines.join('<br>') +
+        '</div>';
 }
 
 function focusRequest(id, lat, lng) {
@@ -283,7 +303,7 @@ function acceptRequest(id) {
         .then(function(r) { return r.json(); })
         .then(function(res) {
             if (res.success) {
-                showToast('You have accepted this request!', 'success');
+                showToast('Request accepted. Contact details are available in the request card.', 'success');
                 map.closePopup();
                 loadRequests();
             } else {

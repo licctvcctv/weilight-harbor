@@ -508,10 +508,14 @@
                         </div>
                     </div>
 
-                    {% if campaign.status == 'approved' and not campaign.is_fully_funded %}
+                    {% if campaign.status == 'approved' and not campaign.is_fully_funded and campaign.qr_code_url %}
                     <button class="btn-donate-lg active-donate" data-bs-toggle="modal" data-bs-target="#donateModal" id="openDonateBtn">
                         <i data-lucide="heart" style="width:20px;height:20px;margin-right:6px"></i>
                         {{ _('Donate Now') }}
+                    </button>
+                    {% elif campaign.status == 'approved' and not campaign.is_fully_funded and not campaign.qr_code_url %}
+                    <button class="btn-donate-lg disabled-donate" disabled>
+                        {{ _('Payment QR Unavailable') }}
                     </button>
                     {% elif campaign.is_fully_funded %}
                     <button class="btn-donate-lg disabled-donate" disabled>
@@ -604,13 +608,74 @@
                     </button>
 
                     <p style="font-size:0.75rem;color:var(--color-text-disabled);text-align:center;margin-top:0.75rem">
-                        {{ _('This is a simulated donation for demonstration purposes.') }}
+                        {{ _('You will confirm the payment method before the donation is recorded.') }}
                     </p>
                 </div>
             </div>
 
-            <!-- Step 2: Thank You -->
+            <!-- Step 2: Confirm -->
             <div id="donateStep2" style="display:none">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" style="font-weight:700">{{ _('Confirm Donation') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="background:var(--color-primary-bg);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1rem">
+                        <div style="font-size:0.8125rem;color:var(--color-text-secondary);margin-bottom:0.25rem">{{ _('Donation amount') }}</div>
+                        <div id="paymentAmountSummary" style="font-size:1.75rem;font-weight:700;color:var(--color-primary)">&yen;100.00</div>
+                    </div>
+                    <div class="mb-3">
+                        <label style="font-weight:600;margin-bottom:0.5rem">{{ _('Payment method') }}</label>
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-outline-secondary payment-method-btn active" data-method="wechat">
+                                {{ _('WeChat Pay') }}
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary payment-method-btn" data-method="alipay">
+                                {{ _('Alipay') }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary flex-fill" id="backToAmountBtn">{{ _('Back') }}</button>
+                        <button type="button" class="btn btn-wl-primary flex-fill" id="startPaymentBtn">{{ _('Continue to Pay') }}</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Payment -->
+            <div id="donateStep3" style="display:none">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title" style="font-weight:700">{{ _('Complete Payment') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p id="paymentInstruction" style="color:var(--color-text-secondary);font-size:0.9375rem;margin-bottom:1rem">
+                        {{ _('Scan the campaign payment QR code, then confirm after payment.') }}
+                    </p>
+                    <div id="paymentQrBox" style="width:190px;height:190px;border-radius:var(--radius-lg);border:1px dashed var(--color-border);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;background:#fff;overflow:hidden">
+                        {% if campaign.qr_code_url %}
+                        <img src="{{ campaign.qr_code_url }}" alt="{{ _('Payment QR Code') }}" style="width:100%;height:100%;object-fit:contain;padding:0.5rem">
+                        {% else %}
+                        <div style="padding:1rem;color:var(--color-text-secondary);font-size:0.875rem">
+                            <i data-lucide="qr-code" style="width:48px;height:48px;margin-bottom:0.5rem"></i><br>
+                            {{ _('Payment QR not uploaded') }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div id="paymentStatusText" style="font-size:0.8125rem;color:var(--color-text-disabled);margin-bottom:1rem">
+                        {{ _('Waiting for payment confirmation') }}
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary flex-fill" id="backToConfirmBtn">{{ _('Back') }}</button>
+                        <button type="button" class="btn btn-wl-primary flex-fill" id="finishPaymentBtn">
+                            {{ _('I Have Paid') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Thank You -->
+            <div id="donateStep4" style="display:none">
                 <div class="modal-body position-relative overflow-hidden">
                     <div class="thank-you-screen" id="thankYouScreen">
                         <div class="heart-icon" style="display:inline-block">
@@ -639,7 +704,8 @@ document.addEventListener('DOMContentLoaded', function() {
         campaignId: {{ campaign.id }},
         isAuthenticated: {{ 'true' if current_user.is_authenticated else 'false' }},
         loginUrl: '{{ url_for("auth.login_page") }}',
-        donateUrl: '{{ url_for("crowdfunding.donate", campaign_id=campaign.id) }}'
+        donateUrl: '{{ url_for("crowdfunding.donate", campaign_id=campaign.id) }}',
+        paymentQrUrl: {{ (campaign.qr_code_url or '')|tojson }}
     });
 
     // Tab switching

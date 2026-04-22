@@ -46,6 +46,7 @@ class BaseConfig:
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
     LANGUAGES = {'zh': '中文', 'en': 'English'}
+    PHONE_CODE_DEV_MODE = os.getenv('PHONE_CODE_DEV_MODE', '0') == '1'
 
     # 默认日志等级
     LOG_LEVEL = logging.WARN
@@ -63,6 +64,7 @@ class BaseConfig:
 class TestingConfig(BaseConfig):
     """ 测试配置 """
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'weilight_test.db')
+    PHONE_CODE_DEV_MODE = True
 
 
 class DevelopmentConfig(BaseConfig):
@@ -70,6 +72,7 @@ class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'weilight.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     SQLALCHEMY_ECHO = False
+    PHONE_CODE_DEV_MODE = True
 
 
 class ProductionConfig(BaseConfig):

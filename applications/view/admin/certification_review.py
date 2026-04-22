@@ -1,4 +1,5 @@
 import datetime
+import json
 from flask import Blueprint, render_template, request
 from flask_login import current_user
 from sqlalchemy.orm import joinedload
@@ -32,6 +33,10 @@ def data():
 
     result = []
     for c in pagination.items:
+        try:
+            additional_docs = json.loads(c.additional_docs) if c.additional_docs else []
+        except (TypeError, ValueError):
+            additional_docs = []
         result.append({
             'id': c.id,
             'username': c.user.username if c.user else '',
@@ -39,6 +44,11 @@ def data():
             'real_name': c.real_name,
             'relation': c.relation or '',
             'document_url': c.document_url or '',
+            'patient_name': c.patient_name or '',
+            'patient_illness': c.patient_illness or '',
+            'hospital_name': c.hospital_name or '',
+            'diagnosis_date': c.diagnosis_date.strftime('%Y-%m-%d') if c.diagnosis_date else '',
+            'additional_docs': additional_docs,
             'status': c.status,
             'reject_reason': c.reject_reason or '',
             'create_at': c.create_at.strftime('%Y-%m-%d %H:%M') if c.create_at else ''
@@ -81,7 +91,8 @@ def reject(cert_id):
     if not cert:
         return fail_api(msg="Not found")
     cert.status = 'rejected'
-    cert.reject_reason = request.json.get('reason', 'Application rejected')
+    data = request.get_json(silent=True) or {}
+    cert.reject_reason = data.get('reason', 'Application rejected')
     cert.reviewer_id = current_user.id
     cert.reviewed_at = datetime.datetime.now()
     db.session.commit()

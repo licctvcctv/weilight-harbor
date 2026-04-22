@@ -198,7 +198,7 @@
     <!-- Category Pills -->
     <div class="category-pills mb-3">
         {% for key, label in categories %}
-        <a href="{{ url_for('community.index', category=key, sort=current_sort) }}"
+        <a href="{{ url_for('community.index', category=key, sort=current_sort, q=search_query) }}"
            class="wl-tag {{ 'active' if current_category == key else '' }}">
             {{ _(label) }}
         </a>
@@ -207,22 +207,29 @@
 
     <!-- Sort Tabs -->
     <div class="sort-tabs">
-        <a href="{{ url_for('community.index', category=current_category, sort='latest') }}"
+        <a href="{{ url_for('community.index', category=current_category, sort='latest', q=search_query) }}"
            class="{{ 'active' if current_sort == 'latest' else '' }}">
             <i data-lucide="clock" style="width:14px;height:14px;vertical-align:-2px"></i>
             {{ _('Latest') }}
         </a>
-        <a href="{{ url_for('community.index', category=current_category, sort='empathy') }}"
+        <a href="{{ url_for('community.index', category=current_category, sort='empathy', q=search_query) }}"
            class="{{ 'active' if current_sort == 'empathy' else '' }}">
             <i data-lucide="heart" style="width:14px;height:14px;vertical-align:-2px"></i>
             {{ _('Most Empathized') }}
         </a>
-        <a href="{{ url_for('community.index', category=current_category, sort='hot') }}"
+        <a href="{{ url_for('community.index', category=current_category, sort='hot', q=search_query) }}"
            class="{{ 'active' if current_sort == 'hot' else '' }}">
             <i data-lucide="flame" style="width:14px;height:14px;vertical-align:-2px"></i>
             {{ _('Hot') }}
         </a>
     </div>
+
+    {% if search_query %}
+    <div class="alert alert-light border d-flex align-items-center justify-content-between" style="border-radius:var(--radius-lg)">
+        <span>{{ _('Search results for') }}: <strong>{{ search_query }}</strong></span>
+        <a href="{{ url_for('community.index') }}" class="small">{{ _('Clear') }}</a>
+    </div>
+    {% endif %}
 
     <div class="row">
         <!-- LEFT: Post Feed (70%) -->
@@ -301,7 +308,13 @@
                 {% else %}
                 <div class="empty-state">
                     <i data-lucide="inbox" style="width:48px;height:48px"></i>
-                    <p class="mt-2 mb-0">{{ _('No posts yet. Be the first to share!') }}</p>
+                    <p class="mt-2 mb-0">
+                        {% if search_query %}
+                        {{ _('No matching posts found.') }}
+                        {% else %}
+                        {{ _('No posts yet. Be the first to share!') }}
+                        {% endif %}
+                    </p>
                 </div>
                 {% endif %}
             </div>
@@ -312,7 +325,7 @@
                 <ul class="pagination community-pagination mb-0">
                     {% if pagination.has_prev %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('community.index', page=pagination.prev_num, category=current_category, sort=current_sort) }}">
+                        <a class="page-link" href="{{ url_for('community.index', page=pagination.prev_num, category=current_category, sort=current_sort, q=search_query) }}">
                             <i data-lucide="chevron-left" style="width:16px;height:16px"></i>
                         </a>
                     </li>
@@ -320,7 +333,7 @@
                     {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
                         {% if p %}
                         <li class="page-item {{ 'active' if p == pagination.page else '' }}">
-                            <a class="page-link" href="{{ url_for('community.index', page=p, category=current_category, sort=current_sort) }}">{{ p }}</a>
+                            <a class="page-link" href="{{ url_for('community.index', page=p, category=current_category, sort=current_sort, q=search_query) }}">{{ p }}</a>
                         </li>
                         {% else %}
                         <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -328,7 +341,7 @@
                     {% endfor %}
                     {% if pagination.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="{{ url_for('community.index', page=pagination.next_num, category=current_category, sort=current_sort) }}">
+                        <a class="page-link" href="{{ url_for('community.index', page=pagination.next_num, category=current_category, sort=current_sort, q=search_query) }}">
                             <i data-lucide="chevron-right" style="width:16px;height:16px"></i>
                         </a>
                     </li>

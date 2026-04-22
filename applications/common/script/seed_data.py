@@ -23,6 +23,7 @@ def seed_command():
     """Seed initial data."""
     _seed_roles()
     _seed_admin()
+    _seed_admin_powers()
     _seed_sensitive_words()
     click.echo('Base seed data created.')
 
@@ -33,6 +34,7 @@ def seed_demo_command():
     """Seed rich demo data for testing."""
     _seed_roles()
     _seed_admin()
+    _seed_admin_powers()
     _seed_sensitive_words()
     _seed_users()
     _seed_certifications()
@@ -76,6 +78,106 @@ def _seed_admin():
         admin.role.append(admin_role)
         db.session.add(admin)
         db.session.commit()
+
+
+def _seed_admin_powers():
+    """Create minimum admin menu and review permissions used by custom modules."""
+    admin_role = Role.query.filter_by(code='admin').first()
+    if not admin_role:
+        return
+
+    def upsert_power(code, **kwargs):
+        power = Power.query.filter_by(code=code).first()
+        if power:
+            for key, value in kwargs.items():
+                setattr(power, key, value)
+        else:
+            power = Power(code=code, **kwargs)
+            db.session.add(power)
+        db.session.flush()
+        if power not in admin_role.power:
+            admin_role.power.append(power)
+        return power
+
+    review_parent = upsert_power(
+        'admin:review',
+        name='Review Management',
+        type='0',
+        url='',
+        open_type='_iframe',
+        parent_id=0,
+        icon='layui-icon layui-icon-survey',
+        sort=20,
+        enable=1
+    )
+
+    upsert_power(
+        'admin:certification:main',
+        name='Certification Review',
+        type='1',
+        url='/admin/certification/',
+        open_type='_iframe',
+        parent_id=review_parent.id,
+        icon='layui-icon layui-icon-vercode',
+        sort=10,
+        enable=1
+    )
+    upsert_power(
+        'admin:certification:edit',
+        name='Edit Certification Review',
+        type='2',
+        url='',
+        open_type='',
+        parent_id=review_parent.id,
+        icon='',
+        sort=11,
+        enable=1
+    )
+    upsert_power(
+        'admin:campaign:main',
+        name='Campaign Review',
+        type='1',
+        url='/admin/campaign-review/',
+        open_type='_iframe',
+        parent_id=review_parent.id,
+        icon='layui-icon layui-icon-rmb',
+        sort=20,
+        enable=1
+    )
+    upsert_power(
+        'admin:campaign:edit',
+        name='Edit Campaign Review',
+        type='2',
+        url='',
+        open_type='',
+        parent_id=review_parent.id,
+        icon='',
+        sort=21,
+        enable=1
+    )
+    upsert_power(
+        'admin:community:main',
+        name='Community Moderation',
+        type='1',
+        url='/admin/community/',
+        open_type='_iframe',
+        parent_id=review_parent.id,
+        icon='layui-icon layui-icon-dialogue',
+        sort=30,
+        enable=1
+    )
+    upsert_power(
+        'admin:community:edit',
+        name='Edit Community Moderation',
+        type='2',
+        url='',
+        open_type='',
+        parent_id=review_parent.id,
+        icon='',
+        sort=31,
+        enable=1
+    )
+    db.session.commit()
 
 
 def _seed_sensitive_words():
@@ -313,6 +415,7 @@ def _seed_confessions():
 
 def _seed_campaigns():
     """Create crowdfunding campaigns in various states."""
+    demo_qr_url = '/static/index/images/ic_alipay_qrcode.png'
     campaigns_data = [
         {'username': 'limei', 'title': 'Help cover ALS treatment costs for my husband',
          'description': 'My husband was diagnosed with ALS two years ago. The disease has progressed and he now needs a specialized ventilator and a power wheelchair. Our insurance only covers a fraction of the costs.\n\nWe have two children, ages 8 and 12. I had to quit my teaching job to become a full-time caregiver. The financial pressure is crushing.\n\nThe ventilator alone costs €8,000, and the wheelchair is €12,000. We\'ve already spent our savings on medications and home modifications.\n\nAny amount helps. Even a few euros gives us hope. Thank you for reading our story.',
@@ -342,12 +445,16 @@ def _seed_campaigns():
         user = User.query.filter_by(username=cd['username']).first()
         if not user:
             continue
-        if Campaign.query.filter_by(title=cd['title']).first():
+        existing = Campaign.query.filter_by(title=cd['title']).first()
+        if existing:
+            if not existing.qr_code_url:
+                existing.qr_code_url = demo_qr_url
             continue
         campaign = Campaign(
             user_id=user.id, title=cd['title'], description=cd['description'],
             category=cd['category'], funding_goal=cd['goal'],
             current_amount=cd['raised'], status=cd['status'],
+            qr_code_url=demo_qr_url,
             is_fully_funded=(cd['raised'] >= cd['goal']),
             create_at=datetime.datetime.now() - datetime.timedelta(days=random.randint(5, 45))
         )

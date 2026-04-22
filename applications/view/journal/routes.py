@@ -130,6 +130,10 @@ def annual_film():
         db.extract('year', JournalEntry.entry_date) == year
     ).order_by(JournalEntry.entry_date.asc()).all()
 
+    if len(entries) < 10:
+        flash('Annual Film is available after you create at least 10 journal entries for the selected year.', 'warning')
+        return redirect(url_for('journal.timeline', year=year))
+
     slides = []
     total_images = 0
     for e in entries:

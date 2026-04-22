@@ -52,7 +52,10 @@ def requests_api():
 def request_detail(req_id):
     """Return single request detail as JSON for InfoWindow."""
     r = RespiteRequest.query.get_or_404(req_id)
-    return jsonify({
+    is_requester = current_user.is_authenticated and current_user.id == r.user_id
+    is_acceptor = current_user.is_authenticated and current_user.id == r.acceptor_id
+
+    data = {
         'id': r.id,
         'title': r.title,
         'description': r.description,
@@ -65,8 +68,27 @@ def request_detail(req_id):
         'username': r.user.username if r.user else 'Unknown',
         'is_certified': r.user.is_certified if r.user else False,
         'user_id': r.user_id,
+        'acceptor_id': r.acceptor_id,
+        'acceptor_username': r.acceptor.username if r.acceptor else '',
+        'accepted_at': r.accepted_at.strftime('%Y-%m-%d %H:%M') if r.accepted_at else '',
+        'is_requester': is_requester,
+        'is_acceptor': is_acceptor,
+        'can_complete': is_requester and r.status == 'in_progress',
         'create_at': r.create_at.strftime('%Y-%m-%d %H:%M') if r.create_at else ''
-    })
+    }
+    if is_requester and r.acceptor:
+        data['acceptor_contact'] = {
+            'username': r.acceptor.username,
+            'phone': r.acceptor.phone or '',
+            'email': r.acceptor.email or ''
+        }
+    if is_acceptor and r.user:
+        data['requester_contact'] = {
+            'username': r.user.username,
+            'phone': r.user.phone or '',
+            'email': r.user.email or ''
+        }
+    return jsonify(data)
 
 
 @respite_bp.route('/create', methods=['POST'])
@@ -76,20 +98,35 @@ def create_request():
         return jsonify({'error': 'Only certified users can create requests.'}), 403
 
     data = request.get_json(silent=True) or {}
+    request_type = data.get('request_type', 'service')
+    if request_type not in ['service', 'equipment']:
+        return jsonify({'error': 'Invalid request type.'}), 400
+
+    try:
+        latitude = float(data.get('latitude'))
+        longitude = float(data.get('longitude'))
+    except (TypeError, ValueError):
+        return jsonify({'error': 'A valid map location is required.'}), 400
+
+    if not (-90 <= latitude <= 90 and -180 <= longitude <= 180):
+        return jsonify({'error': 'A valid map location is required.'}), 400
+
+    title = (data.get('title') or '').strip()[:200]
+    description = (data.get('description') or '').strip()[:2000]
     req = RespiteRequest(
         user_id=current_user.id,
-        request_type=data.get('request_type', 'service'),
-        title=data.get('title', '').strip(),
-        description=data.get('description', '').strip(),
-        category=data.get('category', ''),
-        province=data.get('province', ''),
-        city=data.get('city', ''),
-        district=data.get('district', ''),
-        address=data.get('address', ''),
-        latitude=data.get('latitude'),
-        longitude=data.get('longitude'),
-        pin_color='orange' if data.get('request_type') == 'service' else 'green',
-        time_limit=data.get('time_limit', ''),
+        request_type=request_type,
+        title=title,
+        description=description,
+        category=(data.get('category') or '')[:50],
+        province=(data.get('province') or '')[:50],
+        city=(data.get('city') or '')[:50],
+        district=(data.get('district') or '')[:50],
+        address=(data.get('address') or '')[:255],
+        latitude=latitude,
+        longitude=longitude,
+        pin_color='orange' if request_type == 'service' else 'green',
+        time_limit=(data.get('time_limit') or '')[:100],
         status='pending'
     )
     if not req.title:
@@ -115,7 +152,14 @@ def accept_request(req_id):
     req.accepted_at = datetime.datetime.now()
     req.status = 'in_progress'
     db.session.commit()
-    return jsonify({'success': True})
+    return jsonify({
+        'success': True,
+        'requester_contact': {
+            'username': req.user.username if req.user else '',
+            'phone': req.user.phone if req.user else '',
+            'email': req.user.email if req.user else ''
+        }
+    })
 
 
 @respite_bp.route('/request/<int:req_id>/complete', methods=['POST'])
@@ -124,6 +168,8 @@ def complete_request(req_id):
     req = RespiteRequest.query.get_or_404(req_id)
     if req.user_id != current_user.id:
         return jsonify({'error': 'Only the requester can mark as completed.'}), 403
+    if req.status != 'in_progress':
+        return jsonify({'error': 'Only accepted requests can be marked as completed.'}), 400
     req.status = 'completed'
     req.completed_at = datetime.datetime.now()
     db.session.commit()

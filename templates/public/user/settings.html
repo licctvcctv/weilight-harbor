@@ -184,9 +184,24 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function setLanguage(lang) {
-    // Set language cookie and reload
-    document.cookie = 'locale=' + lang + ';path=/;max-age=31536000';
-    window.location.reload();
+    localStorage.setItem('wl_locale', lang);
+    if (typeof showLangOverlay === 'function') {
+        showLangOverlay();
+    }
+
+    fetch('/set-locale', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ locale: lang })
+    })
+    .then(function(resp) {
+        if (!resp.ok) throw new Error('Locale update failed');
+        window.location.reload();
+    })
+    .catch(function() {
+        document.cookie = 'locale=' + lang + ';path=/;max-age=31536000';
+        window.location.reload();
+    });
 }
 </script>
 {% endblock %}

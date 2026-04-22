@@ -27,12 +27,18 @@ def index():
     category = request.args.get('category', 'all')
     page = request.args.get('page', 1, type=int)
     sort = request.args.get('sort', 'latest')
+    q = request.args.get('q', '').strip()
 
     query = Post.query.options(joinedload(Post.user)).filter(
         Post.status == 1, Post.delete_at.is_(None)
     )
     if category != 'all':
         query = query.filter_by(category=category)
+    if q:
+        query = query.filter(db.or_(
+            Post.title.ilike(f'%{q}%'),
+            Post.content.ilike(f'%{q}%')
+        ))
     if sort == 'hot':
         query = query.order_by((Post.like_count + Post.comment_count).desc())
     elif sort == 'empathy':
@@ -48,7 +54,7 @@ def index():
     return render_template('public/community/index.html',
                            posts=pagination.items, pagination=pagination,
                            categories=categories_with_all, current_category=category,
-                           current_sort=sort, confessions=confessions)
+                           current_sort=sort, search_query=q, confessions=confessions)
 
 
 @community_bp.route('/post/<int:post_id>')
@@ -85,10 +91,12 @@ def post_detail(post_id):
 @login_required
 def create_post():
     if request.method == 'POST':
-        title = request.form.get('title', '').strip()
-        content = request.form.get('content', '').strip()
+        title = request.form.get('title', '').strip()[:200]
+        content = request.form.get('content', '').strip()[:5000]
         category = request.form.get('category', 'daily')
         is_anonymous = request.form.get('is_anonymous') == 'on'
+        if category not in dict(COMMUNITY_CATEGORIES):
+            category = 'daily'
 
         if not title or not content:
             flash('Title and content are required.', 'error')
@@ -99,20 +107,20 @@ def create_post():
             request.files.getlist('images'), 'posts', 'post'
         )
 
+        sensitive_matches = check_sensitive(title + ' ' + content)
+        needs_review = any(m['severity'] >= 1 for m in sensitive_matches)
+
         post = Post(
             user_id=current_user.id, title=title, content=content,
             category=category,
             images=json.dumps(images) if images else None,
-            is_anonymous=is_anonymous
+            is_anonymous=is_anonymous,
+            status=0 if needs_review else 1
         )
         db.session.add(post)
         db.session.commit()
 
-        # Check for sensitive words in title + content
-        sensitive_matches = check_sensitive(title + ' ' + content)
-        if any(m['severity'] >= 1 for m in sensitive_matches):
-            post.status = 0  # hidden, pending review
-            db.session.commit()
+        if needs_review:
             flash('Your post has been submitted and is pending review due to content moderation.', 'warning')
         else:
             flash('Post published successfully!', 'success')
@@ -146,11 +154,16 @@ def toggle_like(post_id):
 @login_required
 def add_comment(post_id):
     post = Post.query.get_or_404(post_id)
-    content = request.form.get('content', '').strip()
+    content = request.form.get('content', '').strip()[:2000]
     parent_id = request.form.get('parent_id', type=int)
 
     if not content:
         flash('Comment cannot be empty.', 'error')
+        return redirect(url_for('community.post_detail', post_id=post_id))
+
+    sensitive_matches = check_sensitive(content)
+    if any(m['severity'] >= 1 for m in sensitive_matches):
+        flash('Your comment contains content that needs moderation. Please edit and try again.', 'warning')
         return redirect(url_for('community.post_detail', post_id=post_id))
 
     db.session.add(Comment(
@@ -179,6 +192,11 @@ def delete_post(post_id):
 
 # --- Night Confessions ---
 
+def _is_night_confession_open(now=None):
+    now = now or datetime.datetime.now()
+    return now.hour >= 21 or now.hour < 6
+
+
 @community_bp.route('/confessions', methods=['GET'])
 def confessions_api():
     page = request.args.get('page', 1, type=int)
@@ -198,8 +216,13 @@ def confessions_api():
 @community_bp.route('/confessions', methods=['POST'])
 def post_confession():
     data = request.get_json(silent=True) or {}
-    content = data.get('content', '').strip()
-    session_id = data.get('session_id', '')
+    content = data.get('content', '').strip()[:1000]
+    session_id = data.get('session_id', '')[:100]
+
+    if not _is_night_confession_open():
+        return jsonify({
+            'error': 'Night Confessions opens from 21:00 to 06:00.'
+        }), 403
 
     if not content:
         return jsonify({'error': 'Content is required'}), 400

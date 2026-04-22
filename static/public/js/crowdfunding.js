@@ -5,6 +5,92 @@
 function initCrowdfundingDetail(config) {
     var selectedAmount = 100;
     var isCustom = false;
+    var selectedPaymentMethod = 'wechat';
+    var paymentStatusTimer = null;
+
+    function getConfirmAmountSpan() {
+        return document.getElementById('confirmAmount');
+    }
+
+    function updateConfirmAmountLabel() {
+        var span = getConfirmAmountSpan();
+        if (!span) return;
+        if (selectedAmount && selectedAmount > 0) {
+            span.textContent = '\u00a5' + selectedAmount.toFixed(2);
+        } else {
+            span.textContent = '\u00a5--';
+        }
+    }
+
+    function showStep(stepNumber) {
+        ['donateStep1', 'donateStep2', 'donateStep3', 'donateStep4'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.style.display = id === 'donateStep' + stepNumber ? 'block' : 'none';
+        });
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function readSelectedAmount() {
+        var customInput = document.getElementById('customAmountInput');
+        if (isCustom && customInput) {
+            selectedAmount = parseFloat(customInput.value);
+        }
+        return selectedAmount;
+    }
+
+    function getPaymentMethodLabel(method) {
+        var labels = {
+            wechat: 'WeChat Pay',
+            alipay: 'Alipay'
+        };
+        return labels[method] || labels.wechat;
+    }
+
+    function setButtonLoading(button, loadingText) {
+        if (!button) return;
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>' + loadingText;
+    }
+
+    function restoreFinishButton() {
+        var finishBtn = document.getElementById('finishPaymentBtn');
+        if (!finishBtn) return;
+        finishBtn.disabled = false;
+        finishBtn.textContent = 'I Have Paid';
+    }
+
+    function beginPaymentStatusCycle() {
+        var statusEl = document.getElementById('paymentStatusText');
+        if (!statusEl) return;
+
+        clearInterval(paymentStatusTimer);
+        var messages = [
+            'Waiting for payment confirmation',
+            'Keep this window open after scanning',
+            'Click "I Have Paid" once the transfer is complete'
+        ];
+        var index = 0;
+        statusEl.textContent = messages[index];
+        paymentStatusTimer = setInterval(function() {
+            index = (index + 1) % messages.length;
+            statusEl.textContent = messages[index];
+        }, 2500);
+    }
+
+    function updatePaymentStep() {
+        var instruction = document.getElementById('paymentInstruction');
+        var statusEl = document.getElementById('paymentStatusText');
+        if (instruction) {
+            instruction.textContent = 'Pay ' + '\u00a5' + selectedAmount.toFixed(2) + ' via ' +
+                getPaymentMethodLabel(selectedPaymentMethod) + ', then confirm after payment.';
+        }
+        if (statusEl) {
+            statusEl.textContent = config.paymentQrUrl ?
+                'Waiting for payment confirmation' :
+                'No QR code was uploaded. Confirm only after using the organizer payment information.';
+        }
+        beginPaymentStatusCycle();
+    }
 
     // Animate progress bar on load
     document.querySelectorAll('.wl-progress-bar[data-progress]').forEach(function(bar) {
@@ -18,7 +104,6 @@ function initCrowdfundingDetail(config) {
     var presetBtns = document.querySelectorAll('.amount-preset-btn');
     var customWrapper = document.getElementById('customAmountWrapper');
     var customInput = document.getElementById('customAmountInput');
-    var confirmAmountSpan = document.getElementById('confirmAmount');
 
     presetBtns.forEach(function(btn) {
         btn.addEventListener('click', function() {
@@ -28,21 +113,16 @@ function initCrowdfundingDetail(config) {
             var amt = btn.getAttribute('data-amount');
             if (amt === 'custom') {
                 isCustom = true;
-                customWrapper.style.display = 'block';
-                customInput.focus();
-                var val = parseFloat(customInput.value);
-                if (val > 0) {
-                    selectedAmount = val;
-                    confirmAmountSpan.textContent = '\u00a5' + val.toFixed(2);
-                } else {
-                    confirmAmountSpan.textContent = '\u00a5--';
-                }
+                if (customWrapper) customWrapper.style.display = 'block';
+                if (customInput) customInput.focus();
+                var val = customInput ? parseFloat(customInput.value) : 0;
+                selectedAmount = val > 0 ? val : 0;
             } else {
                 isCustom = false;
-                customWrapper.style.display = 'none';
+                if (customWrapper) customWrapper.style.display = 'none';
                 selectedAmount = parseFloat(amt);
-                confirmAmountSpan.textContent = '\u00a5' + selectedAmount.toFixed(2);
             }
+            updateConfirmAmountLabel();
         });
     });
 
@@ -50,16 +130,21 @@ function initCrowdfundingDetail(config) {
     if (customInput) {
         customInput.addEventListener('input', function() {
             var val = parseFloat(this.value);
-            if (val > 0) {
-                selectedAmount = val;
-                confirmAmountSpan.textContent = '\u00a5' + val.toFixed(2);
-            } else {
-                confirmAmountSpan.textContent = '\u00a5--';
-            }
+            selectedAmount = val > 0 ? val : 0;
+            updateConfirmAmountLabel();
         });
     }
 
-    // Confirm donation
+    // Payment method selection
+    document.querySelectorAll('.payment-method-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.payment-method-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            selectedPaymentMethod = btn.getAttribute('data-method') || 'wechat';
+        });
+    });
+
+    // Step 1 -> Step 2
     var confirmBtn = document.getElementById('confirmDonateBtn');
     if (confirmBtn) {
         confirmBtn.addEventListener('click', function() {
@@ -68,97 +153,135 @@ function initCrowdfundingDetail(config) {
                 return;
             }
 
-            if (isCustom) {
-                selectedAmount = parseFloat(customInput.value);
-            }
-
+            readSelectedAmount();
             if (!selectedAmount || selectedAmount < 1) {
                 showToast('Please enter a valid amount (minimum \u00a51).', 'error');
                 return;
             }
 
-            var message = document.getElementById('donateMessage').value.trim();
-            var isAnonymous = document.getElementById('donateAnonymous').checked;
-
-            confirmBtn.disabled = true;
-            confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
-
-            fetch(config.donateUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    amount: selectedAmount,
-                    message: message,
-                    is_anonymous: isAnonymous
-                })
-            })
-            .then(function(resp) { return resp.json(); })
-            .then(function(data) {
-                if (data.success) {
-                    // Update page values
-                    var amountEl = document.getElementById('amountRaised');
-                    if (amountEl) amountEl.textContent = '\u00a5' + data.current_amount.toFixed(2);
-
-                    var pctEl = document.getElementById('progressPct');
-                    if (pctEl) pctEl.textContent = data.progress + '%';
-
-                    var donorEl = document.getElementById('donorCount');
-                    if (donorEl) donorEl.textContent = data.donor_count;
-
-                    // Update progress bar
-                    document.querySelectorAll('.wl-progress-bar').forEach(function(bar) {
-                        bar.style.width = data.progress + '%';
-                        bar.setAttribute('data-progress', data.progress);
-                    });
-
-                    // Show thank you
-                    showThankYou(data);
-
-                    // If fully funded, update button
-                    if (data.is_fully_funded) {
-                        var donateBtn = document.getElementById('openDonateBtn');
-                        if (donateBtn) {
-                            donateBtn.className = 'btn-donate-lg disabled-donate';
-                            donateBtn.disabled = true;
-                            donateBtn.innerHTML = '<i data-lucide="check-circle" style="width:20px;height:20px;margin-right:6px"></i> Fully Funded';
-                            donateBtn.removeAttribute('data-bs-toggle');
-                            donateBtn.removeAttribute('data-bs-target');
-                            if (typeof lucide !== 'undefined') lucide.createIcons();
-                        }
-                    }
-                } else {
-                    showToast(data.error || 'Donation failed. Please try again.', 'error');
-                    confirmBtn.disabled = false;
-                    confirmBtn.innerHTML = 'Confirm Donation <span id="confirmAmount">\u00a5' + selectedAmount.toFixed(2) + '</span>';
-                }
-            })
-            .catch(function(err) {
-                showToast('Network error. Please try again.', 'error');
-                confirmBtn.disabled = false;
-                confirmBtn.innerHTML = 'Confirm Donation <span id="confirmAmount">\u00a5' + selectedAmount.toFixed(2) + '</span>';
-            });
+            var summary = document.getElementById('paymentAmountSummary');
+            if (summary) summary.textContent = '\u00a5' + selectedAmount.toFixed(2);
+            showStep(2);
         });
     }
 
+    var backToAmountBtn = document.getElementById('backToAmountBtn');
+    if (backToAmountBtn) {
+        backToAmountBtn.addEventListener('click', function() {
+            showStep(1);
+        });
+    }
+
+    var startPaymentBtn = document.getElementById('startPaymentBtn');
+    if (startPaymentBtn) {
+        startPaymentBtn.addEventListener('click', function() {
+            updatePaymentStep();
+            showStep(3);
+        });
+    }
+
+    var backToConfirmBtn = document.getElementById('backToConfirmBtn');
+    if (backToConfirmBtn) {
+        backToConfirmBtn.addEventListener('click', function() {
+            clearInterval(paymentStatusTimer);
+            showStep(2);
+        });
+    }
+
+    var finishPaymentBtn = document.getElementById('finishPaymentBtn');
+    if (finishPaymentBtn) {
+        finishPaymentBtn.addEventListener('click', function() {
+            readSelectedAmount();
+            if (!selectedAmount || selectedAmount < 1) {
+                showToast('Please enter a valid amount (minimum \u00a51).', 'error');
+                showStep(1);
+                return;
+            }
+            recordDonation();
+        });
+    }
+
+    function recordDonation() {
+        var finishBtn = document.getElementById('finishPaymentBtn');
+        var messageEl = document.getElementById('donateMessage');
+        var anonymousEl = document.getElementById('donateAnonymous');
+        var message = messageEl ? messageEl.value.trim() : '';
+        var isAnonymous = anonymousEl ? anonymousEl.checked : false;
+
+        clearInterval(paymentStatusTimer);
+        setButtonLoading(finishBtn, 'Recording...');
+
+        fetch(config.donateUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                amount: selectedAmount,
+                message: message,
+                is_anonymous: isAnonymous,
+                payment_method: selectedPaymentMethod,
+                payment_confirmed: true
+            })
+        })
+        .then(function(resp) { return resp.json(); })
+        .then(function(data) {
+            if (data.success) {
+                updateCampaignProgress(data);
+                showThankYou(data);
+                return;
+            }
+            showToast(data.error || 'Donation failed. Please try again.', 'error');
+            restoreFinishButton();
+            beginPaymentStatusCycle();
+        })
+        .catch(function() {
+            showToast('Network error. Please try again.', 'error');
+            restoreFinishButton();
+            beginPaymentStatusCycle();
+        });
+    }
+
+    function updateCampaignProgress(data) {
+        var amountEl = document.getElementById('amountRaised');
+        if (amountEl) amountEl.textContent = '\u00a5' + data.current_amount.toFixed(2);
+
+        var pctEl = document.getElementById('progressPct');
+        if (pctEl) pctEl.textContent = data.progress + '%';
+
+        var donorEl = document.getElementById('donorCount');
+        if (donorEl) donorEl.textContent = data.donor_count;
+
+        document.querySelectorAll('.wl-progress-bar').forEach(function(bar) {
+            bar.style.width = data.progress + '%';
+            bar.setAttribute('data-progress', data.progress);
+        });
+
+        if (data.is_fully_funded) {
+            var donateBtn = document.getElementById('openDonateBtn');
+            if (donateBtn) {
+                donateBtn.className = 'btn-donate-lg disabled-donate';
+                donateBtn.disabled = true;
+                donateBtn.innerHTML = '<i data-lucide="check-circle" style="width:20px;height:20px;margin-right:6px"></i> Fully Funded';
+                donateBtn.removeAttribute('data-bs-toggle');
+                donateBtn.removeAttribute('data-bs-target');
+            }
+        }
+    }
+
     function showThankYou(data) {
-        var step1 = document.getElementById('donateStep1');
-        var step2 = document.getElementById('donateStep2');
         var summary = document.getElementById('donationSummary');
+        showStep(4);
 
-        step1.style.display = 'none';
-        step2.style.display = 'block';
+        if (summary) {
+            summary.innerHTML =
+                '<div style="font-size:0.875rem;color:var(--color-text-secondary)">' +
+                'You donated <strong style="color:var(--color-primary);font-size:1.25rem">\u00a5' + selectedAmount.toFixed(2) + '</strong>' +
+                '</div>' +
+                '<div style="font-size:0.8125rem;color:var(--color-text-disabled);margin-top:0.25rem">' +
+                'Campaign is now ' + data.progress + '% funded with ' + data.donor_count + ' donors' +
+                '</div>';
+        }
 
-        summary.innerHTML =
-            '<div style="font-size:0.875rem;color:var(--color-text-secondary)">' +
-            'You donated <strong style="color:var(--color-primary);font-size:1.25rem">\u00a5' + selectedAmount.toFixed(2) + '</strong>' +
-            '</div>' +
-            '<div style="font-size:0.8125rem;color:var(--color-text-disabled);margin-top:0.25rem">' +
-            'Campaign is now ' + data.progress + '% funded with ' + data.donor_count + ' donors' +
-            '</div>';
-
-        // Trigger confetti
         createConfetti(document.getElementById('thankYouScreen'));
-
         if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
@@ -187,28 +310,41 @@ function initCrowdfundingDetail(config) {
     var modal = document.getElementById('donateModal');
     if (modal) {
         modal.addEventListener('hidden.bs.modal', function() {
-            var step1 = document.getElementById('donateStep1');
-            var step2 = document.getElementById('donateStep2');
-            step1.style.display = 'block';
-            step2.style.display = 'none';
+            clearInterval(paymentStatusTimer);
+            showStep(1);
 
-            // Reset form
-            var confirmBtn = document.getElementById('confirmDonateBtn');
-            confirmBtn.disabled = false;
-            confirmBtn.innerHTML = 'Confirm Donation <span id="confirmAmount">\u00a5100</span>';
+            var finishBtn = document.getElementById('finishPaymentBtn');
+            if (finishBtn) {
+                finishBtn.disabled = false;
+                finishBtn.textContent = 'I Have Paid';
+            }
+
+            var confirm = document.getElementById('confirmDonateBtn');
+            if (confirm) {
+                confirm.disabled = false;
+                confirm.innerHTML = 'Confirm Donation <span id="confirmAmount">\u00a5100</span>';
+            }
 
             selectedAmount = 100;
             isCustom = false;
-            document.getElementById('donateMessage').value = '';
-            document.getElementById('donateAnonymous').checked = false;
-            document.getElementById('customAmountWrapper').style.display = 'none';
-            document.getElementById('customAmountInput').value = '';
+            selectedPaymentMethod = 'wechat';
+
+            var message = document.getElementById('donateMessage');
+            if (message) message.value = '';
+            var anonymous = document.getElementById('donateAnonymous');
+            if (anonymous) anonymous.checked = false;
+            if (customWrapper) customWrapper.style.display = 'none';
+            if (customInput) customInput.value = '';
 
             presetBtns.forEach(function(b) { b.classList.remove('selected'); });
             var defaultBtn = document.querySelector('.amount-preset-btn[data-amount="100"]');
             if (defaultBtn) defaultBtn.classList.add('selected');
 
-            // Remove confetti
+            document.querySelectorAll('.payment-method-btn').forEach(function(b) { b.classList.remove('active'); });
+            var defaultMethod = document.querySelector('.payment-method-btn[data-method="wechat"]');
+            if (defaultMethod) defaultMethod.classList.add('active');
+
+            updateConfirmAmountLabel();
             document.querySelectorAll('.confetti-piece').forEach(function(p) { p.remove(); });
         });
     }

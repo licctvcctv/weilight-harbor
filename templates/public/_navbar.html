@@ -47,7 +47,7 @@
                         <i data-lucide="search" style="width:18px;height:18px"></i>
                     </a>
                     <div id="navSearchBox" class="position-absolute end-0 bg-white shadow rounded-3 p-2" style="display:none;top:100%;width:280px;z-index:1050;border:1px solid var(--color-border);">
-                        <form action="/community/" method="GET" class="d-flex">
+                        <form action="/search" method="GET" class="d-flex">
                             <input type="text" name="q" class="form-control form-control-sm border-0" placeholder="{{ _('Search...') }}" autofocus>
                             <button type="submit" class="btn btn-sm btn-wl-primary ms-1">
                                 <i data-lucide="search" style="width:14px;height:14px"></i>
@@ -59,7 +59,7 @@
                 {% if current_user.is_authenticated %}
                 <!-- Notification Bell -->
                 <li class="nav-item me-2">
-                    <a class="nav-link position-relative" href="#" title="{{ _('Notifications') }}">
+                    <a class="nav-link position-relative" href="/user/history?tab=requests" title="{{ _('Notifications') }}">
                         <i data-lucide="bell" style="width:18px;height:18px"></i>
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style="font-size:0.6rem;display:none;" id="notifBadge">0</span>
                     </a>
@@ -81,13 +81,13 @@
                         <li><a class="dropdown-item" href="/user/history">
                             <i data-lucide="heart-handshake" style="width:16px;height:16px"></i> {{ _('My Donations') }}
                         </a></li>
-                        <li><a class="dropdown-item" href="/crowdfunding/my">
+                        <li><a class="dropdown-item" href="/user/history?tab=campaigns">
                             <i data-lucide="megaphone" style="width:16px;height:16px"></i> {{ _('My Campaigns') }}
                         </a></li>
-                        <li><a class="dropdown-item" href="/user/certification">
+                        <li><a class="dropdown-item" href="/user/certification/status">
                             <i data-lucide="shield-check" style="width:16px;height:16px"></i> {{ _('Certification Status') }}
                         </a></li>
-                        <li><a class="dropdown-item text-muted" href="#">
+                        <li><a class="dropdown-item" href="/user/settings">
                             <i data-lucide="settings" style="width:16px;height:16px"></i> {{ _('Settings') }}
                         </a></li>
                         {% if current_user.user_type == 'admin' %}

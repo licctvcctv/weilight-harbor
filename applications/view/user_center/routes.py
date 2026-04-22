@@ -1,5 +1,6 @@
 import json
 import datetime
+import re
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from applications.extensions import db
@@ -37,9 +38,21 @@ def profile():
 @login_required
 def edit_profile():
     if request.method == 'POST':
+        phone = re.sub(r'\D', '', request.form.get('phone', '').strip())[:20]
+        email = request.form.get('email', '').strip()[:120]
+        if phone and not re.fullmatch(r'\d{6,20}', phone):
+            flash('Please enter a valid phone number.', 'error')
+            return redirect(url_for('user_center.edit_profile'))
+        if phone and User.query.filter(User.id != current_user.id, User.phone == phone).first():
+            flash('Phone number is already in use.', 'error')
+            return redirect(url_for('user_center.edit_profile'))
+        if email and User.query.filter(User.id != current_user.id, User.email == email).first():
+            flash('Email is already in use.', 'error')
+            return redirect(url_for('user_center.edit_profile'))
+
         current_user.realname = request.form.get('realname', '').strip()[:20]
-        current_user.phone = request.form.get('phone', '').strip()[:20]
-        current_user.email = request.form.get('email', '').strip()[:120]
+        current_user.phone = phone
+        current_user.email = email
         current_user.bio = request.form.get('bio', '').strip()[:500]
 
         if 'avatar' in request.files:
@@ -62,6 +75,23 @@ def certification():
             flash('You already have a pending application.', 'error')
             return redirect(url_for('user_center.certification'))
 
+        cert_type = request.form.get('cert_type', 'family')
+        if cert_type not in ['family', 'volunteer']:
+            cert_type = 'family'
+        real_name = request.form.get('real_name', '').strip()[:50]
+        id_card = request.form.get('id_card', '').strip()[:30]
+        if not real_name or not id_card:
+            flash('Real name, ID number, and a valid proof document are required.', 'error')
+            return redirect(url_for('user_center.certification'))
+
+        document_url = save_upload(
+            request.files.get('document'), 'certifications', 'cert',
+            allowed_exts=ALLOWED_DOC_EXTS
+        )
+        if not document_url:
+            flash('Real name, ID number, and a valid proof document are required.', 'error')
+            return redirect(url_for('user_center.certification'))
+
         diagnosis_date = None
         diagnosis_date_str = request.form.get('diagnosis_date', '').strip()
         if diagnosis_date_str:
@@ -72,22 +102,17 @@ def certification():
 
         cert = Certification(
             user_id=current_user.id,
-            cert_type=request.form.get('cert_type', 'family'),
-            real_name=request.form.get('real_name', '').strip(),
-            id_card=request.form.get('id_card', '').strip(),
-            relation=request.form.get('relation', '').strip(),
-            patient_name=request.form.get('patient_name', '').strip(),
-            patient_illness=request.form.get('patient_illness', '').strip(),
-            hospital_name=request.form.get('hospital_name', '').strip(),
+            cert_type=cert_type,
+            real_name=real_name,
+            id_card=id_card,
+            relation=request.form.get('relation', '').strip()[:50],
+            document_url=document_url,
+            patient_name=request.form.get('patient_name', '').strip()[:50],
+            patient_illness=request.form.get('patient_illness', '').strip()[:100],
+            hospital_name=request.form.get('hospital_name', '').strip()[:100],
             diagnosis_date=diagnosis_date,
             status='pending'
         )
-
-        if 'document' in request.files:
-            cert.document_url = save_upload(
-                request.files['document'], 'certifications', 'cert',
-                allowed_exts=ALLOWED_DOC_EXTS
-            )
 
         additional_urls = []
         for i in range(1, 4):

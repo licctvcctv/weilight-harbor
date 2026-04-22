@@ -18,6 +18,22 @@
                 <input type="email" name="email" class="form-control wl-form-control" required placeholder="{{ _('Your email address') }}">
             </div>
             <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Phone Number') }}</label>
+                <input type="tel" name="phone" id="registerPhone" class="form-control wl-form-control" required
+                       minlength="6" maxlength="20" placeholder="{{ _('Enter your phone number') }}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-medium">{{ _('Phone Verification Code') }}</label>
+                <div class="input-group">
+                    <input type="text" name="verification_code" class="form-control wl-form-control" required
+                           inputmode="numeric" minlength="6" maxlength="6" placeholder="{{ _('6-digit code') }}">
+                    <button type="button" class="btn btn-outline-secondary" id="sendRegisterCode">
+                        {{ _('Send Code') }}
+                    </button>
+                </div>
+                <div id="registerCodeMessage" class="small text-muted mt-1"></div>
+            </div>
+            <div class="mb-3">
                 <label class="form-label small fw-medium">{{ _('Password') }}</label>
                 <input type="password" name="password" class="form-control wl-form-control" required minlength="6" placeholder="{{ _('Create a password') }}">
             </div>
@@ -38,4 +54,17 @@
         </p>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='public/js/auth.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initPhoneCodeSender({
+        phoneSelector: '#registerPhone',
+        buttonSelector: '#sendRegisterCode',
+        messageSelector: '#registerCodeMessage'
+    });
+});
+</script>
 {% endblock %}

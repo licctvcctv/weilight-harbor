@@ -59,6 +59,17 @@
     {{# } }}'|safe }}
 </script>
 
+{# Additional documents template #}
+<script type="text/html" id="cert-additional-docs">
+    {{ '{{# if(d.additional_docs && d.additional_docs.length){ }}
+    {{# layui.each(d.additional_docs, function(index, url){ }}
+    <a href="{{url}}" target="_blank" class="layui-btn layui-btn-xs">Doc {{index + 1}}</a>
+    {{# }); }}
+    {{# } else { }}
+    <span style="color:#999">N/A</span>
+    {{# } }}'|safe }}
+</script>
+
 {# Actions template #}
 <script type="text/html" id="cert-bar">
     {{ '{{# if(d.status === "pending"){ }}
@@ -95,7 +106,12 @@
         { title: 'Type', field: 'cert_type', align: 'center', width: 100 },
         { title: 'Real Name', field: 'real_name', align: 'center', width: 120 },
         { title: 'Relation', field: 'relation', align: 'center', width: 120 },
+        { title: 'Patient', field: 'patient_name', align: 'center', width: 120 },
+        { title: 'Illness', field: 'patient_illness', align: 'center', width: 140 },
+        { title: 'Hospital', field: 'hospital_name', align: 'center', width: 150 },
+        { title: 'Diagnosis Date', field: 'diagnosis_date', align: 'center', width: 130 },
         { title: 'Document', field: 'document_url', align: 'center', width: 130, templet: '#cert-document' },
+        { title: 'Extra Docs', field: 'additional_docs', align: 'center', width: 150, templet: '#cert-additional-docs' },
         { title: 'Status', field: 'status', align: 'center', width: 110, templet: '#cert-status' },
         { title: 'Reject Reason', field: 'reject_reason', align: 'center', minWidth: 150 },
         { title: 'Created', field: 'create_at', align: 'center', width: 150 },

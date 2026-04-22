@@ -323,17 +323,17 @@
                     <i data-lucide="shield-check" style="width:20px;height:20px;color:var(--color-primary)"></i>
                     {{ _('Verification Materials') }}
                 </div>
-                <p class="form-section-subtitle">{{ _('Upload a payment QR code for admin review purposes.') }}</p>
+                <p class="form-section-subtitle">{{ _('Upload a payment QR code for admin review and donor payment confirmation.') }}</p>
 
                 <div class="mb-0">
-                    <label class="form-label-wl">{{ _('Payment QR Code') }}</label>
+                    <label class="form-label-wl">{{ _('Payment QR Code') }} <span class="required">*</span></label>
                     <div class="upload-area" id="qrUploadArea">
-                        <input type="file" name="qr_code" accept="image/jpeg,image/png,image/webp" id="qrCodeInput">
+                        <input type="file" name="qr_code" accept="image/jpeg,image/png,image/webp" id="qrCodeInput" required>
                         <div class="upload-icon">
                             <i data-lucide="qr-code" style="width:36px;height:36px"></i>
                         </div>
                         <div class="upload-text">{{ _('Click or drag to upload QR code') }}</div>
-                        <div class="upload-hint">{{ _('Optional. WeChat or Alipay QR code.') }}</div>
+                        <div class="upload-hint">{{ _('Required. WeChat or Alipay QR code.') }}</div>
                         <img class="upload-preview" id="qrPreview" alt="">
                     </div>
                 </div>
@@ -423,10 +423,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var title = form.querySelector('[name="title"]').value.trim();
         var description = form.querySelector('[name="description"]').value.trim();
         var goal = parseFloat(form.querySelector('[name="funding_goal"]').value);
+        var qrCode = form.querySelector('[name="qr_code"]').files[0];
 
-        if (!title || !description || !goal || goal < 100) {
+        if (!title || !description || !goal || goal < 100 || !qrCode) {
             e.preventDefault();
-            showToast('{{ _("Please fill in all required fields. Minimum goal is 100 yuan.") }}', 'error');
+            showToast('{{ _("Please fill in all required fields, upload a payment QR code, and set a minimum goal of 100 yuan.") }}', 'error');
             return;
         }
     });
