@@ -197,6 +197,21 @@ git pull origin main
 bash vm_update.sh
 ```
 
+### Method 3: GitHub Actions (push to `main`)
+
+The repository now includes `.github/workflows/deploy.yml`.
+
+- Trigger: push to `main` or manual `workflow_dispatch`
+- Flow: SSH to the jump host, SSH to the VM, `git pull origin main`, then run `bash vm_update.sh`
+- Required GitHub Secrets:
+  - `JUMPER_USER`
+  - `JUMPER_HOST`
+  - `JUMPER_PASSWORD`
+  - `JUMPER_TOTP_SECRET`
+  - `VM_USER`
+  - `VM_HOST`
+  - `VM_PASSWORD`
+
 ### Systemd Service Files
 
 **gunicorn.service** (`/etc/systemd/system/gunicorn.service`):

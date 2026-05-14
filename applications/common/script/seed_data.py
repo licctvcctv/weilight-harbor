@@ -81,7 +81,7 @@ def _seed_admin():
 
 
 def _seed_admin_powers():
-    """Create minimum admin menu and review permissions used by custom modules."""
+    """Create business and system admin menus used by the platform."""
     admin_role = Role.query.filter_by(code='admin').first()
     if not admin_role:
         return
@@ -99,9 +99,9 @@ def _seed_admin_powers():
             admin_role.power.append(power)
         return power
 
-    review_parent = upsert_power(
+    business_parent = upsert_power(
         'admin:review',
-        name='Review Management',
+        name='Business Management',
         type='0',
         url='',
         open_type='_iframe',
@@ -117,7 +117,7 @@ def _seed_admin_powers():
         type='1',
         url='/admin/certification/',
         open_type='_iframe',
-        parent_id=review_parent.id,
+        parent_id=business_parent.id,
         icon='layui-icon layui-icon-vercode',
         sort=10,
         enable=1
@@ -128,7 +128,7 @@ def _seed_admin_powers():
         type='2',
         url='',
         open_type='',
-        parent_id=review_parent.id,
+        parent_id=business_parent.id,
         icon='',
         sort=11,
         enable=1
@@ -139,7 +139,7 @@ def _seed_admin_powers():
         type='1',
         url='/admin/campaign-review/',
         open_type='_iframe',
-        parent_id=review_parent.id,
+        parent_id=business_parent.id,
         icon='layui-icon layui-icon-rmb',
         sort=20,
         enable=1
@@ -150,7 +150,7 @@ def _seed_admin_powers():
         type='2',
         url='',
         open_type='',
-        parent_id=review_parent.id,
+        parent_id=business_parent.id,
         icon='',
         sort=21,
         enable=1
@@ -161,7 +161,7 @@ def _seed_admin_powers():
         type='1',
         url='/admin/community/',
         open_type='_iframe',
-        parent_id=review_parent.id,
+        parent_id=business_parent.id,
         icon='layui-icon layui-icon-dialogue',
         sort=30,
         enable=1
@@ -172,9 +172,132 @@ def _seed_admin_powers():
         type='2',
         url='',
         open_type='',
-        parent_id=review_parent.id,
+        parent_id=business_parent.id,
         icon='',
         sort=31,
+        enable=1
+    )
+
+    system_parent = upsert_power(
+        'admin:system',
+        name='System Management',
+        type='0',
+        url='',
+        open_type='_iframe',
+        parent_id=0,
+        icon='layui-icon layui-icon-set',
+        sort=30,
+        enable=1
+    )
+
+    upsert_power(
+        'admin:home',
+        name='Home',
+        type='1',
+        url='/admin/welcome',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-home',
+        sort=1,
+        enable=1
+    )
+    upsert_power(
+        'admin:user:main',
+        name='User Management',
+        type='1',
+        url='/admin/user/',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-user',
+        sort=10,
+        enable=1
+    )
+    upsert_power(
+        'admin:role:main',
+        name='Role Management',
+        type='1',
+        url='/admin/role/',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-auz',
+        sort=20,
+        enable=1
+    )
+    upsert_power(
+        'admin:power:main',
+        name='Permission Management',
+        type='1',
+        url='/admin/power/',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-vercode',
+        sort=30,
+        enable=1
+    )
+    upsert_power(
+        'admin:dept:main',
+        name='Department Management',
+        type='1',
+        url='/dept/',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-group',
+        sort=40,
+        enable=1
+    )
+    upsert_power(
+        'admin:dict:main',
+        name='Dictionary Management',
+        type='1',
+        url='/admin/dict/',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-tabs',
+        sort=50,
+        enable=1
+    )
+    upsert_power(
+        'admin:file:main',
+        name='File Management',
+        type='1',
+        url='/admin/file/',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-file',
+        sort=60,
+        enable=1
+    )
+    upsert_power(
+        'admin:monitor:main',
+        name='System Monitor',
+        type='1',
+        url='/admin/monitor/',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-engine',
+        sort=70,
+        enable=1
+    )
+    upsert_power(
+        'admin:log:main',
+        name='Operation Log',
+        type='1',
+        url='/admin/log/',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-log',
+        sort=80,
+        enable=1
+    )
+    upsert_power(
+        'admin:task:main',
+        name='Task Management',
+        type='1',
+        url='/admin/task/',
+        open_type='_iframe',
+        parent_id=system_parent.id,
+        icon='layui-icon layui-icon-util',
+        sort=90,
         enable=1
     )
     db.session.commit()

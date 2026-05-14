@@ -61,6 +61,14 @@ def layui_paginate(query):
     )
 
 
+try:
+    from sqlalchemy.orm import Query
+
+    Query.layui_paginate = layui_paginate
+except Exception:
+    pass
+
+
 def init_databases(app: Flask):
     db.init_app(app)
     ma.init_app(app)

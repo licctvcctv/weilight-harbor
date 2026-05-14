@@ -3,6 +3,7 @@ from collections import OrderedDict
 from io import BytesIO
 from flask import session, make_response, current_app
 from flask_login import current_user
+from flask_babel import gettext as _
 
 from applications.common.utils.gen_captcha import gen_captcha
 from applications.schemas import PowerOutSchema
@@ -42,6 +43,13 @@ def make_menu_tree():
     power_schema = PowerOutSchema(many=True)  # 用已继承 ma.ModelSchema 类的自定制类生成序列化类
     power_dict = power_schema.dump(powers)  # 生成可序列化对象
     power_dict.sort(key=lambda x: x['id'], reverse=True)
+
+    for item in power_dict:
+        translated_name = item.get('title') or item.get('name')
+        if translated_name:
+            translated_name = _(translated_name)
+            item['title'] = translated_name
+            item['name'] = translated_name
 
     menu_dict = OrderedDict()
     for _dict in power_dict:
@@ -109,7 +117,7 @@ def get_render_config():
             # 页面地址
             "href": "/admin/welcome",
             # 标题
-            "title": "首页"
+            "title": _("Home")
         }
     }, theme={
         # 默认主题色，对应 colors 配置中的 ID 标识

@@ -1,32 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Campaign Review</title>
+    <title>{{ _('Campaign Review') }}</title>
     {% include 'admin/common/header.html' %}
 </head>
+{% set t_status = _('Status') %}
+{% set t_all = _('All') %}
+{% set t_draft = _('Draft') %}
+{% set t_pending = _('Pending') %}
+{% set t_approved = _('Approved') %}
+{% set t_rejected = _('Rejected') %}
+{% set t_search = _('Search') %}
+{% set t_reset = _('Reset') %}
+{% set t_refresh = _('Refresh') %}
+{% set t_no_records = _('No campaign records found') %}
+{% set t_confirm = _('Confirm') %}
+{% set t_approve = _('Approve') %}
+{% set t_reject = _('Reject') %}
+{% set t_reviewed = _('Reviewed') %}
+{% set t_details = _('Details') %}
+{% set t_confirm_approve = _('Are you sure you want to approve this campaign?') %}
+{% set t_prompt_reject = _('Please enter the rejection reason') %}
+{% set t_na = _('N/A') %}
+{% set t_id = _('ID') %}
+{% set t_creator = _('Creator') %}
+{% set t_title = _('Title') %}
+{% set t_category = _('Category') %}
+{% set t_cover = _('Cover') %}
+{% set t_qr_code = _('QR Code') %}
+{% set t_funding = _('Funding') %}
+{% set t_reject_reason = _('Reject Reason') %}
+{% set t_created = _('Created') %}
+{% set t_actions = _('Actions') %}
 <body class="pear-container">
 {# Filter form #}
 <div class="layui-card">
     <div class="layui-card-body">
         <form class="layui-form" action="" lay-filter="campaign-query-form">
             <div class="layui-form-item">
-                <label class="layui-form-label">Status</label>
+                <label class="layui-form-label">{{ t_status }}</label>
                 <div class="layui-input-inline">
                     <select name="status">
-                        <option value="">All</option>
-                        <option value="draft">Draft</option>
-                        <option value="pending">Pending</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
+                        <option value="">{{ t_all }}</option>
+                        <option value="draft">{{ t_draft }}</option>
+                        <option value="pending">{{ t_pending }}</option>
+                        <option value="approved">{{ t_approved }}</option>
+                        <option value="rejected">{{ t_rejected }}</option>
                     </select>
                 </div>
                 <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="campaign-query">
                     <i class="layui-icon layui-icon-search"></i>
-                    Search
+                    {{ t_search }}
                 </button>
                 <button type="reset" class="pear-btn pear-btn-md">
                     <i class="layui-icon layui-icon-refresh"></i>
-                    Reset
+                    {{ t_reset }}
                 </button>
             </div>
         </form>
@@ -42,60 +70,60 @@
 
 {# Status badge template #}
 <script type="text/html" id="campaign-status">
-    {{ '{{# if(d.status === "draft"){ }}
-    <span class="layui-badge layui-bg-gray">Draft</span>
-    {{# } else if(d.status === "pending"){ }}
-    <span class="layui-badge layui-bg-orange">Pending</span>
-    {{# } else if(d.status === "approved"){ }}
-    <span class="layui-badge layui-bg-green">Approved</span>
-    {{# } else if(d.status === "rejected"){ }}
-    <span class="layui-badge">Rejected</span>
-    {{# } else { }}
-    <span class="layui-badge layui-bg-blue">{{d.status}}</span>
-    {{# } }}'|safe }}
+    {{ '{{# if(d.status === "draft"){ }}' | safe }}
+    <span class="layui-badge layui-bg-gray">{{ t_draft }}</span>
+    {{ '{{# } else if(d.status === "pending"){ }}' | safe }}
+    <span class="layui-badge layui-bg-orange">{{ t_pending }}</span>
+    {{ '{{# } else if(d.status === "approved"){ }}' | safe }}
+    <span class="layui-badge layui-bg-green">{{ t_approved }}</span>
+    {{ '{{# } else if(d.status === "rejected"){ }}' | safe }}
+    <span class="layui-badge">{{ t_rejected }}</span>
+    {{ '{{# } else { }}' | safe }}
+    <span class="layui-badge layui-bg-blue">{{ '{{d.status}}' | safe }}</span>
+    {{ '{{# } }}' | safe }}
 </script>
 
 {# Cover image preview template #}
 <script type="text/html" id="campaign-cover">
-    {{ '{{# if(d.cover_image){ }}
-    <img src="{{d.cover_image}}" style="width:60px;height:40px;object-fit:cover;cursor:pointer;" onclick="layer.photos({photos:{data:[{src:\\\'{{d.cover_image}}\\\'}]}})">
-    {{# } else { }}
-    <span style="color:#999">N/A</span>
-    {{# } }}'|safe }}
+    {{ '{{# if(d.cover_image){ }}' | safe }}
+    <img src="{{ '{{d.cover_image}}' | safe }}" data-src="{{ '{{d.cover_image}}' | safe }}" style="width:60px;height:40px;object-fit:cover;cursor:pointer;" onclick="layer.photos({photos:{data:[{src:this.dataset.src}]}})">
+    {{ '{{# } else { }}' | safe }}
+    <span style="color:#999">{{ t_na }}</span>
+    {{ '{{# } }}' | safe }}
 </script>
 
 {# QR code preview template #}
 <script type="text/html" id="campaign-qr">
-    {{ '{{# if(d.qr_code_url){ }}
-    <img src="{{d.qr_code_url}}" style="width:40px;height:40px;cursor:pointer;" onclick="layer.photos({photos:{data:[{src:\\\'{{d.qr_code_url}}\\\'}]}})">
-    {{# } else { }}
-    <span style="color:#999">N/A</span>
-    {{# } }}'|safe }}
+    {{ '{{# if(d.qr_code_url){ }}' | safe }}
+    <img src="{{ '{{d.qr_code_url}}' | safe }}" data-src="{{ '{{d.qr_code_url}}' | safe }}" style="width:40px;height:40px;cursor:pointer;" onclick="layer.photos({photos:{data:[{src:this.dataset.src}]}})">
+    {{ '{{# } else { }}' | safe }}
+    <span style="color:#999">{{ t_na }}</span>
+    {{ '{{# } }}' | safe }}
 </script>
 
 {# Funding goal format #}
 <script type="text/html" id="campaign-goal">
-    {{ '{{# var pct = d.funding_goal > 0 ? ((d.current_amount / d.funding_goal) * 100).toFixed(1) : 0; }}
-    <span>${{d.current_amount}} / ${{d.funding_goal}}</span><br>
-    <span style="color:#999;font-size:12px">({{pct}}%)</span>'|safe }}
+    {{ '{{# var pct = d.funding_goal > 0 ? ((d.current_amount / d.funding_goal) * 100).toFixed(1) : 0; }}' | safe }}
+    <span>${{ '{{d.current_amount}}' | safe }} / ${{ '{{d.funding_goal}}' | safe }}</span><br>
+    <span style="color:#999;font-size:12px">{{ '{{' }}pct{{ '}}' | safe }}%</span>
 </script>
 
 {# Actions template #}
 <script type="text/html" id="campaign-bar">
-    {{ '{{# if(d.status === "pending"){ }}
-    <button class="layui-btn layui-btn-xs" lay-event="approve">Approve</button>
-    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">Reject</button>
-    {{# } else { }}
-    <span style="color:#999">Reviewed</span>
-    {{# } }}
-    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view">Details</button>'|safe }}
+    {{ '{{# if(d.status === "pending"){ }}' | safe }}
+    <button class="layui-btn layui-btn-xs" lay-event="approve">{{ t_approve }}</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">{{ t_reject }}</button>
+    {{ '{{# } else { }}' | safe }}
+    <span style="color:#999">{{ t_reviewed }}</span>
+    {{ '{{# } }}' | safe }}
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view">{{ t_details }}</button>
 </script>
 
 {# Toolbar #}
 <script type="text/html" id="campaign-toolbar">
     <button class="pear-btn pear-btn-md" lay-event="refresh">
         <i class="layui-icon layui-icon-refresh"></i>
-        Refresh
+        {{ t_refresh }}
     </button>
 </script>
 
@@ -106,23 +134,83 @@
     let table = layui.table
     let form = layui.form
     let $ = layui.jquery
-    let popup = layui.popup
-    let layer = layui.layer
-    let MODULE_PATH = '/admin/campaign-review/'
+        let popup = layui.popup
+        let layer = layui.layer
+        let MODULE_PATH = '/admin/campaign-review/'
+    const t_na = "{{ t_na }}"
+    const t_draft = "{{ t_draft }}"
+    const t_pending = "{{ t_pending }}"
+    const t_approved = "{{ t_approved }}"
+    const t_rejected = "{{ t_rejected }}"
+    const t_reviewed = "{{ t_reviewed }}"
+    const t_approve = "{{ t_approve }}"
+    const t_reject = "{{ t_reject }}"
+    const t_details = "{{ t_details }}"
+
+    const escapeHtml = function (value) {
+      return String(value === null || value === undefined ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+    }
+
+    const renderCampaignStatus = function (status) {
+      if (status === 'draft') {
+        return '<span class="layui-badge layui-bg-gray">' + escapeHtml(t_draft) + '</span>'
+      }
+      if (status === 'pending') {
+        return '<span class="layui-badge layui-bg-orange">' + escapeHtml(t_pending) + '</span>'
+      }
+      if (status === 'approved') {
+        return '<span class="layui-badge layui-bg-green">' + escapeHtml(t_approved) + '</span>'
+      }
+      if (status === 'rejected') {
+        return '<span class="layui-badge">' + escapeHtml(t_rejected) + '</span>'
+      }
+      return '<span class="layui-badge layui-bg-blue">' + escapeHtml(status || t_na) + '</span>'
+    }
+
+    const renderCampaignImage = function (url) {
+      if (!url) {
+        return '<span style="color:#999">' + escapeHtml(t_na) + '</span>'
+      }
+      const safeUrl = escapeHtml(url)
+      return '<img src="' + safeUrl + '" data-src="' + safeUrl + '" style="width:60px;height:40px;object-fit:cover;cursor:pointer;" onclick="layer.photos({photos:{data:[{src:this.dataset.src}]}})">'
+    }
+
+    const renderCampaignGoal = function (row) {
+      const current = Number(row.current_amount || 0)
+      const goal = Number(row.funding_goal || 0)
+      const pct = goal > 0 ? ((current / goal) * 100).toFixed(1) : '0'
+      return '<span>$' + current.toFixed(2) + ' / $' + goal.toFixed(2) + '</span><br>' +
+        '<span style="color:#999;font-size:12px">(' + pct + '%)</span>'
+    }
+
+    const renderCampaignActions = function (row) {
+      if (row.status === 'pending') {
+        return '<button class="layui-btn layui-btn-xs" lay-event="approve">' + escapeHtml(t_approve) + '</button>' +
+          '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">' + escapeHtml(t_reject) + '</button>' +
+          '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view">' + escapeHtml(t_details) + '</button>'
+      }
+      return '<span style="color:#999">' + escapeHtml(t_reviewed) + '</span>' +
+        '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view">' + escapeHtml(t_details) + '</button>'
+    }
 
     let cols = [
       [
-        { title: 'ID', field: 'id', align: 'center', width: 70 },
-        { title: 'Creator', field: 'username', align: 'center', width: 120 },
-        { title: 'Title', field: 'title', align: 'center', minWidth: 180 },
-        { title: 'Category', field: 'category', align: 'center', width: 100 },
-        { title: 'Cover', field: 'cover_image', align: 'center', width: 90, templet: '#campaign-cover' },
-        { title: 'QR Code', field: 'qr_code_url', align: 'center', width: 80, templet: '#campaign-qr' },
-        { title: 'Funding', field: 'funding_goal', align: 'center', width: 160, templet: '#campaign-goal' },
-        { title: 'Status', field: 'status', align: 'center', width: 110, templet: '#campaign-status' },
-        { title: 'Reject Reason', field: 'reject_reason', align: 'center', width: 150 },
-        { title: 'Created', field: 'create_at', align: 'center', width: 150 },
-        { title: 'Actions', toolbar: '#campaign-bar', align: 'center', width: 200, fixed: 'right' }
+        { title: "{{ t_id }}", field: 'id', align: 'center', width: 70 },
+        { title: "{{ t_creator }}", field: 'username', align: 'center', width: 120 },
+        { title: "{{ t_title }}", field: 'title', align: 'center', minWidth: 180 },
+        { title: "{{ t_category }}", field: 'category', align: 'center', width: 100 },
+        { title: "{{ t_cover }}", field: 'cover_image', align: 'center', width: 90, templet: function (d) { return renderCampaignImage(d.cover_image) } },
+        { title: "{{ t_qr_code }}", field: 'qr_code_url', align: 'center', width: 80, templet: function (d) { return renderCampaignImage(d.qr_code_url) } },
+        { title: "{{ t_funding }}", field: 'funding_goal', align: 'center', width: 160, templet: function (d) { return renderCampaignGoal(d) } },
+        { title: "{{ t_status }}", field: 'status', align: 'center', width: 110, templet: function (d) { return renderCampaignStatus(d.status) } },
+        { title: "{{ t_reject_reason }}", field: 'reject_reason', align: 'center', width: 150 },
+        { title: "{{ t_created }}", field: 'create_at', align: 'center', width: 150 },
+        { title: "{{ t_actions }}", field: 'actions', align: 'center', width: 200, fixed: 'right', templet: function (d) { return renderCampaignActions(d) } }
       ]
     ]
 
@@ -134,7 +222,7 @@
       skin: 'line',
       toolbar: '#campaign-toolbar',
       defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'],
-      text: { none: 'No campaign records found' }
+      text: { none: "{{ t_no_records }}" }
     })
 
     form.on('submit(campaign-query)', function (data) {
@@ -150,7 +238,7 @@
 
     table.on('tool(campaign-table)', function (obj) {
       if (obj.event === 'approve') {
-        layer.confirm('Are you sure you want to approve this campaign?', { icon: 3, title: 'Confirm' }, function (index) {
+        layer.confirm("{{ t_confirm_approve }}", { icon: 3, title: "{{ t_confirm }}" }, function (index) {
           layer.close(index)
           let loading = layer.load()
           $.ajax({
@@ -173,7 +261,7 @@
       } else if (obj.event === 'reject') {
         layer.prompt({
           formType: 2,
-          title: 'Please enter the rejection reason',
+          title: "{{ t_prompt_reject }}",
           area: ['400px', '150px'],
           value: ''
         }, function (value, promptIndex) {

@@ -29,11 +29,9 @@
                 <li class="nav-item">
                     <a class="nav-link {{ 'active' if '/crowdfunding' in request.path else '' }}" href="/crowdfunding/">{{ _('Crowdfunding') }}</a>
                 </li>
-                {% if current_user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link {{ 'active' if '/journal' in request.path else '' }}" href="/journal/">{{ _('Life Journal') }}</a>
                 </li>
-                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link {{ 'active' if '/respite' in request.path else '' }}" href="/respite/">{{ _('Respite Station') }}</a>
                 </li>
@@ -87,6 +85,11 @@
                         <li><a class="dropdown-item" href="/user/certification/status">
                             <i data-lucide="shield-check" style="width:16px;height:16px"></i> {{ _('Certification Status') }}
                         </a></li>
+                        {% if not current_user.is_certified %}
+                        <li><a class="dropdown-item" href="/user/certification">
+                            <i data-lucide="badge-plus" style="width:16px;height:16px"></i> {{ _('Apply Certification') }}
+                        </a></li>
+                        {% endif %}
                         <li><a class="dropdown-item" href="/user/settings">
                             <i data-lucide="settings" style="width:16px;height:16px"></i> {{ _('Settings') }}
                         </a></li>

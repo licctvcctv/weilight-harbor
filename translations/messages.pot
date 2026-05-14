@@ -2296,3 +2296,206 @@ msgstr ""
 msgid "Please contact admin to delete your account."
 msgstr ""
 
+#: templates/public/_navbar.html:90
+msgid "Apply Certification"
+msgstr ""
+
+#: templates/public/auth/register.html:26 templates/public/auth/forgot_password.html:24
+msgid "Phone Verification Code"
+msgstr ""
+
+#: templates/admin/login.html:4
+msgid "Admin Login"
+msgstr ""
+
+#: templates/admin/login.html:16
+msgid "Manage reviews, approvals, and platform operations."
+msgstr ""
+
+#: templates/admin/login.html:19
+msgid "Username"
+msgstr ""
+
+#: templates/admin/login.html:22
+msgid "Password"
+msgstr ""
+
+#: templates/admin/login.html:25
+msgid "Verification Code"
+msgstr ""
+
+#: templates/admin/login.html:28
+msgid "Remember me"
+msgstr ""
+
+#: templates/admin/login.html:32
+msgid "Sign In"
+msgstr ""
+
+msgid "Business Management"
+msgstr ""
+
+msgid "System Management"
+msgstr ""
+
+msgid "User Management"
+msgstr ""
+
+msgid "Role Management"
+msgstr ""
+
+msgid "Permission Management"
+msgstr ""
+
+msgid "Department Management"
+msgstr ""
+
+msgid "Dictionary Management"
+msgstr ""
+
+msgid "File Management"
+msgstr ""
+
+msgid "System Monitor"
+msgstr ""
+
+msgid "Operation Log"
+msgstr ""
+
+msgid "Task Management"
+msgstr ""
+
+msgid "Basic Info"
+msgstr ""
+
+msgid "Weilight Harbor Admin"
+msgstr ""
+
+msgid "Certification Review"
+msgstr ""
+
+msgid "Campaign Review"
+msgstr ""
+
+msgid "Community Moderation"
+msgstr ""
+
+msgid "No certification records found"
+msgstr ""
+
+msgid "View Document"
+msgstr ""
+
+msgid "Doc"
+msgstr ""
+
+msgid "Are you sure you want to approve this certification?"
+msgstr ""
+
+msgid "Please enter the rejection reason"
+msgstr ""
+
+msgid "No campaign records found"
+msgstr ""
+
+msgid "Are you sure you want to approve this campaign?"
+msgstr ""
+
+msgid "No community posts found"
+msgstr ""
+
+msgid "Approve this post and make it visible?"
+msgstr ""
+
+msgid "Hide this post from public view?"
+msgstr ""
+
+msgid "Are you sure you want to delete this post? This action cannot be undone."
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "Draft"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Hidden"
+msgstr ""
+
+msgid "Visible"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Creator"
+msgstr ""
+
+msgid "Cover"
+msgstr ""
+
+msgid "QR Code"
+msgstr ""
+
+msgid "Funding"
+msgstr ""
+
+msgid "Content Preview"
+msgstr ""
+
+msgid "Likes"
+msgstr ""
+
+msgid "Comments"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
+msgid "Approve"
+msgstr ""
+
+msgid "Reject"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Relation"
+msgstr ""
+
+msgid "Patient"
+msgstr ""
+
+msgid "Illness"
+msgstr ""
+
+msgid "Hospital"
+msgstr ""
+
+msgid "Extra Docs"
+msgstr ""
+
+msgid "Created"
+msgstr ""
+
+msgid "Actions"
+msgstr ""
+
+msgid "Reject Reason"
+msgstr ""

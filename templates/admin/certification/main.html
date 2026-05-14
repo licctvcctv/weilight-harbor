@@ -1,31 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Certification Review</title>
+    <title>{{ _('Certification Review') }}</title>
     {% include 'admin/common/header.html' %}
 </head>
+{% set t_status = _('Status') %}
+{% set t_all = _('All') %}
+{% set t_pending = _('Pending') %}
+{% set t_approved = _('Approved') %}
+{% set t_rejected = _('Rejected') %}
+{% set t_search = _('Search') %}
+{% set t_reset = _('Reset') %}
+{% set t_refresh = _('Refresh') %}
+{% set t_no_records = _('No certification records found') %}
+{% set t_view_document = _('View Document') %}
+{% set t_doc = _('Doc') %}
+{% set t_reviewed = _('Reviewed') %}
+{% set t_confirm = _('Confirm') %}
+{% set t_approve = _('Approve') %}
+{% set t_reject = _('Reject') %}
+{% set t_confirm_approve = _('Are you sure you want to approve this certification?') %}
+{% set t_prompt_reject = _('Please enter the rejection reason') %}
+{% set t_na = _('N/A') %}
+{% set t_id = _('ID') %}
+{% set t_username = _('Username') %}
+{% set t_type = _('Type') %}
+{% set t_real_name = _('Real Name') %}
+{% set t_relation = _('Relation') %}
+{% set t_patient = _('Patient') %}
+{% set t_illness = _('Illness') %}
+{% set t_hospital = _('Hospital') %}
+{% set t_diagnosis_date = _('Diagnosis Date') %}
+{% set t_document = _('Document') %}
+{% set t_extra_docs = _('Extra Docs') %}
+{% set t_reject_reason = _('Reject Reason') %}
+{% set t_created = _('Created') %}
+{% set t_actions = _('Actions') %}
 <body class="pear-container">
 {# Filter form #}
 <div class="layui-card">
     <div class="layui-card-body">
         <form class="layui-form" action="" lay-filter="cert-query-form">
             <div class="layui-form-item">
-                <label class="layui-form-label">Status</label>
+                <label class="layui-form-label">{{ t_status }}</label>
                 <div class="layui-input-inline">
                     <select name="status">
-                        <option value="">All</option>
-                        <option value="pending">Pending</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
+                        <option value="">{{ t_all }}</option>
+                        <option value="pending">{{ t_pending }}</option>
+                        <option value="approved">{{ t_approved }}</option>
+                        <option value="rejected">{{ t_rejected }}</option>
                     </select>
                 </div>
                 <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="cert-query">
                     <i class="layui-icon layui-icon-search"></i>
-                    Search
+                    {{ t_search }}
                 </button>
                 <button type="reset" class="pear-btn pear-btn-md">
                     <i class="layui-icon layui-icon-refresh"></i>
-                    Reset
+                    {{ t_reset }}
                 </button>
             </div>
         </form>
@@ -41,81 +73,153 @@
 
 {# Status badge template #}
 <script type="text/html" id="cert-status">
-    {{ '{{# if(d.status === "pending"){ }}
-    <span class="layui-badge layui-bg-orange">Pending</span>
-    {{# } else if(d.status === "approved"){ }}
-    <span class="layui-badge layui-bg-green">Approved</span>
-    {{# } else if(d.status === "rejected"){ }}
-    <span class="layui-badge">Rejected</span>
-    {{# } }}'|safe }}
+    {{ '{{# if(d.status === "pending"){ }}' }}
+    <span class="layui-badge layui-bg-orange">{{ t_pending }}</span>
+    {{ '{{# } else if(d.status === "approved"){ }}' }}
+    <span class="layui-badge layui-bg-green">{{ t_approved }}</span>
+    {{ '{{# } else if(d.status === "rejected"){ }}' }}
+    <span class="layui-badge">{{ t_rejected }}</span>
+    {{ '{{# } }}' }}
 </script>
 
 {# Document link template #}
 <script type="text/html" id="cert-document">
-    {{ '{{# if(d.document_url){ }}
-    <a href="{{d.document_url}}" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal">View Document</a>
-    {{# } else { }}
-    <span style="color:#999">N/A</span>
-    {{# } }}'|safe }}
+    {{ '{{# if(d.document_url){ }}' }}
+    <a href="{{ '{{d.document_url}}' }}" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal">{{ t_view_document }}</a>
+    {{ '{{# } else { }}' }}
+    <span style="color:#999">{{ t_na }}</span>
+    {{ '{{# } }}' }}
 </script>
 
 {# Additional documents template #}
 <script type="text/html" id="cert-additional-docs">
-    {{ '{{# if(d.additional_docs && d.additional_docs.length){ }}
-    {{# layui.each(d.additional_docs, function(index, url){ }}
-    <a href="{{url}}" target="_blank" class="layui-btn layui-btn-xs">Doc {{index + 1}}</a>
-    {{# }); }}
-    {{# } else { }}
-    <span style="color:#999">N/A</span>
-    {{# } }}'|safe }}
+    {{ '{{# if(d.additional_docs && d.additional_docs.length){ }}' }}
+    {{ '{{# layui.each(d.additional_docs, function(index, url){ }}' }}
+    <a href="{{ '{{url}}' }}" target="_blank" class="layui-btn layui-btn-xs">{{ t_doc }} {{'{{index + 1}}'}}</a>
+    {{ '{{# }); }}' }}
+    {{ '{{# } else { }}' }}
+    <span style="color:#999">{{ t_na }}</span>
+    {{ '{{# } }}' }}
 </script>
 
 {# Actions template #}
 <script type="text/html" id="cert-bar">
-    {{ '{{# if(d.status === "pending"){ }}
-    <button class="layui-btn layui-btn-xs" lay-event="approve">Approve</button>
-    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">Reject</button>
-    {{# } else { }}
-    <span style="color:#999">Reviewed</span>
-    {{# } }}'|safe }}
+    {{ '{{# if(d.status === "pending"){ }}' }}
+    <button class="layui-btn layui-btn-xs" lay-event="approve">{{ t_approve }}</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">{{ t_reject }}</button>
+    {{ '{{# } else { }}' }}
+    <span style="color:#999">{{ t_reviewed }}</span>
+    {{ '{{# } }}' }}
 </script>
 
 {# Toolbar #}
 <script type="text/html" id="cert-toolbar">
     <button class="pear-btn pear-btn-md" lay-event="refresh">
         <i class="layui-icon layui-icon-refresh"></i>
-        Refresh
+        {{ t_refresh }}
     </button>
 </script>
 
 {% include 'admin/common/footer.html' %}
 
 <script>
+  window.addEventListener('error', function (event) {
+    document.title = '认证审核 ERR: ' + (event && event.message ? event.message : 'unknown')
+  })
+  window.addEventListener('unhandledrejection', function (event) {
+    const reason = event && event.reason
+    const message = reason && reason.message ? reason.message : String(reason || 'unknown')
+    document.title = '认证审核 ERR: ' + message
+  })
+
   layui.use(['table', 'form', 'jquery', 'popup', 'layer'], function () {
     let table = layui.table
     let form = layui.form
     let $ = layui.jquery
-    let popup = layui.popup
-    let layer = layui.layer
-    let MODULE_PATH = '/admin/certification/'
+        let popup = layui.popup
+        let layer = layui.layer
+        let MODULE_PATH = '/admin/certification/'
+    const t_na = "{{ t_na }}"
+    const t_pending = "{{ t_pending }}"
+    const t_approved = "{{ t_approved }}"
+    const t_rejected = "{{ t_rejected }}"
+    const t_view_document = "{{ t_view_document }}"
+    const t_doc = "{{ t_doc }}"
+    const t_reviewed = "{{ t_reviewed }}"
+    const t_approve = "{{ t_approve }}"
+    const t_reject = "{{ t_reject }}"
+
+    const escapeHtml = function (value) {
+      return String(value === null || value === undefined ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+    }
+
+    const renderCertStatus = function (status) {
+      if (status === 'pending') {
+        return '<span class="layui-badge layui-bg-orange">' + escapeHtml(t_pending) + '</span>'
+      }
+      if (status === 'approved') {
+        return '<span class="layui-badge layui-bg-green">' + escapeHtml(t_approved) + '</span>'
+      }
+      if (status === 'rejected') {
+        return '<span class="layui-badge">' + escapeHtml(t_rejected) + '</span>'
+      }
+      return '<span class="layui-badge layui-bg-blue">' + escapeHtml(status || t_na) + '</span>'
+    }
+
+    const renderDocument = function (url) {
+      if (!url) {
+        return '<span style="color:#999">' + escapeHtml(t_na) + '</span>'
+      }
+      return '<a href="' + escapeHtml(url) + '" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal">' + escapeHtml(t_view_document) + '</a>'
+    }
+
+    const renderAdditionalDocs = function (docs) {
+      let list = docs
+      if (typeof list === 'string') {
+        try {
+          list = JSON.parse(list)
+        } catch (e) {
+          list = []
+        }
+      }
+      if (!Array.isArray(list) || !list.length) {
+        return '<span style="color:#999">' + escapeHtml(t_na) + '</span>'
+      }
+      return list.map(function (url, index) {
+        return '<a href="' + escapeHtml(url) + '" target="_blank" class="layui-btn layui-btn-xs">' + escapeHtml(t_doc) + ' ' + (index + 1) + '</a>'
+      }).join(' ')
+    }
+
+    const renderCertActions = function (status) {
+      if (status === 'pending') {
+        return '<button class="layui-btn layui-btn-xs" lay-event="approve">' + escapeHtml(t_approve) + '</button>' +
+          '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">' + escapeHtml(t_reject) + '</button>'
+      }
+      return '<span style="color:#999">' + escapeHtml(t_reviewed) + '</span>'
+    }
 
     let cols = [
       [
-        { title: 'ID', field: 'id', align: 'center', width: 70 },
-        { title: 'Username', field: 'username', align: 'center', width: 120 },
-        { title: 'Type', field: 'cert_type', align: 'center', width: 100 },
-        { title: 'Real Name', field: 'real_name', align: 'center', width: 120 },
-        { title: 'Relation', field: 'relation', align: 'center', width: 120 },
-        { title: 'Patient', field: 'patient_name', align: 'center', width: 120 },
-        { title: 'Illness', field: 'patient_illness', align: 'center', width: 140 },
-        { title: 'Hospital', field: 'hospital_name', align: 'center', width: 150 },
-        { title: 'Diagnosis Date', field: 'diagnosis_date', align: 'center', width: 130 },
-        { title: 'Document', field: 'document_url', align: 'center', width: 130, templet: '#cert-document' },
-        { title: 'Extra Docs', field: 'additional_docs', align: 'center', width: 150, templet: '#cert-additional-docs' },
-        { title: 'Status', field: 'status', align: 'center', width: 110, templet: '#cert-status' },
-        { title: 'Reject Reason', field: 'reject_reason', align: 'center', minWidth: 150 },
-        { title: 'Created', field: 'create_at', align: 'center', width: 150 },
-        { title: 'Actions', toolbar: '#cert-bar', align: 'center', width: 160, fixed: 'right' }
+        { title: "{{ t_id }}", field: 'id', align: 'center', width: 70 },
+        { title: "{{ t_username }}", field: 'username', align: 'center', width: 120 },
+        { title: "{{ t_type }}", field: 'cert_type', align: 'center', width: 100 },
+        { title: "{{ t_real_name }}", field: 'real_name', align: 'center', width: 120 },
+        { title: "{{ t_relation }}", field: 'relation', align: 'center', width: 120 },
+        { title: "{{ t_patient }}", field: 'patient_name', align: 'center', width: 120 },
+        { title: "{{ t_illness }}", field: 'patient_illness', align: 'center', width: 140 },
+        { title: "{{ t_hospital }}", field: 'hospital_name', align: 'center', width: 150 },
+        { title: "{{ t_diagnosis_date }}", field: 'diagnosis_date', align: 'center', width: 130 },
+        { title: "{{ t_document }}", field: 'document_url', align: 'center', width: 130, templet: function (d) { return renderDocument(d.document_url) } },
+        { title: "{{ t_extra_docs }}", field: 'additional_docs', align: 'center', width: 150, templet: function (d) { return renderAdditionalDocs(d.additional_docs) } },
+        { title: "{{ t_status }}", field: 'status', align: 'center', width: 110, templet: function (d) { return renderCertStatus(d.status) } },
+        { title: "{{ t_reject_reason }}", field: 'reject_reason', align: 'center', minWidth: 150 },
+        { title: "{{ t_created }}", field: 'create_at', align: 'center', width: 150 },
+        { title: "{{ t_actions }}", field: 'actions', align: 'center', width: 160, fixed: 'right', templet: function (d) { return renderCertActions(d.status) } }
       ]
     ]
 
@@ -127,7 +231,7 @@
       skin: 'line',
       toolbar: '#cert-toolbar',
       defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'],
-      text: { none: 'No certification records found' }
+      text: { none: "{{ t_no_records }}" }
     })
 
     form.on('submit(cert-query)', function (data) {
@@ -143,7 +247,7 @@
 
     table.on('tool(cert-table)', function (obj) {
       if (obj.event === 'approve') {
-        layer.confirm('Are you sure you want to approve this certification?', { icon: 3, title: 'Confirm' }, function (index) {
+        layer.confirm("{{ t_confirm_approve }}", { icon: 3, title: "{{ t_confirm }}" }, function (index) {
           layer.close(index)
           let loading = layer.load()
           $.ajax({
@@ -166,7 +270,7 @@
       } else if (obj.event === 'reject') {
         layer.prompt({
           formType: 2,
-          title: 'Please enter the rejection reason',
+          title: "{{ t_prompt_reject }}",
           area: ['400px', '150px'],
           value: ''
         }, function (value, promptIndex) {

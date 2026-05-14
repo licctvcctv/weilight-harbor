@@ -2384,3 +2384,199 @@ msgstr "删除账户"
 #: templates/public/user/settings.html:143
 msgid "Please contact admin to delete your account."
 msgstr "请联系管理员删除您的账户。"
+
+#: templates/public/_navbar.html:90
+msgid "Apply Certification"
+msgstr "申请认证"
+
+#: templates/public/auth/register.html:26 templates/public/auth/forgot_password.html:24
+msgid "Phone Verification Code"
+msgstr "手机验证码"
+
+#: templates/admin/login.html:4
+msgid "Admin Login"
+msgstr "管理员登录"
+
+#: templates/admin/login.html:16
+msgid "Manage reviews, approvals, and platform operations."
+msgstr "用于审核、审批和平台运营管理。"
+
+#: templates/admin/login.html:25
+msgid "Verification Code"
+msgstr "验证码"
+
+#: templates/admin/login.html:28
+msgid "Remember me"
+msgstr "记住我"
+
+#: templates/admin/login.html:32
+msgid "Sign In"
+msgstr "登录"
+
+msgid "Business Management"
+msgstr "业务管理"
+
+msgid "System Management"
+msgstr "系统管理"
+
+msgid "User Management"
+msgstr "用户管理"
+
+msgid "Role Management"
+msgstr "角色管理"
+
+msgid "Permission Management"
+msgstr "权限管理"
+
+msgid "Department Management"
+msgstr "部门管理"
+
+msgid "Dictionary Management"
+msgstr "字典管理"
+
+msgid "File Management"
+msgstr "文件管理"
+
+msgid "System Monitor"
+msgstr "系统监控"
+
+msgid "Operation Log"
+msgstr "操作日志"
+
+msgid "Task Management"
+msgstr "任务管理"
+
+msgid "Basic Info"
+msgstr "基本资料"
+
+msgid "Weilight Harbor Admin"
+msgstr "微光港湾后台"
+
+msgid "Certification Review"
+msgstr "认证审核"
+
+msgid "Campaign Review"
+msgstr "众筹审核"
+
+msgid "Community Moderation"
+msgstr "社区审核"
+
+msgid "No certification records found"
+msgstr "暂无认证记录"
+
+msgid "View Document"
+msgstr "查看文件"
+
+msgid "Doc"
+msgstr "文档"
+
+msgid "Are you sure you want to approve this certification?"
+msgstr "确定通过该认证申请吗？"
+
+msgid "Please enter the rejection reason"
+msgstr "请输入驳回原因"
+
+msgid "No campaign records found"
+msgstr "暂无筹款项目"
+
+msgid "Are you sure you want to approve this campaign?"
+msgstr "确定通过该筹款项目吗？"
+
+msgid "No community posts found"
+msgstr "暂无社区帖子"
+
+msgid "Approve this post and make it visible?"
+msgstr "确定通过该帖子并公开显示吗？"
+
+msgid "Hide this post from public view?"
+msgstr "确定将该帖子对外隐藏吗？"
+
+msgid "Are you sure you want to delete this post? This action cannot be undone."
+msgstr "确定删除该帖子吗？此操作无法撤销。"
+
+msgid "Reset"
+msgstr "重置"
+
+msgid "Refresh"
+msgstr "刷新"
+
+msgid "Confirm"
+msgstr "确认"
+
+msgid "Approve"
+msgstr "通过"
+
+msgid "Reject"
+msgstr "驳回"
+
+msgid "Hide"
+msgstr "隐藏"
+
+msgid "Relation"
+msgstr "关系"
+
+msgid "Patient"
+msgstr "患者"
+
+msgid "Illness"
+msgstr "病情"
+
+msgid "Hospital"
+msgstr "医院"
+
+msgid "Extra Docs"
+msgstr "补充材料"
+
+msgid "Created"
+msgstr "创建时间"
+
+msgid "Actions"
+msgstr "操作"
+
+msgid "Reject Reason"
+msgstr "驳回原因"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "Draft"
+msgstr "草稿"
+
+msgid "Pending"
+msgstr "待审核"
+
+msgid "Hidden"
+msgstr "隐藏"
+
+msgid "Visible"
+msgstr "公开"
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "Creator"
+msgstr "发起人"
+
+msgid "Cover"
+msgstr "封面"
+
+msgid "QR Code"
+msgstr "二维码"
+
+msgid "Funding"
+msgstr "筹款"
+
+msgid "Content Preview"
+msgstr "内容预览"
+
+msgid "Likes"
+msgstr "点赞"
+
+msgid "Comments"
+msgstr "评论"
+
+msgid "Date"
+msgstr "日期"

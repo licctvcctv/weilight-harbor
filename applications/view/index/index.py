@@ -78,7 +78,7 @@ def terms():
 @index_bp.route('/set-locale', methods=['POST'])
 def set_locale():
     data = request.get_json(silent=True) or {}
-    locale = data.get('locale', 'en')
+    locale = data.get('locale') or request.form.get('locale') or 'en'
     if locale in ('zh', 'en'):
         session['locale'] = locale
         if current_user.is_authenticated:
