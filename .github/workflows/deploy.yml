@@ -39,9 +39,11 @@ jobs:
         run: |
           set -euo pipefail
 
+          echo "[1/5] Generating TOTP for jump host..."
           TOTP="$(python3 -c 'import os, pyotp; print(pyotp.TOTP(os.environ["JUMPER_TOTP_SECRET"]).now())')"
           export TOTP
 
+          echo "[2/5] Connecting to jump host..."
           expect <<'EOF'
           set timeout 900
           log_user 1
@@ -49,14 +51,18 @@ jobs:
           spawn ssh -tt -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $env(JUMPER_USER)@$env(JUMPER_HOST)
           expect {
             -re "(?i)password" {
+              send_user "\n[jump] password prompt received\n"
               send "$env(JUMPER_PASSWORD)\r"
               exp_continue
             }
             -re "(?i)verification" {
+              send_user "\n[jump] verification prompt received\n"
               send "$env(TOTP)\r"
               exp_continue
             }
-            -re {[$#] ?$} { }
+            -re {[$#] ?$} {
+              send_user "\n[jump] shell prompt reached\n"
+            }
             eof {
               exit 1
             }
@@ -65,13 +71,17 @@ jobs:
           send "printf 'JUMPER_READY\\n'\r"
           expect "JUMPER_READY"
 
+          send_user "\n[vm] Connecting to VM...\n"
           send "ssh -tt -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $env(VM_USER)@$env(VM_HOST) \"cd ~/weilight-harbor && git pull origin main && bash vm_update.sh && printf 'DEPLOY_DONE\\n'\"\r"
           expect {
             -re "(?i)password" {
+              send_user "\n[vm] password prompt received\n"
               send "$env(VM_PASSWORD)\r"
               exp_continue
             }
-            "DEPLOY_DONE" { }
+            "DEPLOY_DONE" {
+              send_user "\n[vm] deploy script completed\n"
+            }
             eof {
               exit 1
             }
