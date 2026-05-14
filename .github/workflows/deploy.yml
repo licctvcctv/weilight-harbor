@@ -81,11 +81,32 @@ jobs:
             }
             -re {[$#] ?$} {
               send_user "\n(vm) shell prompt reached\n"
-              send "cd ~/weilight-harbor && git pull origin main && bash vm_update.sh && printf 'DEPLOY_DONE\\n'\r"
-              exp_continue
-            }
-            "DEPLOY_DONE" {
-              send_user "\n(vm) deploy script completed\n"
+              send "if ! git remote get-url origin >/dev/null 2>&1; then git remote add origin https://github.com/licctvcctv/weilight-harbor.git; fi && git fetch origin main && git reset --hard origin/main && bash vm_update.sh\r"
+              expect {
+                -nocase -re "password" {
+                  send_user "\n(vm) sudo password prompt received\n"
+                  send "$env(VM_PASSWORD)\r"
+                  exp_continue
+                }
+                -re {[$#] ?$} {
+                  send_user "\n(vm) shell prompt returned after update\n"
+                  send "printf '__RC__:%s\\n' \$?\r"
+                  expect {
+                    -re {\r?\n__RC__:0\r?\n} {
+                      send_user "\n(vm) deploy script completed\n"
+                    }
+                    -re {\r?\n__RC__:[1-9][0-9]*\r?\n} {
+                      exit 1
+                    }
+                    eof {
+                      exit 1
+                    }
+                  }
+                }
+                eof {
+                  exit 1
+                }
+              }
             }
             eof {
               exit 1
