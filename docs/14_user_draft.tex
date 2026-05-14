@@ -1,0 +1,416 @@
+\input{preamble}
+
+\title{\vspace{-1.5cm}\textbf{Weilight Harbor — User Document}\\
+       \large COMP3030J Web Development, UCD, 2025/26 — Group 14 (Draft, Week 11)}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2.0cm}
+\begin{center}
+  \small
+  Live deployment: \url{http://csi6220-2-vm3.ucd.ie}
+\end{center}
+\vspace{0.4cm}
+
+\noindent
+This document is written for the three end-user roles supported by
+Weilight Harbor. Screenshots are referenced inline; the placeholder
+captions will be replaced with actual screenshots before final
+submission.
+
+% =====================================================================
+\section{Getting started}
+
+\subsection{What is Weilight Harbor?}
+Weilight Harbor (\textit{Weiguang Gangwan}) is a charity and mutual-aid platform
+for the families and caregivers of seriously ill patients. It combines a
+moderated community, an after-dark anonymous space, a private journal, a
+verified crowdfunding module, and an interactive map for arranging
+temporary respite help. The platform deliberately puts emotional
+support \emph{ahead} of financial transaction.
+
+\subsection{Browser and device support}
+\begin{itemize}
+  \item Recommended desktop browsers: latest Chrome, Firefox, Safari, or
+        Edge.
+  \item Mobile: iOS Safari $\geq 16$, Android Chrome $\geq 120$.
+  \item A network connection is required to reach the live VM.
+\end{itemize}
+
+\subsection{Visiting the site}
+Open \url{http://csi6220-2-vm3.ucd.ie} in a browser. The landing page
+introduces the platform; the navigation bar at the top lets you move
+between modules, switch language (\textbf{ZH}/\textbf{EN}), and log in.
+
+\subsection{Test accounts (assignment evaluation only)}
+\begin{tabularx}{\linewidth}{@{} l l L{4cm} X @{}}
+  \toprule
+  \textbf{Username} & \textbf{Password} & \textbf{Role} & \textbf{Use this for} \\
+  \midrule
+  \texttt{admin}    & \texttt{admin123} & Administrator       & Admin
+                                                                panel,
+                                                                review
+                                                                queues \\
+  \texttt{limei}    & \texttt{test123}  & Certified Family    & Verified
+                                                                caregiver
+                                                                journey \\
+  \texttt{zhangwei} & \texttt{test123}  & Regular User        & Donor /
+                                                                visitor
+                                                                journey \\
+  \bottomrule
+\end{tabularx}
+
+\noindent
+A complete account list is in Appendix~A.
+
+\subsection{Switching language}
+Use the \textbf{ZH}/\textbf{EN} toggle on the left of the navigation
+bar. The choice is remembered for the rest of your session and across
+visits on the same browser.
+
+% =====================================================================
+\section{Regular User}
+
+A \emph{regular user} is anyone who has registered without applying for
+caregiver certification. Regular users can browse, donate, post in the
+community, comment, react, and use the night confession panel.
+
+\subsection{Registering and logging in}
+\begin{enumerate}
+  \item Click \textbf{Join the Harbor} in the top-right of any page.
+  \item Fill in username, email or phone, password ($\geq$~6 characters),
+        and confirm password.
+  \item Submit. You are redirected to the login page; sign in with your
+        credentials.
+  \item Forgot your password? Click \textbf{Forgot password?} on the
+        login page (UI only in the current build).
+\end{enumerate}
+
+\textit{[Screenshot: Register page]}
+
+\subsection{Browsing the community}
+The community page (\texttt{/community/}) is split: the left 70\,\% is
+the post feed; the right 30\,\% is the \textbf{Night Confessions} panel.
+Filter posts by the category pills near the top (e.g.\ \emph{Emotional
+Support}, \emph{Daily Life}, \emph{Medical Info}, \emph{Good News},
+\emph{Resources}). Sort by \textbf{Latest}, \textbf{Most Empathised}, or
+\textbf{Hot}. Click a post card to open the detail page.
+
+\textit{[Screenshot: Community feed with right-side Night Confessions
+panel]}
+
+\subsection{Reacting and commenting on a post}
+\begin{itemize}
+  \item The empathy button (heart icon) is labelled \emph{"I feel the
+        same"} and toggles your reaction. Each user can react once per
+        post.
+  \item Comments appear chronologically; click \textbf{Reply} under a
+        comment to thread.
+  \item You can mark your comment \textbf{Anonymous} via the checkbox
+        above the comment box.
+\end{itemize}
+
+\subsection{Writing a post}
+\begin{enumerate}
+  \item Click \textbf{New Post} in the community navigation.
+  \item Choose at least one category, optionally add a title
+        (max.~50 characters), write your content, attach up to nine
+        images.
+  \item Toggle \textbf{Post anonymously} if you prefer; your username
+        and avatar will be hidden.
+  \item Click \textbf{Publish}. If your text contains words flagged as
+        sensitive, you will be warned; if the text contains crisis
+        keywords, you will be redirected to a hotline modal before
+        submission.
+\end{enumerate}
+
+\subsection{Night Confessions}
+\begin{itemize}
+  \item The panel is \textbf{active 21:00–06:00} server local time
+        (UTC on the VM). Outside that window the panel is dimmed with a
+        countdown.
+  \item During active hours you can write a confession (anonymous,
+        capped length) or send a \textbf{hug} reaction to an existing
+        one.
+  \item If your text mentions self-harm or crisis keywords, a crisis
+        hotline modal appears \emph{before} submission.
+\end{itemize}
+
+\textit{[Screenshot: Night Confessions modal at night]}
+
+\subsection{Donating to a crowdfunding campaign}
+\begin{enumerate}
+  \item Open \texttt{/crowdfunding/}.
+  \item Filter or search for a campaign.
+  \item Click a campaign card to open the detail page.
+  \item The right-hand sticky panel shows progress and the
+        \textbf{Donate} button. Choose a preset amount or enter a custom
+        value.
+  \item Optionally write a public message and tick \textbf{Anonymous} to
+        hide your name from the donor list.
+  \item Confirm. The progress bar animates and a thank-you toast
+        appears. \emph{Donations are simulated for the assignment.}
+\end{enumerate}
+
+\subsection{Personal centre}
+\begin{itemize}
+  \item \textbf{Profile} (\texttt{/user/profile}) — overview of your
+        activity.
+  \item \textbf{Edit profile} (\texttt{/user/edit}) — name, phone,
+        email, avatar, bio.
+  \item \textbf{History} (\texttt{/user/history}) — paginated tabs for
+        your Posts, Campaigns, Donations and Respite Requests.
+  \item \textbf{Settings} (\texttt{/user/settings}) — change password.
+  \item \textbf{Apply for certification} (\texttt{/user/certification})
+        — see Section~3.1.
+\end{itemize}
+
+\subsection{Logging out}
+Click your avatar in the top-right $\to$ \textbf{Logout}. Logout is
+issued as a POST so it cannot be triggered from a malicious link.
+
+% =====================================================================
+\section{Certified Family / Volunteer}
+
+A certified user is a regular user whose caregiver/volunteer status has
+been approved by an administrator. Certified users keep all
+regular-user capabilities and additionally gain access to crowdfunding
+creation, the journal, and the create/accept actions on the respite
+map.
+
+\subsection{Applying for certification}
+\begin{enumerate}
+  \item Open the avatar menu $\to$ \textbf{Apply Certification}
+        (\texttt{/user/certification}).
+  \item Choose \textbf{Family} or \textbf{Volunteer}.
+  \item Fill in real name, ID number, relationship to the patient, and
+        patient details (name, illness, hospital, diagnosis date).
+  \item Upload a primary proof document (PDF / JPG / PNG). Optionally
+        upload up to three additional supporting documents.
+  \item Submit. Your application enters a queue with status
+        \textbf{Pending}; an admin will approve or reject within
+        24–48 hours.
+  \item Track status at \texttt{/user/certification/status}. If
+        rejected, the rejection reason is shown; you can re-apply.
+\end{enumerate}
+
+\textit{[Screenshot: Certification status page with timeline]}
+
+\subsection{Starting a crowdfunding campaign}
+\begin{enumerate}
+  \item From the crowdfunding page, click \textbf{Start a Campaign}.
+  \item If you are not yet certified, the page redirects to the
+        certification application.
+  \item Provide title, story, target amount, deadline, category,
+        cover image, patient photo and a payment QR placeholder.
+  \item Click \textbf{Submit for Review}. Status becomes \textbf{Pending};
+        once approved by an admin, your campaign appears in the public
+        listing.
+\end{enumerate}
+
+\subsection{Receiving donations}
+\begin{itemize}
+  \item The campaign detail page shows real-time progress, donor count,
+        and a donor list (anonymous donations render as \emph{"Anonymous
+        Caregiver"}).
+  \item When \texttt{current\_amount} $\geq$ \texttt{funding\_goal}, a
+        \textbf{Fully Funded} badge is shown and the donate button is
+        greyed out.
+\end{itemize}
+
+\subsection{Life Journal}
+\begin{itemize}
+  \item Open \texttt{/journal/} for your private timeline. Only you can
+        see your entries.
+  \item \textbf{New entry} — pick a date, a mood emoji, write your
+        text, attach up to nine photos.
+  \item \textbf{Edit / Delete} — available from any entry detail page
+        (soft-delete preserves the row).
+  \item \textbf{Filters} — choose a year and month to focus the
+        timeline.
+  \item \textbf{Annual Film} — once you have at least ten entries in a
+        year, an \emph{Annual Film} button unlocks; it plays a
+        full-screen Ken-Burns slideshow of up to twelve highlights.
+\end{itemize}
+
+\textit{[Screenshot: Journal timeline + entry composer]}
+
+\subsection{Respite Station — posting and accepting}
+\begin{enumerate}
+  \item Open \texttt{/respite/}. The map centres on Dublin by default;
+        allow location access for a closer view.
+  \item Click \textbf{I need a break} to post a service request, or
+        \textbf{I can lend equipment} to post an equipment offer.
+  \item Fill the form: title, time window, address (auto-filled if
+        location is allowed), special notes, contact preference.
+  \item Your pin appears on the map (orange = service, green =
+        equipment) with a pulsing animation while pending.
+  \item Other certified users can click your pin and \textbf{Accept}.
+        You cannot accept your own request.
+  \item After the activity is over, the original requester clicks
+        \textbf{Confirm Completed} to close the request.
+\end{enumerate}
+
+\subsection{Profile visibility}
+Certified users display a verification badge next to their name across
+the platform: in posts, comments, donations, and respite pins.
+
+% =====================================================================
+\section{Administrator}
+
+Administrators see an additional \textbf{Admin} entry in the user-menu
+dropdown that opens \texttt{/admin/}. The admin panel is a Layui-based
+interface inherited from Pear-Admin-Flask, extended with three custom
+review pages.
+
+\subsection{Logging in as an administrator}
+Use the seeded \texttt{admin}/\texttt{admin123} account on the standard
+\texttt{/auth/login} page. After signing in, your avatar dropdown
+contains an \textbf{Admin Panel} item, which opens \texttt{/admin/} in a
+new tab.
+
+\subsection{Dashboard}
+The admin dashboard shows summary cards (pending counts) and a left-hand
+sidebar with sections:
+\begin{itemize}
+  \item \textbf{Certification Reviews} — \texttt{/admin/certification/}
+  \item \textbf{Campaign Reviews} — \texttt{/admin/campaign-review/}
+  \item \textbf{Community Moderation} — \texttt{/admin/community/}
+  \item \textbf{User Management} — inherited from the base panel
+  \item \textbf{Roles \& Powers} — inherited from the base panel
+  \item \textbf{Operation Log} — inherited audit log
+\end{itemize}
+
+\subsection{Reviewing certification applications}
+\begin{enumerate}
+  \item Open \textbf{Certification Reviews}.
+  \item The table lists applicants oldest first; filter by status if
+        needed.
+  \item Click \textbf{Review} on a row to see all uploaded documents
+        (clickable to enlarge), the applicant profile, and any prior
+        applications.
+  \item Pick one of:
+        \begin{itemize}
+          \item \textbf{Approve} — confirms the certification; the
+                applicant is granted certified status immediately.
+          \item \textbf{Reject} — requires a reason; shown to the
+                applicant on their status page.
+          \item \textbf{Request More Info} — sends a note back; status
+                stays \emph{Pending}.
+        \end{itemize}
+  \item Every action is logged to the operation log table.
+\end{enumerate}
+
+\textit{[Screenshot: Certification review modal with documents]}
+
+\subsection{Reviewing crowdfunding campaigns}
+Open \textbf{Campaign Reviews}. Click a campaign to open the review
+pane: cover image, story, payment QR, target amount and any patient
+documents. \textbf{Approve} to publish the campaign;
+\textbf{Reject} with a reason. The campaign creator sees the decision on
+their personal centre.
+
+\subsection{Moderating community posts}
+\begin{enumerate}
+  \item Open \textbf{Community Moderation}.
+  \item Filter by status (auto, hidden, pending) or search by author or
+        keyword.
+  \item For each post you can:
+        \begin{itemize}
+          \item \textbf{Approve} — leave it visible.
+          \item \textbf{Hide} — keep the row in the database but remove
+                it from the public feed; the author sees a \emph{"hidden
+                by moderator"} notice.
+          \item \textbf{Delete} — soft-delete (sets \texttt{delete\_at});
+                reversible only by direct database operation.
+        \end{itemize}
+\end{enumerate}
+
+\subsection{User and role management}
+The base Pear-Admin-Flask \textbf{User Management} and \textbf{Role /
+Power} pages remain available for managing accounts, freezing users, or
+editing the RBAC matrix. New roles or permissions follow the existing
+dictionary structure.
+
+\subsection{Audit log}
+Every action wrapped in the \texttt{@authorize("…", log=True)}
+decorator writes a row to the operation log, including the operator,
+the resource code, and a timestamp.
+
+% =====================================================================
+\section{Frequently Asked Questions}
+
+\textbf{Q1. The Night Confessions panel is dimmed — is the feature
+broken?}\\
+No. It is intentionally only active between 21:00 and 06:00 (VM local
+time, UTC).
+
+\textbf{Q2. Why does the \emph{Donate} button do nothing for my
+campaign?}\\
+The campaign is probably already fully funded, or your account is not
+signed in. The button is greyed out in both cases.
+
+\textbf{Q3. I uploaded a document but the page says "valid proof
+document required".}\\
+The file may exceed the size limit or have a non-permitted extension.
+Allowed types are PDF, JPG, JPEG, PNG (and the equivalents declared in
+\texttt{ALLOWED\_DOC\_EXTS}).
+
+\textbf{Q4. Why can my friend not see my journal entries?}\\
+The journal is private by design. All journal queries filter by
+\texttt{user\_id == current\_user.id}; no one but you, including
+administrators, can read your entries through the public site.
+
+\textbf{Q5. I cannot start a campaign — the page tells me to "apply for
+certification".}\\
+Crowdfunding requires verified caregiver/volunteer status. Submit a
+certification application (Section~3.1) and wait for admin approval
+(24–48 hours).
+
+\textbf{Q6. The map does not centre on my location.}\\
+The browser blocked the location prompt or no permission was granted.
+The map falls back to Dublin city centre. You can pan/zoom manually.
+
+\textbf{Q7. Where do I report a bug?}\\
+For the assignment evaluation, please email the group contact listed on
+the cover of the system document, or open an issue at
+\url{https://github.com/licctvcctv/weilight-harbor/issues}.
+
+% =====================================================================
+\appendix
+\section*{Appendix A — Test accounts (full list)}
+\addcontentsline{toc}{section}{Appendix A — Test accounts}
+{\small
+\begin{tabularx}{\linewidth}{@{} l l L{4cm} X @{}}
+  \toprule
+  \textbf{Username} & \textbf{Password} & \textbf{Role} & \textbf{Notes} \\
+  \midrule
+  \texttt{admin}     & \texttt{admin123} & Administrator       & Full admin access \\
+  \texttt{limei}     & \texttt{test123}  & Certified Family    & ALS caregiver, has campaigns \\
+  \texttt{zhangwei}  & \texttt{test123}  & Regular User        & Donor profile, tech background \\
+  \texttt{wangfang}  & \texttt{test123}  & Certified Volunteer & Retired nurse \\
+  \texttt{chenyun}   & \texttt{test123}  & Certified Family    & Alzheimer's caregiver \\
+  \texttt{liuyang}   & \texttt{test123}  & Regular User        & Has a pending certification \\
+  \texttt{sunli}     & \texttt{test123}  & Certified Family    & Pediatric cancer caregiver \\
+  \texttt{zhaojing}  & \texttt{test123}  & Certified Volunteer & Social worker \\
+  \bottomrule
+\end{tabularx}}
+
+\section*{Appendix B — Glossary}
+\addcontentsline{toc}{section}{Appendix B — Glossary}
+\begin{itemize}
+  \item \textbf{Certified user} — a regular user whose caregiver or
+        volunteer status has been approved by an administrator.
+  \item \textbf{Empathy reaction} — the like equivalent on this
+        platform, labelled \emph{"I feel the same"} (wo ye shi).
+  \item \textbf{Night Confessions} — the time-gated, anonymous
+        after-dark panel.
+  \item \textbf{Annual Film} — a full-screen slideshow synthesised from
+        a user's journal entries.
+  \item \textbf{Respite} — a temporary break from caregiving
+        responsibilities.
+\end{itemize}
+
+\end{document}

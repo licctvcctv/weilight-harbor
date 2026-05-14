@@ -9,6 +9,8 @@ product_design.md
 *.pdf
 *.docx
 .DS_Store
+.deploy/
+.diag/
 
 # Large admin vendor files (download separately)
 static/admin/component/pear/module/echarts.js

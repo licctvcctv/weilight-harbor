@@ -1,0 +1,83 @@
+% Shared preamble for the three Weilight Harbor documents.
+% Compile each main file with pdfLaTeX (Overleaf default).
+
+\documentclass[11pt,a4paper]{article}
+
+% --- Page layout
+\usepackage[a4paper,margin=2.4cm]{geometry}
+\usepackage{setspace}
+\setstretch{1.10}
+\setlength{\parskip}{4pt}
+\setlength{\parindent}{0pt}
+
+% --- Fonts and basics
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{lmodern}
+\usepackage{textcomp}
+% Map Unicode em/en-dashes and the simple bullet to LaTeX equivalents so they
+% render in the default Computer Modern font without falling back to question
+% marks.
+\DeclareUnicodeCharacter{2014}{---}
+\DeclareUnicodeCharacter{2013}{--}
+\DeclareUnicodeCharacter{2026}{\ldots}
+\DeclareUnicodeCharacter{2018}{`}
+\DeclareUnicodeCharacter{2019}{'}
+\DeclareUnicodeCharacter{201C}{``}
+\DeclareUnicodeCharacter{201D}{''}
+\DeclareUnicodeCharacter{2022}{\textbullet}
+
+% --- Common packages
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=blue!55!black,
+  pdfborder={0 0 0}
+}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.6ex}{0.8ex}
+\titlespacing*{\subsection}{0pt}{1.2ex}{0.5ex}
+\titlespacing*{\subsubsection}{0pt}{1.0ex}{0.3ex}
+
+% Inline code
+\usepackage{listings}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  columns=fullflexible,
+  showstringspaces=false,
+  frame=single,
+  framerule=0.3pt,
+  rulecolor=\color{black!30},
+  xleftmargin=0pt,
+  xrightmargin=0pt,
+  aboveskip=4pt,
+  belowskip=4pt
+}
+
+% Tighter table column types
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.15}
+
+% Header / footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\fancyhead[L]{\small Weilight Harbor — Group 14}
+\fancyhead[R]{\small COMP3030J 2025/26}
+\renewcommand{\headrulewidth}{0.3pt}

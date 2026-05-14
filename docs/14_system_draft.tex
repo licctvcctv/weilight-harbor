@@ -1,0 +1,596 @@
+\input{preamble}
+
+\title{\vspace{-1.5cm}\textbf{Weilight Harbor — System Document}\\
+       \large COMP3030J Web Development, UCD, 2025/26 — Group 14 (Draft, Week 11)}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2.0cm}
+\begin{center}
+  \small
+  Live deployment: \url{http://csi6220-2-vm3.ucd.ie} \quad
+  Repository: \url{https://github.com/licctvcctv/weilight-harbor}
+\end{center}
+\vspace{0.4cm}
+
+% =====================================================================
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+
+Weilight Harbor (\textit{Weiguang Gangwan}, ``harbor of faint lights'') is a Flask-based
+web platform built for the families and caregivers of seriously ill patients.
+The system unifies five modules that mainstream platforms typically keep
+separate: a moderated peer community, a time-gated anonymous \emph{Night
+Confessions} space, a verified crowdfunding flow with simulated donations,
+a private journal with an \emph{Annual Film} reflection, and a Leaflet-based
+\emph{Respite Station} map for arranging temporary care help. Three roles
+are supported via RBAC inherited from the Pear-Admin-Flask base: regular
+visitor, certified family/volunteer, and administrator. The application is
+served by Gunicorn behind Nginx on an Ubuntu VM provided by UCD, persists
+to a single SQLite database with twelve tables, and supports full
+Mandarin/English internationalisation through Flask-Babel
+(\textbf{511 translated strings}). Continuous deployment is automated by a
+GitHub Actions workflow that traverses the UCD jump host with
+\texttt{expect} and a TOTP secret, force-resets the working tree to
+\texttt{origin/main}, and reloads Gunicorn. This document records the
+design rationale, the module-by-module implementation, the use of
+generative AI in the build, and the per-member contribution split.
+
+% =====================================================================
+\section{Introduction}
+
+\subsection{Background and motivation}
+Caregivers of seriously ill patients face emotional exhaustion, social
+isolation, and financial strain that mainstream platforms address only in
+fragments. Generic forums lack verification; fundraising sites are
+purely transactional; chat groups are ephemeral and private. Weilight
+Harbor was designed as a \emph{quiet, warm} space where these users can
+both be \emph{heard} and \emph{helped} — emotional companionship before
+financial transaction, and verified identity before public appeal.
+
+\subsection{Goals}
+\begin{itemize}
+  \item Provide a verified community where certified caregivers and the
+        public can interact with low friction and clear safety signals.
+  \item Enable trustworthy, simulated crowdfunding to demonstrate the
+        end-to-end donation flow, without handling real money.
+  \item Offer private journaling with mood tracking and a year-end
+        \emph{Annual Film} reflection.
+  \item Surface practical mutual aid (respite and equipment lending) on
+        an interactive map.
+  \item Support both Mandarin and English audiences with one codebase.
+\end{itemize}
+
+\subsection{Stakeholders and roles}
+\begin{itemize}
+  \item \textbf{Regular user} — read, donate, post in the community,
+        comment, react.
+  \item \textbf{Certified family / volunteer} — additionally create
+        crowdfunding campaigns, accept respite requests, and access the
+        private journal.
+  \item \textbf{Administrator} — additionally review certification and
+        campaign applications, and moderate community content.
+\end{itemize}
+
+\subsection{Document structure}
+Section~\ref{sec:tech} describes the technical implementation, end-to-end.
+Section~\ref{sec:ai} evaluates how generative AI tooling was used during
+development. Section~\ref{sec:team} records team contribution.
+Section~\ref{sec:concl} concludes. Appendices list the routing surface,
+seeded test accounts, and a sample LCP/Lighthouse run.
+
+% =====================================================================
+\section{Technical Implementation}\label{sec:tech}
+
+\subsection{Technology stack}
+\begin{tabularx}{\linewidth}{@{} l X @{}}
+  \toprule
+  \textbf{Layer} & \textbf{Choice and rationale} \\
+  \midrule
+  Backend         & Python 3.10 with Flask 3.x, application-factory pattern. \\
+  ORM             & SQLAlchemy + Flask-Migrate; Alembic-style migrations. \\
+  Auth            & Flask-Login session cookies; Werkzeug PBKDF2 hashing. \\
+  i18n            & Flask-Babel with a single \texttt{messages.po}
+                    catalogue (511 strings translated). \\
+  Frontend        & Server-rendered Jinja2 templates with Bootstrap 5.3,
+                    Lucide icons, and Leaflet.js for the map. Minimal
+                    custom JS. \\
+  Database        & SQLite (single-file), tuned for the assignment scale. \\
+  Process         & Gunicorn 21 sync workers (default 2). \\
+  Reverse proxy   & Nginx 1.18 — TLS termination point and static asset
+                    server. \\
+  Service         & systemd, with Gunicorn behind a managed socket. \\
+  CI/CD           & GitHub Actions + \texttt{expect} script through the
+                    UCD jump host. \\
+  Admin base      & Pear-Admin-Flask (Layui) — reused for RBAC, dict,
+                    and audit log scaffolding. \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{High-level architecture}
+\begin{verbatim}
+            Browser
+              | HTTP
+              v
+       Nginx :80  -- /static/ served directly
+              |
+              v (Unix socket)
+       Gunicorn (WSGI, sync workers, systemd-managed)
+              |
+              v
+       Flask app (create_app factory)
+        - blueprints: auth, community, crowdfunding,
+          journal, respite, user_center, index, admin
+        - Flask-Login, Flask-Babel, Flask-WTF, Flask-Reuploaded
+              |
+              v
+       SQLAlchemy
+              |
+              v
+       SQLite (12 tables, ~100 KB seeded)
+\end{verbatim}
+
+\subsection{Source layout}
+\begin{lstlisting}
+weilight-harbor/
+  app.py                        # WSGI entry point
+  applications/
+    __init__.py                 # create_app factory
+    configs/                    # SQLite, Babel, upload paths
+    extensions/                 # init_sqlalchemy/init_login/init_babel...
+    models/                     # SQLAlchemy models (12 tables)
+    view/                       # Route blueprints
+      auth/  community/  crowdfunding/
+      journal/  respite/  user_center/
+      index/  admin/
+    common/utils/               # files, http, sensitive, rights, ...
+  templates/
+    public/                     # 31 Bootstrap 5 templates
+    admin/                      # Layui admin panel
+  static/
+    public/  admin/
+  translations/zh/LC_MESSAGES/  # 511 strings
+\end{lstlisting}
+
+\subsection{Data model}
+The schema is built from twelve SQLAlchemy models. The user/role/power
+triplet is inherited from Pear-Admin-Flask and reused as-is. The
+\texttt{wl\_*} tables are domain-specific.
+
+\begin{tabularx}{\linewidth}{@{} L{3.4cm} X @{}}
+  \toprule
+  \textbf{Table} & \textbf{Notable columns} \\
+  \midrule
+  \texttt{admin\_user}
+    & \texttt{username, email, phone, password\_hash, user\_type,
+       is\_certified, locale, avatar, bio} \\
+  \texttt{admin\_role}, \texttt{admin\_user\_role},
+  \texttt{admin\_role\_power}, \texttt{admin\_power}
+    & RBAC mapping inherited from the base. \\
+  \texttt{wl\_post}
+    & \texttt{user\_id, title, content, category, images} (JSON),
+      \texttt{like\_count, comment\_count, view\_count, is\_anonymous,
+      delete\_at}. \\
+  \texttt{wl\_comment}
+    & \texttt{post\_id, user\_id, content, parent\_id} (one-level
+      threading). \\
+  \texttt{wl\_post\_like}
+    & \texttt{(post\_id, user\_id) UNIQUE} for idempotent likes. \\
+  \texttt{wl\_confession}
+    & \texttt{content, nickname, session\_id, hug\_count} (Night
+      Confessions). \\
+  \texttt{wl\_campaign}
+    & \texttt{user\_id, title, description, funding\_goal,
+      current\_amount, status} ($\in \{$pending, active, closed,
+      rejected$\}$), images. \\
+  \texttt{wl\_donation}
+    & \texttt{campaign\_id, user\_id, amount, message, is\_anonymous}. \\
+  \texttt{wl\_journal\_entry}
+    & \texttt{user\_id, title, content, images} (JSON),
+      \texttt{mood, entry\_date}. \\
+  \texttt{wl\_respite\_request}
+    & \texttt{user\_id, request\_type} (service/equipment),
+      \texttt{lat, lng, status, acceptor\_id}. \\
+  \texttt{wl\_certification}
+    & \texttt{user\_id, cert\_type, real\_name, id\_card,
+      document\_url, additional\_docs} (JSON), \texttt{status}. \\
+  \texttt{wl\_sensitive\_word}
+    & \texttt{word, severity} ($1$=warn, $2$=crisis modal). \\
+  \bottomrule
+\end{tabularx}
+
+\smallskip
+All domain tables inherit a common timestamp triple
+(\texttt{create\_at}, \texttt{update\_at}, \texttt{delete\_at}) for
+soft-delete and audit; \texttt{delete\_at IS NULL} is the universal
+"alive" predicate.
+
+\subsection{Authentication and authorisation}
+\textbf{Authentication.} Flask-Login session cookies; passwords stored as
+PBKDF2-SHA256 hashes via \texttt{werkzeug.security}. Login accepts
+\emph{username, email, or phone} in the same field; a uniqueness
+constraint at the model level prevents collisions during registration.
+Logout is POST-only to defeat image-tag CSRF.
+
+\textbf{Authorisation.} Public-side blueprints use the standard
+\texttt{@login\_required} decorator (\textgreater 60 protected endpoints
+in the codebase). Admin-side endpoints add a custom
+\texttt{@authorize("admin:\textit{module}:\textit{action}", log=True)}
+decorator that resolves the current user's effective power codes through
+\texttt{admin\_user $\to$ admin\_user\_role $\to$ admin\_role $\to$
+admin\_role\_power $\to$ admin\_power} and writes an audit row for every
+permitted action. Negative cases short-circuit with HTTP 403 (admin) or
+302 to \texttt{/auth/login?next=…} (public).
+
+\subsection{Module-by-module walkthrough}
+
+\subsubsection{Auth (\texttt{/auth/*})}
+\begin{itemize}
+  \item \texttt{login}: identifier-agnostic — same field accepts username,
+        email or phone; \texttt{User.validate\_password} drives the
+        Werkzeug check.
+  \item \texttt{register}: minimum length (6), uniqueness on email/phone;
+        new accounts default to the \emph{regular} role.
+  \item \texttt{forgot-password}: UI is wired; SMTP is stubbed because
+        the assigned VM has no outbound mail credentials.
+  \item \texttt{logout}: POST-only.
+\end{itemize}
+
+\subsubsection{Community (\texttt{/community/*})}
+The community page uses a 70/30 desktop layout: feed on the left, a
+sticky \emph{Night Confessions} panel on the right. Posts support
+anonymous mode (renderer hides username and avatar). Liking is AJAX, with
+the underlying \texttt{(post\_id, user\_id)} unique index providing
+idempotent toggles. Comments support \texttt{parent\_id} threading.
+Sensitive-word checking is two-tier: severity~1 raises a soft warning;
+severity~2 surfaces a crisis hotline modal client-side and short-circuits
+submission server-side. \emph{Night Confessions} is gated by server-local
+clock to the 21:00–06:00 window; outside the window the panel renders a
+countdown.
+
+\subsubsection{Crowdfunding (\texttt{/crowdfunding/*})}
+Campaigns can be created only by certified users; an admin must approve
+the campaign before it appears in the public listing. A donation is a
+single \texttt{POST} that increments \texttt{current\_amount} inside an
+SQLAlchemy transaction; the response payload includes the new percentage
+so the front-end progress bar can animate. A campaign auto-flips to
+\emph{Fully Funded} when \texttt{current\_amount $\geq$ funding\_goal};
+the donate button is greyed out and the badge appears on every card.
+
+\subsubsection{Life Journal (\texttt{/journal/*})}
+Every query is filtered by \texttt{user\_id == current\_user.id}; no
+operator role can read a user's journal through the public site.
+Annual Film selects up to twelve entries from a chosen year, ordered by
+month, and renders a full-screen Ken-Burns slideshow on the client.
+
+\subsubsection{Respite Station (\texttt{/respite/*})}
+Backed by Leaflet on top of OpenStreetMap tiles. Requests cluster via
+\texttt{Leaflet.markercluster}; orange pins are service requests, green
+pins are equipment lending. The state machine is
+\texttt{pending $\to$ in\_progress $\to$ completed}. A request cannot be
+accepted by its creator. Mobile layout swaps the side panel for a bottom
+sheet.
+
+\subsubsection{User Centre (\texttt{/user/*})}
+Profile, edit, settings, certification application, certification
+status, and a paginated history page with four tabs (Posts, Campaigns,
+Donations, Respite Requests). Avatar uploads use Flask-Reuploaded with an
+extension allow-list. Pagination links are constructed via
+\texttt{url\_for(\textit{endpoint}, **\{page\_param: n\})} so query
+strings never contain the brittle ad-hoc \texttt{\&} concatenation that
+the early prototype used.
+
+\subsubsection{Admin (\texttt{/admin/*})}
+Three custom blueprints sit on top of the Pear-Admin-Flask base:
+\texttt{adminCert} (certification queue), \texttt{adminCampaign}
+(campaign queue), and \texttt{adminCommunity} (post moderation). Every
+state-changing action is wrapped in \texttt{@authorize(..., log=True)}
+which writes a row to the audit log. Reviewers can approve, reject (with
+required reason), or hide; deletes are soft.
+
+\subsection{Internationalisation}
+All user-visible strings are wrapped with \texttt{\{\{ \_('…') \}\}}
+(Jinja) or \texttt{gettext(…)} (Python). The catalogue lives at
+\texttt{translations/zh/LC\_MESSAGES/messages.po} and contains 511
+translated strings. Locale resolution order is: query string
+(\texttt{?locale=}) $\to$ session $\to$ \texttt{Accept-Language}. The
+\textbf{ZH/EN} toggle in the navbar persists the choice via both session
+and \texttt{localStorage}, so a returning visitor on the same browser
+sees their last choice.
+
+\subsection{Front-end design system}
+The platform uses CSS variables for a warm "harbor" palette
+(\texttt{--color-primary}, \texttt{--color-primary-bg},
+\texttt{--color-text-primary}, \texttt{--color-bg-card},
+\texttt{--shadow-sm}, \texttt{--radius-md},
+\texttt{--transition-fast}, etc.). Bootstrap 5 utility classes drive
+layout; component skins (\texttt{wl-tag}, \texttt{wl-progress},
+\texttt{btn-wl-primary}) wrap Bootstrap defaults. Lucide icons are
+rendered through \texttt{data-lucide} and initialised once per page on
+\texttt{DOMContentLoaded}.
+
+\subsection{Validation, sanitisation and uploads}
+All form fields are length-clamped (\texttt{[:N]}) and re-validated on
+the server side regardless of client behaviour. Email and phone are
+uniqueness-checked. File uploads pass through a single helper
+\texttt{save\_upload(file, folder, prefix, allowed\_exts=…)} that:
+\begin{enumerate}
+  \item verifies the extension against an explicit allow-list;
+  \item generates a UUID-prefixed filename so collisions and path
+        traversal are impossible;
+  \item writes to \texttt{static/uploads/<folder>/}.
+\end{enumerate}
+Sensitive-word checking is debounced 300\,ms client-side; the
+authoritative decision still runs on the server.
+
+\subsection{Deployment}
+Two deploy paths are supported, sharing the same \texttt{vm\_update.sh}
+on the VM.
+
+\textbf{Local one-click (\texttt{deploy.sh}).}
+The script generates a TOTP for the UCD jump host, drives \texttt{expect}
+through \texttt{jumper $\to$ VM}, runs
+\texttt{git fetch origin main \&\& git checkout -fB main FETCH\_HEAD
+\&\& git reset --hard FETCH\_HEAD \&\& git clean -fd \&\& bash
+vm\_update.sh}. After a successful run, it captures the new
+\texttt{HEAD} on the VM and asserts it matches the local branch SHA.
+A diagnostics-only mode (\texttt{./deploy.sh --diag}) and a vendor sync
+(\texttt{./deploy.sh --sync-vendor}) are exposed for the gitignored
+heavy assets (Layui, TinyMCE, ECharts).
+
+\textbf{GitHub Actions (\texttt{.github/workflows/deploy.yml}).}
+Triggered on \texttt{push} to \texttt{main}; uses the same
+\texttt{expect} pattern with secrets held in \emph{GitHub Secrets}.
+Concurrency is locked to a single deployment at a time.
+
+\subsection{Security considerations}
+\begin{itemize}
+  \item Sessions are HTTPOnly cookies; passwords PBKDF2-SHA256.
+  \item Write actions are POST and CSRF-protected via Flask-WTF where
+        the form is rendered through the helper.
+  \item File uploads validated by extension and isolated under
+        \texttt{static/uploads/}.
+  \item Admin endpoints behind RBAC + audit log.
+  \item \texttt{.gitignore} excludes \texttt{*.db}, \texttt{*.env},
+        large vendor JS files, and \texttt{.DS\_Store}.
+  \item \textbf{Limitations} (acknowledged): no rate limiting; no
+        CAPTCHA; the sensitive-word list is finite and bypassable; the
+        platform is intentionally \emph{not} PCI-compliant — donations
+        are simulated.
+\end{itemize}
+
+\subsection{Testing strategy}
+We use a manual smoke-test matrix covering the primary user journeys for
+each role, driven by the eight seeded demo accounts (Section~A.2). The
+\texttt{flask seed} and \texttt{flask seed-demo} CLI commands produce a
+reproducible state (8 users, 12 community posts, 7 campaigns, 82
+donations, 50 journal entries, 8 respite requests, 15 confessions). A
+small per-module Python smoke probe (used during pull-request review)
+hits each blueprint's index route and asserts that the response is
+either 200 or a 302 redirect to login.
+
+\subsection{Performance and accessibility}
+A baseline Lighthouse run on the live VM produces, on the landing page,
+\textbf{Performance $\geq$ 90} and \textbf{Best Practices $\geq$ 95} for
+desktop. Server-rendered pages are below 25\,KB gzipped; static assets
+are served directly by Nginx with a 30-day cache. WCAG AA has \emph{not}
+been formally validated; partial measures include semantic HTML,
+keyboard-reachable interactive controls, and visible focus rings on
+custom components.
+
+\subsection{Limitations and known issues}
+\begin{itemize}
+  \item SQLite write contention under heavy concurrent load (acceptable
+        for the assignment scale).
+  \item Forgot-password flow is UI-only — no real e-mail is sent.
+  \item Annual Film unlocks only if a user has $\geq$10 entries in a year.
+  \item Public OpenStreetMap tile rate limits apply on Respite Station.
+\end{itemize}
+
+% =====================================================================
+\section{Generative AI Use}\label{sec:ai}
+
+\subsection{Tools used}
+\begin{itemize}
+  \item \textbf{ChatGPT (GPT-4 / GPT-4o)} — architectural reasoning,
+        microcopy drafting, debugging.
+  \item \textbf{Claude (Sonnet / Opus)} — long-context refactors across
+        multiple files, Jinja template clean-up, deployment-script
+        reasoning.
+  \item \textbf{GitHub Copilot} — line-level autocompletion in VS Code.
+\end{itemize}
+
+\subsection{Where AI helped}
+\begin{tabularx}{\linewidth}{@{} L{4cm} X @{}}
+  \toprule
+  \textbf{Area} & \textbf{Use} \\
+  \midrule
+  Initial scaffolding
+    & Drafting blueprint folder structure, route stubs, model fields. \\
+  Bilingual microcopy
+    & First-pass Mandarin/English for empty states, error messages,
+      modals; team revised tone to fit the warm/quiet palette. \\
+  Refactors
+    & Extracting shared decorators, normalising form-validation,
+      cleaning Jinja macros (e.g.\ the \texttt{render\_history\_pagination}
+      macro on the user history page). \\
+  Deployment debugging
+    & Diagnosing why the GitHub Actions deploy reported
+      \texttt{\_\_RC\_\_:0} while the live site never changed (root
+      cause: missing \texttt{cd \~/weilight-harbor} in the remote
+      command); diagnosing why the VM repo was stuck on an empty
+      \texttt{master} branch and never advanced past the initial
+      \texttt{deploy.sh --tar} import. \\
+  Documentation
+    & First drafts of \texttt{README.md}, this system document, and
+      the user document. \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Where AI was avoided}
+\begin{itemize}
+  \item Decisions on data model, role boundaries, and module split were
+        taken by the team based on the product brief.
+  \item Sensitive-word list, illness categories, and crisis-hotline copy
+        were authored manually to avoid hallucinated or insensitive
+        content.
+  \item All AI-suggested code was opened, read top-to-bottom, and
+        manually tested before commit.
+\end{itemize}
+
+\subsection{Verification practices}
+\begin{enumerate}
+  \item AI-suggested files were reviewed line by line and run on a fresh
+        SQLite database before being merged.
+  \item AI-drafted SQL or migration logic was re-checked against
+        \texttt{db.create\_all()} on a clean database file.
+  \item Deployment scripts were dry-run with the diagnostics-only mode
+        (\texttt{./deploy.sh --diag}) before any change touched the
+        production VM.
+\end{enumerate}
+
+\subsection{Reflection}
+Generative AI most clearly accelerated \emph{plumbing}: form rendering,
+i18n wrapping, repeated validation, and shell scripts. It was less
+useful for \emph{taste-sensitive} work — palette, microcopy tone,
+illness terminology — where unchecked output would have damaged the
+empathic posture the platform is built around. Net effect:
+approximately $30$–$40\%$ effort saved on plumbing, with no measurable
+saving on design judgement.
+
+% =====================================================================
+\section{Team Contribution}\label{sec:team}
+
+\textit{The contribution table below is a placeholder for the Week~11
+draft. Final names and percentages will be confirmed before the Week~13
+final submission. Each row is intended to be replaced with: full name,
+student number, modules owned, key commits, and \% contribution.}
+
+\subsection{Contribution matrix (placeholder)}
+\begin{tabularx}{\linewidth}{@{} L{3.0cm} L{4.5cm} X r @{}}
+  \toprule
+  \textbf{Member} & \textbf{Modules / areas} & \textbf{Notable deliverables} & \textbf{\%} \\
+  \midrule
+  A (TBD) & Auth, User Centre, Certification & Login/Register, Profile,
+            Certification flow, History page & TBD \\
+  B (TBD) & Community, Sensitive Words, Night Confessions
+          & Feed UI, like/comment, anonymous post, time-gated panel &
+            TBD \\
+  C (TBD) & Crowdfunding, Donation Flow
+          & Campaign listing/detail, simulated donate, progress
+            animation & TBD \\
+  D (TBD) & Journal, Annual Film & Timeline UI, mood tracking,
+            Ken-Burns slideshow & TBD \\
+  E (TBD) & Respite Station, Map & Leaflet integration, marker
+            clustering, accept/complete & TBD \\
+  F (TBD) & Admin Panel, RBAC, Deployment, i18n
+          & Admin review pages, Babel catalogue, Nginx/Gunicorn,
+            GitHub Actions & TBD \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Working practices}
+\begin{itemize}
+  \item Source control on GitHub with feature branches; \texttt{main} is
+        deployed automatically on push.
+  \item Issues tracked on the GitHub Issues board, grouped by module.
+  \item Weekly synchronous meeting; asynchronous coordination on
+        WeChat.
+  \item Code review: at least one peer review on non-trivial PRs;
+        AI-generated code requires the author to walk a peer through the
+        diff before merge.
+\end{itemize}
+
+\subsection{Individual reflections (placeholder)}
+\textit{Each member contributes a $\approx$150-word reflection here
+before final submission.}
+
+% =====================================================================
+\section{Conclusion}\label{sec:concl}
+
+Weilight Harbor delivers, end-to-end, a multi-module web platform that
+places caregiver wellbeing at its centre. The five user-facing modules,
+a back-office admin moderation layer, RBAC, full Mandarin/English
+internationalisation, and an automated deployment pipeline are all live
+on the assigned UCD VM. Generative AI tooling shortened plumbing work
+but was deliberately kept out of taste-sensitive content. The known
+limitations (SQLite scale, simulated donations, stubbed e-mail) are
+acknowledged and documented; none are blockers for the academic scope
+of the assignment. The remaining iteration before submission will focus
+on user-acceptance feedback from Week~12 peer testing, accessibility
+refinement, and final per-member reflection write-ups.
+
+% =====================================================================
+\appendix
+\section*{Appendix A — Selected routes}
+\addcontentsline{toc}{section}{Appendix A — Selected routes}
+{\small
+\begin{tabularx}{\linewidth}{@{} L{1.6cm} L{5.5cm} X @{}}
+  \toprule
+  \textbf{Method} & \textbf{Path} & \textbf{Purpose} \\
+  \midrule
+  GET/POST & \texttt{/auth/login} & Login \\
+  GET/POST & \texttt{/auth/register} & Register \\
+  GET      & \texttt{/community/} & Post feed \\
+  GET      & \texttt{/community/post/<id>} & Post detail \\
+  POST     & \texttt{/community/post/<id>/like} & Toggle like \\
+  POST     & \texttt{/community/post/<id>/comment} & Add comment \\
+  GET/POST & \texttt{/community/confessions} & Night Confessions
+            (read/submit) \\
+  GET      & \texttt{/crowdfunding/} & Campaign listing \\
+  GET      & \texttt{/crowdfunding/campaign/<id>} & Campaign detail \\
+  POST     & \texttt{/crowdfunding/campaign/<id>/donate} & Simulated
+            donation \\
+  GET      & \texttt{/journal/} & Private timeline \\
+  GET/POST & \texttt{/journal/create} & New entry \\
+  GET      & \texttt{/journal/annual-film} & Annual Film slideshow \\
+  GET      & \texttt{/respite/} & Map page \\
+  POST     & \texttt{/respite/create} & Create request \\
+  POST     & \texttt{/respite/request/<id>/accept} & Accept request \\
+  GET      & \texttt{/user/profile} & Personal centre \\
+  GET      & \texttt{/user/history} & Activity history (paginated) \\
+  GET/POST & \texttt{/user/certification} & Certification application \\
+  GET      & \texttt{/admin/certification/} & Certification queue \\
+  PUT      & \texttt{/admin/certification/approve/<id>} & Approve cert \\
+  GET      & \texttt{/admin/campaign-review/} & Campaign queue \\
+  GET      & \texttt{/admin/community/} & Community moderation \\
+  POST     & \texttt{/set-locale} & Switch language \\
+  \bottomrule
+\end{tabularx}}
+
+\section*{Appendix B — Seeded test accounts}
+\addcontentsline{toc}{section}{Appendix B — Seeded test accounts}
+{\small
+\begin{tabularx}{\linewidth}{@{} l l L{3.4cm} X @{}}
+  \toprule
+  \textbf{Username} & \textbf{Password} & \textbf{Role} & \textbf{Notes} \\
+  \midrule
+  \texttt{admin}     & \texttt{admin123} & Administrator     & Full admin access \\
+  \texttt{limei}     & \texttt{test123}  & Certified Family   & ALS caregiver, has campaigns \\
+  \texttt{zhangwei}  & \texttt{test123}  & Regular User       & Donor profile \\
+  \texttt{wangfang}  & \texttt{test123}  & Certified Volunteer & Retired nurse \\
+  \texttt{chenyun}   & \texttt{test123}  & Certified Family   & Alzheimer's caregiver \\
+  \texttt{liuyang}   & \texttt{test123}  & Regular User       & Pending certification \\
+  \texttt{sunli}     & \texttt{test123}  & Certified Family   & Pediatric cancer caregiver \\
+  \texttt{zhaojing}  & \texttt{test123}  & Certified Volunteer & Social worker \\
+  \bottomrule
+\end{tabularx}}
+
+\section*{Appendix C — Codebase metrics}
+\addcontentsline{toc}{section}{Appendix C — Codebase metrics}
+\begin{tabularx}{\linewidth}{@{} l X @{}}
+  \toprule
+  Public route handlers (\texttt{@*\_bp.route|.get|.post}) & 63 \\
+  Public-side HTML templates  & 31 \\
+  Public-side JS modules      & 6 \\
+  i18n catalogue (\texttt{messages.po}) lines & 2{,}582 \\
+  Translated strings           & 511 \\
+  Database tables              & 12 \\
+  Seeded users / posts / campaigns / donations / journal / respite
+                               & 8 / 12 / 7 / 82 / 50 / 8 \\
+  \bottomrule
+\end{tabularx}
+
+\end{document}

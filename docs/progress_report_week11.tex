@@ -1,0 +1,167 @@
+\input{preamble}
+
+\title{\vspace{-1.5cm}\textbf{Weilight Harbor — Progress Report (Week 11)}\\
+       \large COMP3030J Web Development, UCD, 2025/26 — Group 14}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-2.0cm}
+\begin{center}
+  \small
+  Live deployment: \url{http://csi6220-2-vm3.ucd.ie} \quad
+  Repository: \url{https://github.com/licctvcctv/weilight-harbor}
+\end{center}
+\vspace{0.4cm}
+
+% =====================================================================
+\section{Summary}
+
+Weilight Harbor is feature-complete for the Week~11 submission. All five
+planned user-facing modules (Community, Crowdfunding, Life Journal,
+Respite Station, User Centre) plus the Admin moderation panel are
+deployed on the assigned UCD VM and reachable on the public URL above.
+Both Mandarin and English locales are supported end-to-end with 511
+translated strings. Continuous deployment runs through GitHub Actions: a
+push to \texttt{main} triggers a workflow that hops through the UCD jump
+host (password + TOTP), force-resets the working tree to the latest
+commit, runs \texttt{vm\_update.sh}, and restarts Gunicorn.
+
+This week we are submitting two PDF drafts
+(\texttt{14\_system\_draft.pdf}, \texttt{14\_user\_draft.pdf}) on
+Moodle and finalising peer-testing materials for Week~12.
+
+% =====================================================================
+\section{Completed since Week 10}
+
+\begin{itemize}
+  \item Bilingual admin panel (i18n applied to Layui pages).
+  \item GitHub Actions deploy workflow with TOTP + jump-host
+        \texttt{expect} script.
+  \item Pagination fixes on the User Centre history page
+        (\texttt{url\_for(...,**\{page\_param: n\})} replacing the brittle
+        \texttt{\&} concatenation that survived the early prototype).
+  \item Sensitive-word severity tiers (warning vs.\ crisis modal) wired
+        through community and confessions.
+  \item Seed data refresh: 8 users, 12 community posts, 7 campaigns,
+        82 donations, 50 journal entries, 8 respite requests, 15
+        confessions.
+  \item Documentation: README expansion, this Week~11 progress report,
+        and the System / User document drafts.
+  \item Deployment hardening:
+        \begin{itemize}
+          \item Force-checkout to \texttt{main} (the VM had been stuck
+                on an empty \texttt{master} branch from the original
+                tar-based bootstrap, which is why earlier
+                \emph{"successful"} deploys never updated the live
+                site).
+          \item Auto-seed when the database is empty.
+          \item One-shot vendor sync for the gitignored Layui / TinyMCE
+                / ECharts assets (\texttt{./deploy.sh --sync-vendor}).
+          \item Diagnostics-only mode (\texttt{./deploy.sh --diag}).
+          \item SHA-equality assertion after every deploy.
+        \end{itemize}
+\end{itemize}
+
+% =====================================================================
+\section{Plan for Weeks 11–15}
+
+\begin{tabularx}{\linewidth}{@{} L{1.0cm} L{4.0cm} X @{}}
+  \toprule
+  \textbf{Week} & \textbf{Focus} & \textbf{Deliverables} \\
+  \midrule
+  11 & System \& User document drafts
+     & \texttt{14\_system\_draft.pdf}, \texttt{14\_user\_draft.pdf} on
+       Moodle by Friday midnight. \\
+  12 & Peer testing
+     & Run two test sessions; complete the two feedback forms (user +
+       system) for the assigned groups; receive feedback from two
+       groups. \\
+  13 & Final polish
+     & Final system document ($\leq$20 pages), final user document
+       ($\leq$10 pages); incorporate peer-testing feedback. \\
+  14 & Demo rehearsal
+     & Internal dry-run; prepare slides; finalise per-member
+       contribution table. \\
+  15 & Final demonstration and submission
+     & Final demo, final code freeze, archive. \\
+  \bottomrule
+\end{tabularx}
+
+% =====================================================================
+\section{Outstanding work}
+
+\subsection*{Documentation}
+\begin{itemize}
+  \item Replace placeholder names / percentages in the System Document
+        Section~4 (Team Contribution).
+  \item Insert real screenshots into the User Document.
+  \item Confirm wording of the generative-AI usage section with the
+        team.
+\end{itemize}
+
+\subsection*{Product polish}
+\begin{itemize}
+  \item Finish the forgot-password flow (UI exists; SMTP is not
+        provisioned on the VM. Decision: leave stubbed for the
+        assignment scope.)
+  \item Tighten responsive breakpoints on the Respite map list panel.
+  \item Seed at least one user with $>10$ entries in a year so the
+        Annual Film button is visible to evaluators by default.
+\end{itemize}
+
+\subsection*{Peer-testing preparation (Week 12)}
+\begin{itemize}
+  \item Prepare a one-page \emph{test scenario} sheet with login
+        credentials and six user journeys (register, post, donate,
+        journal, respite request, admin review).
+  \item Confirm the two feedback forms (user + system) are filled in
+        for each of the two groups assigned to us.
+  \item Reserve the test slot on the shared schedule.
+\end{itemize}
+
+% =====================================================================
+\section{Risks}
+
+\begin{tabularx}{\linewidth}{@{} L{4.6cm} l l X @{}}
+  \toprule
+  \textbf{Risk} & \textbf{Likelihood} & \textbf{Impact} & \textbf{Mitigation} \\
+  \midrule
+  Jump-host TOTP secret rotates before final submission
+    & Low & High
+    & Fall-back to manual \texttt{bash deploy.sh}; secret stored in
+      GitHub Secrets and in the team password manager. \\
+  VM disk fills up due to uploads
+    & Low & Medium
+    & Static uploads bounded by extension allow-list; current usage
+      $\approx$40\,\% of 30\,GB. \\
+  SQLite write contention during demo
+    & Low & Medium
+    & Demo audience size is small; if needed switch to a single-worker
+      Gunicorn for the demo. \\
+  Late-binding peer-testing feedback
+    & Medium & Low
+    & Allocate Day 1 of Week~13 strictly to feedback ingestion. \\
+  \bottomrule
+\end{tabularx}
+
+% =====================================================================
+\section{Asks for the tutor}
+
+\begin{enumerate}
+  \item Confirmation that the Week~11 cover sheet should follow the
+        standard module template (no separate group cover required).
+  \item Confirmation that simulated donations are acceptable as
+        \emph{"transaction"} coverage in the System Document.
+  \item Indicative page weighting between \emph{Technical Implementation}
+        and \emph{AI Use} sections in the rubric (we have budgeted
+        $10$–$12$ vs.\ $1$–$2$).
+\end{enumerate}
+
+\vspace{0.6cm}
+\noindent
+\textit{Prepared by Group~14. The complete System and User drafts
+accompany this report under \texttt{docs/}.}
+
+\end{document}
