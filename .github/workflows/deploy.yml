@@ -39,14 +39,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          TOTP="$(python3 - <<'PY'
-import os
-import pyotp
-
-secret = os.environ["JUMPER_TOTP_SECRET"]
-print(pyotp.TOTP(secret).now())
-PY
-)"
+          TOTP="$(python3 -c 'import os, pyotp; print(pyotp.TOTP(os.environ["JUMPER_TOTP_SECRET"]).now())')"
           export TOTP
 
           expect <<'EOF'
