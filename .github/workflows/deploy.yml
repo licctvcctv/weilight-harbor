@@ -81,7 +81,7 @@ jobs:
             }
             -re {[$#] ?$} {
               send_user "\n(vm) shell prompt reached\n"
-              send "if ! git remote get-url origin >/dev/null 2>&1; then git remote add origin https://github.com/licctvcctv/weilight-harbor.git; fi && git fetch origin main && git reset --hard origin/main && bash vm_update.sh\r"
+              send "cd ~/weilight-harbor && if ! git remote get-url origin >/dev/null 2>&1; then git remote add origin https://github.com/licctvcctv/weilight-harbor.git; fi && git fetch origin main && git reset --hard origin/main && bash vm_update.sh\r"
               expect {
                 -nocase -re "password" {
                   send_user "\n(vm) sudo password prompt received\n"
