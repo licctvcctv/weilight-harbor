@@ -139,7 +139,7 @@
     <ul class="pagination history-pagination mb-0">
         {% if pagination.has_prev %}
         <li class="page-item">
-            <a class="page-link" href="{{ url_for('user_center.history', tab=tab_name) }}&{{ page_param }}={{ pagination.prev_num }}">
+            <a class="page-link" href="{{ url_for('user_center.history', tab=tab_name, **{page_param: pagination.prev_num}) }}">
                 <i data-lucide="chevron-left" style="width:16px;height:16px;"></i>
             </a>
         </li>
@@ -147,7 +147,7 @@
         {% for p in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
             {% if p %}
             <li class="page-item {{ 'active' if p == pagination.page else '' }}">
-                <a class="page-link" href="{{ url_for('user_center.history', tab=tab_name) }}&{{ page_param }}={{ p }}">{{ p }}</a>
+                <a class="page-link" href="{{ url_for('user_center.history', tab=tab_name, **{page_param: p}) }}">{{ p }}</a>
             </li>
             {% else %}
             <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -155,7 +155,7 @@
         {% endfor %}
         {% if pagination.has_next %}
         <li class="page-item">
-            <a class="page-link" href="{{ url_for('user_center.history', tab=tab_name) }}&{{ page_param }}={{ pagination.next_num }}">
+            <a class="page-link" href="{{ url_for('user_center.history', tab=tab_name, **{page_param: pagination.next_num}) }}">
                 <i data-lucide="chevron-right" style="width:16px;height:16px;"></i>
             </a>
         </li>
@@ -242,9 +242,9 @@
                     <p>{{ _('Share your story, ask questions, or offer support to others in the community.') }}</p>
                     <a href="{{ url_for('community.index') }}" class="btn btn-wl-primary btn-sm mt-2">{{ _('Write a Post') }}</a>
                 </div>
-                {% endif %}
-                {{ render_history_pagination(posts_pagination, 'posts_page', 'posts') }}
-            </div>
+            {% endif %}
+            {{ render_history_pagination(posts_pagination, 'posts_page', 'posts') }}
+        </div>
 
         <!-- Campaigns -->
         <div class="tab-pane fade {{ 'show active' if tab == 'campaigns' }}" id="tab-campaigns">
@@ -267,16 +267,17 @@
                         {% endif %}
                     </div>
                     {% if campaign.funding_goal and campaign.funding_goal > 0 %}
+                    {% set funded_pct = ((campaign.current_amount / campaign.funding_goal) * 100)|round(1) %}
                     <div class="wl-progress">
-                        <div class="wl-progress-bar" style="width: {{ ((campaign.current_amount / campaign.funding_goal) * 100)|round(1) }}%"></div>
+                        <div class="wl-progress-bar" style="width: {{ funded_pct }}%"></div>
                     </div>
                     <div style="font-size:0.75rem;color:var(--color-text-secondary);margin-top:4px;">
-                        {{ ((campaign.current_amount / campaign.funding_goal) * 100)|round(1) }}% {{ _('funded') }}
+                        {{ funded_pct }}% {{ _('funded') }}
                     </div>
                     {% endif %}
                 </div>
                 {% endfor %}
-                {% else %}
+            {% else %}
                 <div class="empty-state">
                     <div class="empty-icon"><i data-lucide="heart" style="width:28px;height:28px;"></i></div>
                     <h5>{{ _('No campaigns yet') }}</h5>
@@ -312,7 +313,7 @@
                     </div>
                 </div>
                 {% endfor %}
-                {% else %}
+            {% else %}
                 <div class="empty-state">
                     <div class="empty-icon"><i data-lucide="gift" style="width:28px;height:28px;"></i></div>
                     <h5>{{ _('No donations yet') }}</h5>
@@ -344,7 +345,7 @@
                     </div>
                 </div>
                 {% endfor %}
-                {% else %}
+            {% else %}
                 <div class="empty-state">
                     <div class="empty-icon"><i data-lucide="map-pin" style="width:28px;height:28px;"></i></div>
                     <h5>{{ _('No respite requests yet') }}</h5>

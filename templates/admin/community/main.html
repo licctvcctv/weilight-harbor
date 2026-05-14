@@ -1,30 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Community Moderation</title>
+    <title>{{ _('Community Moderation') }}</title>
     {% include 'admin/common/header.html' %}
 </head>
+{% set t_status = _('Status') %}
+{% set t_all = _('All') %}
+{% set t_hidden = _('Hidden') %}
+{% set t_visible = _('Visible') %}
+{% set t_yes = _('Yes') %}
+{% set t_no = _('No') %}
+{% set t_search = _('Search') %}
+{% set t_reset = _('Reset') %}
+{% set t_refresh = _('Refresh') %}
+{% set t_no_records = _('No community posts found') %}
+{% set t_confirm = _('Confirm') %}
+{% set t_approve = _('Approve') %}
+{% set t_hide = _('Hide') %}
+{% set t_delete = _('Delete') %}
+{% set t_reviewed = _('Reviewed') %}
+{% set t_approve_post = _('Approve this post and make it visible?') %}
+{% set t_hide_post = _('Hide this post from public view?') %}
+{% set t_delete_post = _('Are you sure you want to delete this post? This action cannot be undone.') %}
+{% set t_id = _('ID') %}
+{% set t_author = _('Author') %}
+{% set t_title = _('Title') %}
+{% set t_category = _('Category') %}
+{% set t_content_preview = _('Content Preview') %}
+{% set t_likes = _('Likes') %}
+{% set t_comments = _('Comments') %}
+{% set t_date = _('Date') %}
+{% set t_actions = _('Actions') %}
 <body class="pear-container">
 {# Filter form #}
 <div class="layui-card">
     <div class="layui-card-body">
         <form class="layui-form" action="" lay-filter="community-query-form">
             <div class="layui-form-item">
-                <label class="layui-form-label">Status</label>
+                <label class="layui-form-label">{{ t_status }}</label>
                 <div class="layui-input-inline">
                     <select name="status">
-                        <option value="">All</option>
-                        <option value="0">Hidden (Pending)</option>
-                        <option value="1">Visible</option>
+                        <option value="">{{ t_all }}</option>
+                        <option value="0">{{ t_hidden }} ({{ _('Pending') }})</option>
+                        <option value="1">{{ t_visible }}</option>
                     </select>
                 </div>
                 <button class="pear-btn pear-btn-md pear-btn-primary" lay-submit lay-filter="community-query">
                     <i class="layui-icon layui-icon-search"></i>
-                    Search
+                    {{ t_search }}
                 </button>
                 <button type="reset" class="pear-btn pear-btn-md">
                     <i class="layui-icon layui-icon-refresh"></i>
-                    Reset
+                    {{ t_reset }}
                 </button>
             </div>
         </form>
@@ -40,37 +67,37 @@
 
 {# Status badge template #}
 <script type="text/html" id="community-status">
-    {{ '{{# if(d.status === 0){ }}
-    <span class="layui-badge layui-bg-orange">Hidden</span>
-    {{# } else if(d.status === 1){ }}
-    <span class="layui-badge layui-bg-green">Visible</span>
-    {{# } }}'|safe }}
+    {{ '{{# if(d.status === 0){ }}' }}
+    <span class="layui-badge layui-bg-orange">{{ t_hidden }}</span>
+    {{ '{{# } else if(d.status === 1){ }}' }}
+    <span class="layui-badge layui-bg-green">{{ t_visible }}</span>
+    {{ '{{# } }}' }}
 </script>
 
 {# Anonymous badge template #}
 <script type="text/html" id="community-anonymous">
-    {{ '{{# if(d.is_anonymous){ }}
-    <span class="layui-badge layui-bg-gray">Yes</span>
-    {{# } else { }}
-    <span style="color:#999">No</span>
-    {{# } }}'|safe }}
+    {{ '{{# if(d.is_anonymous){ }}' }}
+    <span class="layui-badge layui-bg-gray">{{ t_yes }}</span>
+    {{ '{{# } else { }}' }}
+    <span style="color:#999">{{ t_no }}</span>
+    {{ '{{# } }}' }}
 </script>
 
 {# Actions template #}
 <script type="text/html" id="community-bar">
-    {{ '{{# if(d.status === 0){ }}
-    <button class="layui-btn layui-btn-xs" lay-event="approve">Approve</button>
-    {{# } else { }}
-    <button class="layui-btn layui-btn-warm layui-btn-xs" lay-event="hide">Hide</button>
-    {{# } }}
-    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">Delete</button>'|safe }}
+    {{ '{{# if(d.status === 0){ }}' }}
+    <button class="layui-btn layui-btn-xs" lay-event="approve">{{ t_approve }}</button>
+    {{ '{{# } else { }}' }}
+    <button class="layui-btn layui-btn-warm layui-btn-xs" lay-event="hide">{{ t_hide }}</button>
+    {{ '{{# } }}' }}
+    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">{{ t_delete }}</button>
 </script>
 
 {# Toolbar #}
 <script type="text/html" id="community-toolbar">
     <button class="pear-btn pear-btn-md" lay-event="refresh">
         <i class="layui-icon layui-icon-refresh"></i>
-        Refresh
+        {{ t_refresh }}
     </button>
 </script>
 
@@ -81,22 +108,22 @@
     let table = layui.table
     let form = layui.form
     let $ = layui.jquery
-    let popup = layui.popup
-    let layer = layui.layer
-    let MODULE_PATH = '/admin/community/'
+        let popup = layui.popup
+        let layer = layui.layer
+        let MODULE_PATH = '/admin/community/'
 
     let cols = [
       [
-        { title: 'ID', field: 'id', align: 'center', width: 70 },
-        { title: 'Author', field: 'username', align: 'center', width: 120 },
-        { title: 'Title', field: 'title', align: 'center', minWidth: 160 },
-        { title: 'Category', field: 'category', align: 'center', width: 110 },
-        { title: 'Content Preview', field: 'content', align: 'center', minWidth: 180 },
-        { title: 'Status', field: 'status', align: 'center', width: 100, templet: '#community-status' },
-        { title: 'Likes', field: 'like_count', align: 'center', width: 80 },
-        { title: 'Comments', field: 'comment_count', align: 'center', width: 90 },
-        { title: 'Date', field: 'create_at', align: 'center', width: 150 },
-        { title: 'Actions', toolbar: '#community-bar', align: 'center', width: 180, fixed: 'right' }
+        { title: "{{ t_id }}", field: 'id', align: 'center', width: 70 },
+        { title: "{{ t_author }}", field: 'username', align: 'center', width: 120 },
+        { title: "{{ t_title }}", field: 'title', align: 'center', minWidth: 160 },
+        { title: "{{ t_category }}", field: 'category', align: 'center', width: 110 },
+        { title: "{{ t_content_preview }}", field: 'content', align: 'center', minWidth: 180 },
+        { title: "{{ t_status }}", field: 'status', align: 'center', width: 100, templet: '#community-status' },
+        { title: "{{ t_likes }}", field: 'like_count', align: 'center', width: 80 },
+        { title: "{{ t_comments }}", field: 'comment_count', align: 'center', width: 90 },
+        { title: "{{ t_date }}", field: 'create_at', align: 'center', width: 150 },
+        { title: "{{ t_actions }}", toolbar: '#community-bar', align: 'center', width: 180, fixed: 'right' }
       ]
     ]
 
@@ -108,7 +135,7 @@
       skin: 'line',
       toolbar: '#community-toolbar',
       defaultToolbar: [{ layEvent: 'refresh', icon: 'layui-icon-refresh' }, 'filter', 'print', 'exports'],
-      text: { none: 'No community posts found' }
+      text: { none: "{{ t_no_records }}" }
     })
 
     form.on('submit(community-query)', function (data) {
@@ -124,7 +151,7 @@
 
     table.on('tool(community-table)', function (obj) {
       if (obj.event === 'approve') {
-        layer.confirm('Approve this post and make it visible?', { icon: 3, title: 'Confirm' }, function (index) {
+        layer.confirm("{{ t_approve_post }}", { icon: 3, title: "{{ t_confirm }}" }, function (index) {
           layer.close(index)
           let loading = layer.load()
           $.ajax({
@@ -145,7 +172,7 @@
           })
         })
       } else if (obj.event === 'hide') {
-        layer.confirm('Hide this post from public view?', { icon: 3, title: 'Confirm' }, function (index) {
+        layer.confirm("{{ t_hide_post }}", { icon: 3, title: "{{ t_confirm }}" }, function (index) {
           layer.close(index)
           let loading = layer.load()
           $.ajax({
@@ -166,7 +193,7 @@
           })
         })
       } else if (obj.event === 'delete') {
-        layer.confirm('Are you sure you want to delete this post? This action cannot be undone.', { icon: 2, title: 'Warning' }, function (index) {
+        layer.confirm("{{ t_delete_post }}", { icon: 2, title: "{{ _('Warning') }}" }, function (index) {
           layer.close(index)
           let loading = layer.load()
           $.ajax({
