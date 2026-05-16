@@ -71,7 +71,6 @@ def register_page():
         username = request.form.get('username', '').strip()[:20]
         email = request.form.get('email', '').strip()[:120]
         phone = _normalize_phone(request.form.get('phone', ''))
-        verification_code = request.form.get('verification_code', '').strip()
         password = request.form.get('password', '')
         confirm = request.form.get('confirm_password', '')
 
@@ -80,9 +79,6 @@ def register_page():
             return render_template('public/auth/register.html')
         if not _is_valid_phone(phone):
             flash('Please enter a valid phone number.', 'error')
-            return render_template('public/auth/register.html')
-        if not _verify_phone_code(phone, verification_code):
-            flash('Invalid or expired phone verification code.', 'error')
             return render_template('public/auth/register.html')
         if password != confirm:
             flash('Passwords do not match.', 'error')
@@ -104,7 +100,6 @@ def register_page():
             user.role.append(regular_role)
         db.session.add(user)
         db.session.commit()
-        session.pop('phone_verification', None)
         login_user(user)
         flash('Welcome to Weilight Harbor!', 'success')
         return redirect('/')
