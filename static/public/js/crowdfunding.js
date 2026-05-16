@@ -7,6 +7,10 @@ function initCrowdfundingDetail(config) {
     var isCustom = false;
     var selectedPaymentMethod = 'wechat';
     var paymentStatusTimer = null;
+    function t(key, fallback) {
+        var i18n = window.WL_CROWDFUNDING_I18N || {};
+        return i18n[key] || fallback;
+    }
 
     function getConfirmAmountSpan() {
         return document.getElementById('confirmAmount');
@@ -40,8 +44,8 @@ function initCrowdfundingDetail(config) {
 
     function getPaymentMethodLabel(method) {
         var labels = {
-            wechat: 'WeChat Pay',
-            alipay: 'Alipay'
+            wechat: t('wechatPay', 'WeChat Pay'),
+            alipay: t('alipay', 'Alipay')
         };
         return labels[method] || labels.wechat;
     }
@@ -56,7 +60,7 @@ function initCrowdfundingDetail(config) {
         var finishBtn = document.getElementById('finishPaymentBtn');
         if (!finishBtn) return;
         finishBtn.disabled = false;
-        finishBtn.textContent = 'I Have Paid';
+        finishBtn.textContent = t('iHavePaid', 'I Have Paid');
     }
 
     function beginPaymentStatusCycle() {
@@ -65,9 +69,9 @@ function initCrowdfundingDetail(config) {
 
         clearInterval(paymentStatusTimer);
         var messages = [
-            'Waiting for payment confirmation',
-            'Keep this window open after scanning',
-            'Click "I Have Paid" once the transfer is complete'
+            t('waitingConfirmation', 'Waiting for payment confirmation'),
+            t('keepWindowOpen', 'Keep this window open after scanning'),
+            t('clickPaid', 'Click "I Have Paid" once the transfer is complete')
         ];
         var index = 0;
         statusEl.textContent = messages[index];
@@ -81,13 +85,14 @@ function initCrowdfundingDetail(config) {
         var instruction = document.getElementById('paymentInstruction');
         var statusEl = document.getElementById('paymentStatusText');
         if (instruction) {
-            instruction.textContent = 'Pay ' + '\u00a5' + selectedAmount.toFixed(2) + ' via ' +
-                getPaymentMethodLabel(selectedPaymentMethod) + ', then confirm after payment.';
+            instruction.textContent = t('payVia', 'Pay {amount} via {method}, then confirm after payment.')
+                .replace('{amount}', '\u00a5' + selectedAmount.toFixed(2))
+                .replace('{method}', getPaymentMethodLabel(selectedPaymentMethod));
         }
         if (statusEl) {
             statusEl.textContent = config.paymentQrUrl ?
-                'Waiting for payment confirmation' :
-                'No QR code was uploaded. Confirm only after using the organizer payment information.';
+                t('waitingConfirmation', 'Waiting for payment confirmation') :
+                t('noQr', 'No QR code was uploaded. Confirm only after using the organizer payment information.');
         }
         beginPaymentStatusCycle();
     }
@@ -250,6 +255,18 @@ function initCrowdfundingDetail(config) {
         var donorEl = document.getElementById('donorCount');
         if (donorEl) donorEl.textContent = data.donor_count;
 
+        var donorTab = document.querySelector('.detail-tab[data-tab="donors"]');
+        if (donorTab) {
+            var donorTabLabel = donorTab.textContent.replace(/\s*\([^)]*\)\s*$/, '').trim();
+            donorTab.textContent = donorTabLabel + ' (' + data.donor_count + ')';
+        }
+
+        var donorHeading = document.querySelector('#tab-donors h3');
+        if (donorHeading) {
+            var donorHeadingLabel = donorHeading.textContent.replace(/\s*\([^)]*\)\s*$/, '').trim();
+            donorHeading.textContent = donorHeadingLabel + ' (' + data.donor_count + ')';
+        }
+
         document.querySelectorAll('.wl-progress-bar').forEach(function(bar) {
             bar.style.width = data.progress + '%';
             bar.setAttribute('data-progress', data.progress);
@@ -260,7 +277,7 @@ function initCrowdfundingDetail(config) {
             if (donateBtn) {
                 donateBtn.className = 'btn-donate-lg disabled-donate';
                 donateBtn.disabled = true;
-                donateBtn.innerHTML = '<i data-lucide="check-circle" style="width:20px;height:20px;margin-right:6px"></i> Fully Funded';
+                donateBtn.innerHTML = '<i data-lucide="check-circle" style="width:20px;height:20px;margin-right:6px"></i> ' + t('fullyFunded', 'Fully Funded');
                 donateBtn.removeAttribute('data-bs-toggle');
                 donateBtn.removeAttribute('data-bs-target');
             }
@@ -274,10 +291,12 @@ function initCrowdfundingDetail(config) {
         if (summary) {
             summary.innerHTML =
                 '<div style="font-size:0.875rem;color:var(--color-text-secondary)">' +
-                'You donated <strong style="color:var(--color-primary);font-size:1.25rem">\u00a5' + selectedAmount.toFixed(2) + '</strong>' +
+                t('youDonated', 'You donated') + ' <strong style="color:var(--color-primary);font-size:1.25rem">\u00a5' + selectedAmount.toFixed(2) + '</strong>' +
                 '</div>' +
                 '<div style="font-size:0.8125rem;color:var(--color-text-disabled);margin-top:0.25rem">' +
-                'Campaign is now ' + data.progress + '% funded with ' + data.donor_count + ' donors' +
+                t('campaignFunded', 'Campaign is now {progress} percent funded with {count} donors')
+                    .replace('{progress}', data.progress)
+                    .replace('{count}', data.donor_count) +
                 '</div>';
         }
 
@@ -316,13 +335,13 @@ function initCrowdfundingDetail(config) {
             var finishBtn = document.getElementById('finishPaymentBtn');
             if (finishBtn) {
                 finishBtn.disabled = false;
-                finishBtn.textContent = 'I Have Paid';
+                finishBtn.textContent = t('iHavePaid', 'I Have Paid');
             }
 
             var confirm = document.getElementById('confirmDonateBtn');
             if (confirm) {
                 confirm.disabled = false;
-                confirm.innerHTML = 'Confirm Donation <span id="confirmAmount">\u00a5100</span>';
+                confirm.innerHTML = t('confirmDonation', 'Confirm Donation') + ' <span id="confirmAmount">\u00a5100</span>';
             }
 
             selectedAmount = 100;

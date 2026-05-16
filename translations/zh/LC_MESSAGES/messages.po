@@ -1622,6 +1622,9 @@ msgstr "匿名捐助"
 msgid "Confirm Donation"
 msgstr "确认捐助"
 
+msgid "You will confirm the payment method before the donation is recorded."
+msgstr "记录捐助前，您需要先确认付款方式。"
+
 #: templates/public/crowdfunding/detail.html:607
 msgid "This is a simulated donation for demonstration purposes."
 msgstr "这是一个用于演示目的的模拟捐助。"
@@ -2580,3 +2583,75 @@ msgstr "评论"
 
 msgid "Date"
 msgstr "日期"
+
+msgid "Username, Email, or Phone"
+msgstr "用户名、邮箱或手机号"
+
+msgid "Enter your username, email, or phone"
+msgstr "输入您的用户名、邮箱或手机号"
+
+msgid "Emotional Support"
+msgstr "情感支持"
+
+msgid "Daily Life"
+msgstr "日常生活"
+
+msgid "Medical Info"
+msgstr "医疗资讯"
+
+msgid "Good News"
+msgstr "好消息"
+
+msgid "Resources"
+msgstr "资源分享"
+
+msgid "Pediatric"
+msgstr "儿科"
+
+msgid "Chronic Illness"
+msgstr "慢性病"
+
+msgid "Donation amount"
+msgstr "捐助金额"
+
+msgid "Payment method"
+msgstr "支付方式"
+
+msgid "WeChat Pay"
+msgstr "微信支付"
+
+msgid "Alipay"
+msgstr "支付宝"
+
+msgid "Back"
+msgstr "返回"
+
+msgid "Continue to Pay"
+msgstr "继续支付"
+
+msgid "I Have Paid"
+msgstr "我已支付"
+
+msgid "Complete Payment"
+msgstr "完成支付"
+
+msgid "Waiting for payment confirmation"
+msgstr "等待付款确认"
+
+msgid "Keep this window open after scanning"
+msgstr "扫码后请保持此窗口打开"
+
+msgid "Click \"I Have Paid\" once the transfer is complete"
+msgstr "转账完成后点击“我已支付”"
+
+msgid "Pay {amount} via {method}, then confirm after payment."
+msgstr "请通过 {method} 支付 {amount}，付款后再确认。"
+
+msgid "No QR code was uploaded. Confirm only after using the organizer payment information."
+msgstr "未上传二维码。请仅在使用发起人的收款信息付款后确认。"
+
+msgid "You donated"
+msgstr "您已捐助"
+
+msgid "Campaign is now {progress} percent funded with {count} donors"
+msgstr "当前进度为 {progress}％，共有 {count} 位捐助者"

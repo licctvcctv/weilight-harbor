@@ -621,6 +621,13 @@ a:hover {
   transform: rotate(-15deg);
 }
 
+/* === Navbar Dropdown Fallback === */
+.wl-navbar .nav-item.dropdown:focus-within > .dropdown-menu,
+.wl-navbar .nav-item.dropdown:hover > .dropdown-menu,
+.wl-navbar .dropdown-menu.show {
+  display: block;
+}
+
 /* === Map Page === */
 .map-container {
   height: calc(100vh - 64px);

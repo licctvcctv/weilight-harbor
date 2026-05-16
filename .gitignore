@@ -16,3 +16,7 @@ product_design.md
 static/admin/component/pear/module/echarts.js
 static/admin/component/pear/module/tinymce/
 static/admin/component/layui/layui.js
+
+# Runtime uploads created by users/campaign tests; keep them out of deploy commits
+# and protect ignored upload folders from `git clean -fd` on the VM.
+static/upload/campaigns/

@@ -8,7 +8,7 @@
 
         <!-- Brand -->
         <a class="navbar-brand" href="/">
-            <i data-lucide="lighthouse" style="width:24px;height:24px;color:var(--color-primary)"></i>
+            <i data-lucide="anchor" style="width:24px;height:24px;color:var(--color-primary)"></i>
             Weilight Harbor
         </a>
 
@@ -63,8 +63,23 @@
                     </a>
                 </li>
 
+                {% if current_user.user_type == 'admin' %}
+                <li class="nav-item me-2">
+                    <a class="nav-link" href="/admin/">{{ _('Admin Panel') }}</a>
+                </li>
+                {% endif %}
+
+                <li class="nav-item me-2">
+                    <form action="/auth/logout" method="POST" class="m-0">
+                        <button type="submit" class="nav-link btn btn-link p-0" style="line-height:2.25rem;">
+                            {{ _('Logout') }}
+                        </button>
+                    </form>
+                </li>
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown"
+                       onclick="event.preventDefault();event.stopPropagation();this.nextElementSibling.classList.toggle('show');">
                         <img src="{{ current_user.avatar or url_for('static', filename='public/images/default-avatar.svg') }}"
                              class="rounded-circle" style="width:32px;height:32px;object-fit:cover" alt="">
                         {{ current_user.username }}
@@ -95,7 +110,7 @@
                         </a></li>
                         {% if current_user.user_type == 'admin' %}
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/admin" target="_blank">
+                        <li><a class="dropdown-item" href="/admin">
                             <i data-lucide="layout-dashboard" style="width:16px;height:16px"></i> {{ _('Admin Panel') }}
                         </a></li>
                         {% endif %}

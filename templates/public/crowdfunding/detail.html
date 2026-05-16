@@ -509,7 +509,7 @@
                     </div>
 
                     {% if campaign.status == 'approved' and not campaign.is_fully_funded and campaign.qr_code_url %}
-                    <button class="btn-donate-lg active-donate" data-bs-toggle="modal" data-bs-target="#donateModal" id="openDonateBtn">
+                    <button class="btn-donate-lg active-donate" data-bs-toggle="modal" data-bs-target="#donateModal" id="openDonateBtn" onclick="wlShowDonateModal();">
                         <i data-lucide="heart" style="width:20px;height:20px;margin-right:6px"></i>
                         {{ _('Donate Now') }}
                     </button>
@@ -568,7 +568,7 @@
                         <i data-lucide="heart" style="width:20px;height:20px;color:var(--color-primary);margin-right:6px"></i>
                         {{ _('Make a Donation') }}
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="wlHideDonateModal();"></button>
                 </div>
                 <div class="modal-body">
                     <p style="color:var(--color-text-secondary);font-size:0.9375rem;margin-bottom:1.25rem">
@@ -617,7 +617,7 @@
             <div id="donateStep2" style="display:none">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title" style="font-weight:700">{{ _('Confirm Donation') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="wlHideDonateModal();"></button>
                 </div>
                 <div class="modal-body">
                     <div style="background:var(--color-primary-bg);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1rem">
@@ -646,7 +646,7 @@
             <div id="donateStep3" style="display:none">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="modal-title" style="font-weight:700">{{ _('Complete Payment') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="wlHideDonateModal();"></button>
                 </div>
                 <div class="modal-body text-center">
                     <p id="paymentInstruction" style="color:var(--color-text-secondary);font-size:0.9375rem;margin-bottom:1rem">
@@ -687,7 +687,7 @@
                         </p>
                         <div id="donationSummary" style="background:var(--color-primary-bg);border-radius:var(--radius-lg);padding:1rem;margin:1rem 0">
                         </div>
-                        <button class="btn btn-wl-primary px-4 mt-2" data-bs-dismiss="modal">{{ _('Done') }}</button>
+                        <button class="btn btn-wl-primary px-4 mt-2" data-bs-dismiss="modal" onclick="wlHideDonateModal();">{{ _('Done') }}</button>
                     </div>
                 </div>
             </div>
@@ -697,8 +697,49 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{{ url_for('static', filename='public/js/crowdfunding.js') }}"></script>
+<script src="{{ url_for('static', filename='public/js/crowdfunding.js') }}?v=20260517a"></script>
 <script>
+window.WL_CROWDFUNDING_I18N = {
+    iHavePaid: {{ _('I Have Paid')|tojson }},
+    waitingConfirmation: {{ _('Waiting for payment confirmation')|tojson }},
+    keepWindowOpen: {{ _('Keep this window open after scanning')|tojson }},
+    clickPaid: {{ _('Click "I Have Paid" once the transfer is complete')|tojson }},
+    payVia: {{ _('Pay {amount} via {method}, then confirm after payment.')|tojson }},
+    noQr: {{ _('No QR code was uploaded. Confirm only after using the organizer payment information.')|tojson }},
+    youDonated: {{ _('You donated')|tojson }},
+    campaignFunded: {{ _('Campaign is now {progress} percent funded with {count} donors')|tojson }},
+    fullyFunded: {{ _('Fully Funded')|tojson }},
+    confirmDonation: {{ _('Confirm Donation')|tojson }},
+    wechatPay: {{ _('WeChat Pay')|tojson }},
+    alipay: {{ _('Alipay')|tojson }}
+};
+
+function wlShowDonateModal() {
+    var modal = document.getElementById('donateModal');
+    if (!modal) return;
+    modal.style.display = 'block';
+    modal.removeAttribute('aria-hidden');
+    modal.classList.add('show');
+    document.body.classList.add('modal-open');
+    if (!document.querySelector('.modal-backdrop')) {
+        var backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop fade show';
+        document.body.appendChild(backdrop);
+    }
+}
+
+function wlHideDonateModal() {
+    var modal = document.getElementById('donateModal');
+    if (!modal) return;
+    modal.classList.remove('show');
+    modal.style.display = 'none';
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
+        backdrop.remove();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     initCrowdfundingDetail({
         campaignId: {{ campaign.id }},

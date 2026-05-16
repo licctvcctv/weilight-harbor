@@ -146,6 +146,14 @@
     const t_approve = "{{ t_approve }}"
     const t_reject = "{{ t_reject }}"
     const t_details = "{{ t_details }}"
+    const campaignCategoryLabels = {
+      cancer: {{ _('Cancer')|tojson }},
+      rare_disease: {{ _('Rare Disease')|tojson }},
+      pediatric: {{ _('Pediatric')|tojson }},
+      chronic: {{ _('Chronic Illness')|tojson }},
+      mental_health: {{ _('Mental Health')|tojson }},
+      other: {{ _('Other')|tojson }}
+    }
 
     const escapeHtml = function (value) {
       return String(value === null || value === undefined ? '' : value)
@@ -184,8 +192,12 @@
       const current = Number(row.current_amount || 0)
       const goal = Number(row.funding_goal || 0)
       const pct = goal > 0 ? ((current / goal) * 100).toFixed(1) : '0'
-      return '<span>$' + current.toFixed(2) + ' / $' + goal.toFixed(2) + '</span><br>' +
+      return '<span>¥' + current.toFixed(2) + ' / ¥' + goal.toFixed(2) + '</span><br>' +
         '<span style="color:#999;font-size:12px">(' + pct + '%)</span>'
+    }
+
+    const renderCampaignCategory = function (category) {
+      return escapeHtml(campaignCategoryLabels[category] || category || t_na)
     }
 
     const renderCampaignActions = function (row) {
@@ -203,7 +215,7 @@
         { title: "{{ t_id }}", field: 'id', align: 'center', width: 70 },
         { title: "{{ t_creator }}", field: 'username', align: 'center', width: 120 },
         { title: "{{ t_title }}", field: 'title', align: 'center', minWidth: 180 },
-        { title: "{{ t_category }}", field: 'category', align: 'center', width: 100 },
+        { title: "{{ t_category }}", field: 'category', align: 'center', width: 120, templet: function (d) { return renderCampaignCategory(d.category) } },
         { title: "{{ t_cover }}", field: 'cover_image', align: 'center', width: 90, templet: function (d) { return renderCampaignImage(d.cover_image) } },
         { title: "{{ t_qr_code }}", field: 'qr_code_url', align: 'center', width: 80, templet: function (d) { return renderCampaignImage(d.qr_code_url) } },
         { title: "{{ t_funding }}", field: 'funding_goal', align: 'center', width: 160, templet: function (d) { return renderCampaignGoal(d) } },

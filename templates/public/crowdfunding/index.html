@@ -337,7 +337,8 @@
                         <i data-lucide="image" style="width:48px;height:48px"></i>
                     </div>
                     {% endif %}
-                    <span class="category-tag">{{ _(campaign.category or 'Other') }}</span>
+                    {% set category_labels = {'cancer':'Cancer','rare_disease':'Rare Disease','pediatric':'Pediatric','chronic':'Chronic Illness','mental_health':'Mental Health','other':'Other'} %}
+                    <span class="category-tag">{{ _(category_labels.get(campaign.category, 'Other')) }}</span>
                     {% if campaign.status == 'approved' %}
                     <span class="verified-badge">
                         <i data-lucide="check-circle" style="width:12px;height:12px"></i>

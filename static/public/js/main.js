@@ -3,16 +3,27 @@
 // ============================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Bootstrap fallback for restricted/offline browser environments.
+    ensureBootstrapFallback();
+
     // Language Toggle
     initLangToggle();
 
     // Search Toggle
     initSearchToggle();
 
+    // User dropdown fallback
+    initDropdownFallback();
+
+    // Modal fallback
+    initModalFallback();
+
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.forEach(function(el) {
-        new bootstrap.Tooltip(el);
+        if (window.bootstrap && window.bootstrap.Tooltip) {
+            new bootstrap.Tooltip(el);
+        }
     });
 
     // On page load, check localStorage for saved language and sync if needed
@@ -36,6 +47,94 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+// --- Bootstrap fallback ---
+function ensureBootstrapFallback() {
+    if (window.bootstrap && window.bootstrap.Modal && window.bootstrap.Tooltip) return;
+
+    window.bootstrap = window.bootstrap || {};
+    window.bootstrap.Tooltip = window.bootstrap.Tooltip || function() {};
+
+    if (!window.bootstrap.Modal) {
+        window.bootstrap.Modal = function(el) {
+            this.el = typeof el === 'string' ? document.querySelector(el) : el;
+            if (this.el) this.el.__wlModal = this;
+        };
+
+        window.bootstrap.Modal.prototype.show = function() {
+            if (!this.el) return;
+            this.el.style.display = 'block';
+            this.el.removeAttribute('aria-hidden');
+            this.el.classList.add('show');
+            document.body.classList.add('modal-open');
+            if (!document.querySelector('.modal-backdrop')) {
+                var backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                document.body.appendChild(backdrop);
+            }
+        };
+
+        window.bootstrap.Modal.prototype.hide = function() {
+            if (!this.el) return;
+            this.el.classList.remove('show');
+            this.el.style.display = 'none';
+            this.el.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+            document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
+                backdrop.remove();
+            });
+        };
+
+        window.bootstrap.Modal.getInstance = function(el) {
+            return el && el.__wlModal ? el.__wlModal : new window.bootstrap.Modal(el);
+        };
+    }
+}
+
+// --- Dropdown fallback ---
+function initDropdownFallback() {
+    document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function(toggle) {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            var menu = toggle.parentElement ? toggle.parentElement.querySelector('.dropdown-menu') : null;
+            if (!menu) return;
+
+            document.querySelectorAll('.dropdown-menu.show').forEach(function(openMenu) {
+                if (openMenu !== menu) openMenu.classList.remove('show');
+            });
+            menu.classList.toggle('show');
+        });
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target.closest && e.target.closest('.dropdown')) return;
+        document.querySelectorAll('.dropdown-menu.show').forEach(function(menu) {
+            menu.classList.remove('show');
+        });
+    });
+}
+
+// --- Modal fallback ---
+function initModalFallback() {
+    document.querySelectorAll('[data-bs-toggle="modal"][data-bs-target]').forEach(function(trigger) {
+        trigger.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetSelector = trigger.getAttribute('data-bs-target');
+            var target = targetSelector ? document.querySelector(targetSelector) : null;
+            if (!target) return;
+            new window.bootstrap.Modal(target).show();
+        });
+    });
+
+    document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(function(closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            var modal = closeBtn.closest('.modal');
+            if (modal) window.bootstrap.Modal.getInstance(modal).hide();
+        });
+    });
+}
 
 // --- Language Toggle ---
 function initLangToggle() {

@@ -20,7 +20,7 @@
             </div>
             <div class="col-lg-6 text-center">
                 <div style="font-size: 12rem; line-height: 1; opacity: 0.15; color: var(--color-primary);">
-                    <i data-lucide="lighthouse" style="width:280px;height:280px"></i>
+                    <i data-lucide="anchor" style="width:280px;height:280px"></i>
                 </div>
             </div>
         </div>
@@ -120,7 +120,8 @@
                     {% endif %}
                     <div class="card-body">
                         {% if c.category %}
-                        <span class="wl-tag mb-2">{{ c.category }}</span>
+                        {% set campaign_category_labels = {'cancer':'Cancer','rare_disease':'Rare Disease','pediatric':'Pediatric','chronic':'Chronic Illness','mental_health':'Mental Health','other':'Other'} %}
+                        <span class="wl-tag mb-2">{{ _(campaign_category_labels.get(c.category, c.category)) }}</span>
                         {% endif %}
                         <h6 class="mt-2">{{ c.title }}</h6>
                         <p class="small text-muted">{{ c.description[:100] }}{% if c.description|length > 100 %}...{% endif %}</p>
@@ -179,7 +180,8 @@
                     <div class="wl-card h-100" style="transition: transform 0.2s;">
                         <div class="card-body">
                             {% if post.category %}
-                            <span class="wl-tag mb-2" style="font-size:0.7rem;">{{ post.category }}</span>
+                            {% set post_category_labels = {'emotional':'Emotional Support','daily':'Daily Life','medical':'Medical Info','good_news':'Good News','resources':'Resources'} %}
+                            <span class="wl-tag mb-2" style="font-size:0.7rem;">{{ _(post_category_labels.get(post.category, post.category)) }}</span>
                             {% endif %}
                             <h6 class="mt-2" style="color:var(--color-text-primary);">{{ post.title }}</h6>
                             <p class="small text-muted mb-2">{{ post.content[:80] }}{% if post.content|length > 80 %}...{% endif %}</p>
