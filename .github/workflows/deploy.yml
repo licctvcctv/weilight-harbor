@@ -28,91 +28,22 @@ jobs:
       VM_PASSWORD: ${{ secrets.VM_PASSWORD }}
 
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
       - name: Install deployment tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y expect
+          sudo apt-get install -y expect curl git
           python3 -m pip install --upgrade pip pyotp
 
       - name: Deploy on VM through jump host
         shell: bash
+        env:
+          JUMPER_PASS: ${{ secrets.JUMPER_PASSWORD }}
+          TOTP_SECRET: ${{ secrets.JUMPER_TOTP_SECRET }}
+          VM_PASS: ${{ secrets.VM_PASSWORD }}
         run: |
           set -euo pipefail
-
-          echo "[1/5] Generating TOTP for jump host..."
-          TOTP="$(python3 -c 'import os, pyotp; print(pyotp.TOTP(os.environ["JUMPER_TOTP_SECRET"]).now())')"
-          export TOTP
-
-          echo "[2/5] Connecting to jump host..."
-          expect <<'EOF'
-          set timeout 900
-          log_user 1
-
-          spawn ssh -tt -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $env(JUMPER_USER)@$env(JUMPER_HOST)
-          expect {
-            -nocase -re "password" {
-              send_user "\n(jump) password prompt received\n"
-              send "$env(JUMPER_PASSWORD)\r"
-              exp_continue
-            }
-            -nocase -re "verification" {
-              send_user "\n(jump) verification prompt received\n"
-              send "$env(TOTP)\r"
-              exp_continue
-            }
-            -re {[$#] ?$} {
-              send_user "\n(jump) shell prompt reached\n"
-            }
-            eof {
-              exit 1
-            }
-          }
-
-          send "printf 'JUMPER_READY\\n'\r"
-          expect "JUMPER_READY"
-
-          send_user "\n(vm) Connecting to VM...\n"
-          send "ssh -tt -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $env(VM_USER)@$env(VM_HOST)\r"
-          expect {
-            -nocase -re "password" {
-              send_user "\n(vm) password prompt received\n"
-              send "$env(VM_PASSWORD)\r"
-              exp_continue
-            }
-            -re {[$#] ?$} {
-              send_user "\n(vm) shell prompt reached\n"
-              send "cd ~/weilight-harbor && if ! git remote get-url origin >/dev/null 2>&1; then git remote add origin https://github.com/licctvcctv/weilight-harbor.git; fi && git fetch origin main && git checkout -fB main FETCH_HEAD && git reset --hard FETCH_HEAD && git clean -fd && bash vm_update.sh\r"
-              expect {
-                -nocase -re "password" {
-                  send_user "\n(vm) sudo password prompt received\n"
-                  send "$env(VM_PASSWORD)\r"
-                  exp_continue
-                }
-                -re {[$#] ?$} {
-                  send_user "\n(vm) shell prompt returned after update\n"
-                  send "printf '__RC__:%s\\n' \$?\r"
-                  expect {
-                    -re {\r?\n__RC__:0\r?\n} {
-                      send_user "\n(vm) deploy script completed\n"
-                    }
-                    -re {\r?\n__RC__:[1-9][0-9]*\r?\n} {
-                      exit 1
-                    }
-                    eof {
-                      exit 1
-                    }
-                  }
-                }
-                eof {
-                  exit 1
-                }
-              }
-            }
-            eof {
-              exit 1
-            }
-          }
-
-          send "exit\r"
-          expect eof
-          EOF
+          chmod +x ./deploy.sh
+          ./deploy.sh --quiet
