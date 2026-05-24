@@ -1,6 +1,7 @@
 // Respite Station Map
 let map, markers = [], allRequests = [];
 let markerClusterGroup = null;
+let hasFitInitialRequests = false;
 
 // Radius -> Zoom level mapping
 var radiusZoomMap = { 3: 15, 5: 14, 10: 13, 20: 11 };
@@ -41,6 +42,7 @@ function initMap() {
     // Try to get user location
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(pos) {
+            if (hasFitInitialRequests) return;
             map.setView([pos.coords.latitude, pos.coords.longitude], 13);
         });
     }
@@ -54,6 +56,7 @@ function loadRequests(filter) {
             allRequests = data.requests;
             renderMarkers(allRequests);
             renderList(allRequests);
+            fitMapToRequests(allRequests);
         });
 }
 
@@ -79,6 +82,28 @@ function renderMarkers(requests) {
         marker.on('click', function() { showInfoWindow(req); });
         markerClusterGroup.addLayer(marker);
         markers.push(marker);
+    });
+}
+
+function fitMapToRequests(requests) {
+    if (hasFitInitialRequests || !map) return;
+
+    var points = requests
+        .filter(function(req) { return req.latitude && req.longitude; })
+        .map(function(req) { return [req.latitude, req.longitude]; });
+
+    if (!points.length) return;
+
+    hasFitInitialRequests = true;
+    if (points.length === 1) {
+        map.setView(points[0], 13);
+        return;
+    }
+
+    map.fitBounds(L.latLngBounds(points), {
+        paddingTopLeft: [380, 40],
+        paddingBottomRight: [40, 40],
+        maxZoom: 13
     });
 }
 

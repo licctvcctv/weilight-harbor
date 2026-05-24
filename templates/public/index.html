@@ -110,6 +110,7 @@
             {% if featured_campaigns %}
             {% for c in featured_campaigns %}
             <div class="col-md-4">
+                <a href="{{ url_for('crowdfunding.detail', campaign_id=c.id) }}" class="text-decoration-none d-block h-100">
                 <div class="wl-card campaign-card h-100">
                     {% if c.cover_image %}
                     <img src="{{ c.cover_image }}" alt="{{ c.title }}" style="height:180px;width:100%;object-fit:cover;">
@@ -135,6 +136,7 @@
                         </div>
                     </div>
                 </div>
+                </a>
             </div>
             {% endfor %}
             {% else %}

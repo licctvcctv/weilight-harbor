@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ get_locale() if get_locale else 'en' }}">
 <head>
     <title>{{ _('Campaign Review') }}</title>
     {% include 'admin/common/header.html' %}
@@ -111,12 +111,12 @@
 {# Actions template #}
 <script type="text/html" id="campaign-bar">
     {{ '{{# if(d.status === "pending"){ }}' | safe }}
-    <button class="layui-btn layui-btn-xs" lay-event="approve">{{ t_approve }}</button>
-    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">{{ t_reject }}</button>
+    <button class="layui-btn layui-btn-xs wl-admin-action-approve" lay-event="approve">{{ t_approve }}</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs wl-admin-action-reject" lay-event="reject">{{ t_reject }}</button>
     {{ '{{# } else { }}' | safe }}
-    <span style="color:#999">{{ t_reviewed }}</span>
+    <span class="wl-admin-muted">{{ t_reviewed }}</span>
     {{ '{{# } }}' | safe }}
-    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view">{{ t_details }}</button>
+    <button class="layui-btn layui-btn-normal layui-btn-xs wl-admin-action-view" lay-event="view">{{ t_details }}</button>
 </script>
 
 {# Toolbar #}
@@ -202,12 +202,14 @@
 
     const renderCampaignActions = function (row) {
       if (row.status === 'pending') {
-        return '<button class="layui-btn layui-btn-xs" lay-event="approve">' + escapeHtml(t_approve) + '</button>' +
-          '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">' + escapeHtml(t_reject) + '</button>' +
-          '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view">' + escapeHtml(t_details) + '</button>'
+        return '<span class="wl-admin-actions">' +
+          '<button class="layui-btn layui-btn-xs wl-admin-action-approve" lay-event="approve">' + escapeHtml(t_approve) + '</button>' +
+          '<button class="layui-btn layui-btn-danger layui-btn-xs wl-admin-action-reject" lay-event="reject">' + escapeHtml(t_reject) + '</button>' +
+          '<button class="layui-btn layui-btn-normal layui-btn-xs wl-admin-action-view" lay-event="view">' + escapeHtml(t_details) + '</button>' +
+          '</span>'
       }
-      return '<span style="color:#999">' + escapeHtml(t_reviewed) + '</span>' +
-        '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view">' + escapeHtml(t_details) + '</button>'
+      return '<span class="wl-admin-actions"><span class="wl-admin-muted">' + escapeHtml(t_reviewed) + '</span>' +
+        '<button class="layui-btn layui-btn-normal layui-btn-xs wl-admin-action-view" lay-event="view">' + escapeHtml(t_details) + '</button></span>'
     }
 
     let cols = [
@@ -222,7 +224,7 @@
         { title: "{{ t_status }}", field: 'status', align: 'center', width: 110, templet: function (d) { return renderCampaignStatus(d.status) } },
         { title: "{{ t_reject_reason }}", field: 'reject_reason', align: 'center', width: 150 },
         { title: "{{ t_created }}", field: 'create_at', align: 'center', width: 150 },
-        { title: "{{ t_actions }}", field: 'actions', align: 'center', width: 200, fixed: 'right', templet: function (d) { return renderCampaignActions(d) } }
+        { title: "{{ t_actions }}", field: 'actions', align: 'center', width: 280, fixed: 'right', templet: function (d) { return renderCampaignActions(d) } }
       ]
     ]
 

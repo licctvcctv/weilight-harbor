@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ get_locale() if get_locale else 'en' }}">
 <head>
     <title>{{ _('Certification Review') }}</title>
     {% include 'admin/common/header.html' %}
@@ -36,6 +36,13 @@
 {% set t_reject_reason = _('Reject Reason') %}
 {% set t_created = _('Created') %}
 {% set t_actions = _('Actions') %}
+{% set t_family = _('Family') %}
+{% set t_volunteer = _('Volunteer') %}
+{% set t_spouse = _('Spouse') %}
+{% set t_parent = _('Parent') %}
+{% set t_child = _('Child') %}
+{% set t_sibling = _('Sibling') %}
+{% set t_other = _('Other') %}
 <body class="pear-container">
 {# Filter form #}
 <div class="layui-card">
@@ -85,7 +92,7 @@
 {# Document link template #}
 <script type="text/html" id="cert-document">
     {{ '{{# if(d.document_url){ }}' }}
-    <a href="{{ '{{d.document_url}}' }}" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal">{{ t_view_document }}</a>
+    <a href="{{ '{{d.document_url}}' }}" target="_blank" class="layui-btn layui-btn-xs wl-admin-action-view">{{ t_view_document }}</a>
     {{ '{{# } else { }}' }}
     <span style="color:#999">{{ t_na }}</span>
     {{ '{{# } }}' }}
@@ -95,7 +102,7 @@
 <script type="text/html" id="cert-additional-docs">
     {{ '{{# if(d.additional_docs && d.additional_docs.length){ }}' }}
     {{ '{{# layui.each(d.additional_docs, function(index, url){ }}' }}
-    <a href="{{ '{{url}}' }}" target="_blank" class="layui-btn layui-btn-xs">{{ t_doc }} {{'{{index + 1}}'}}</a>
+    <a href="{{ '{{url}}' }}" target="_blank" class="layui-btn layui-btn-xs wl-admin-action-view">{{ t_doc }} {{'{{index + 1}}'}}</a>
     {{ '{{# }); }}' }}
     {{ '{{# } else { }}' }}
     <span style="color:#999">{{ t_na }}</span>
@@ -105,10 +112,10 @@
 {# Actions template #}
 <script type="text/html" id="cert-bar">
     {{ '{{# if(d.status === "pending"){ }}' }}
-    <button class="layui-btn layui-btn-xs" lay-event="approve">{{ t_approve }}</button>
-    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">{{ t_reject }}</button>
+    <button class="layui-btn layui-btn-xs wl-admin-action-approve" lay-event="approve">{{ t_approve }}</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs wl-admin-action-reject" lay-event="reject">{{ t_reject }}</button>
     {{ '{{# } else { }}' }}
-    <span style="color:#999">{{ t_reviewed }}</span>
+    <span class="wl-admin-muted">{{ t_reviewed }}</span>
     {{ '{{# } }}' }}
 </script>
 
@@ -148,6 +155,18 @@
     const t_reviewed = "{{ t_reviewed }}"
     const t_approve = "{{ t_approve }}"
     const t_reject = "{{ t_reject }}"
+    const certTypeLabels = {
+      family: {{ t_family|tojson }},
+      volunteer: {{ t_volunteer|tojson }}
+    }
+    const relationLabels = {
+      spouse: {{ t_spouse|tojson }},
+      parent: {{ t_parent|tojson }},
+      child: {{ t_child|tojson }},
+      sibling: {{ t_sibling|tojson }},
+      volunteer: {{ t_volunteer|tojson }},
+      other: {{ t_other|tojson }}
+    }
 
     const escapeHtml = function (value) {
       return String(value === null || value === undefined ? '' : value)
@@ -171,11 +190,19 @@
       return '<span class="layui-badge layui-bg-blue">' + escapeHtml(status || t_na) + '</span>'
     }
 
+    const renderCertType = function (value) {
+      return escapeHtml(certTypeLabels[String(value || '').toLowerCase()] || value || t_na)
+    }
+
+    const renderCertRelation = function (value) {
+      return escapeHtml(relationLabels[String(value || '').toLowerCase()] || value || t_na)
+    }
+
     const renderDocument = function (url) {
       if (!url) {
         return '<span style="color:#999">' + escapeHtml(t_na) + '</span>'
       }
-      return '<a href="' + escapeHtml(url) + '" target="_blank" class="layui-btn layui-btn-xs layui-btn-normal">' + escapeHtml(t_view_document) + '</a>'
+      return '<a href="' + escapeHtml(url) + '" target="_blank" class="layui-btn layui-btn-xs wl-admin-action-view">' + escapeHtml(t_view_document) + '</a>'
     }
 
     const renderAdditionalDocs = function (docs) {
@@ -190,26 +217,28 @@
       if (!Array.isArray(list) || !list.length) {
         return '<span style="color:#999">' + escapeHtml(t_na) + '</span>'
       }
-      return list.map(function (url, index) {
-        return '<a href="' + escapeHtml(url) + '" target="_blank" class="layui-btn layui-btn-xs">' + escapeHtml(t_doc) + ' ' + (index + 1) + '</a>'
-      }).join(' ')
+      return '<span class="wl-admin-docs">' + list.map(function (url, index) {
+        return '<a href="' + escapeHtml(url) + '" target="_blank" class="layui-btn layui-btn-xs wl-admin-action-view">' + escapeHtml(t_doc) + ' ' + (index + 1) + '</a>'
+      }).join('') + '</span>'
     }
 
     const renderCertActions = function (status) {
       if (status === 'pending') {
-        return '<button class="layui-btn layui-btn-xs" lay-event="approve">' + escapeHtml(t_approve) + '</button>' +
-          '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reject">' + escapeHtml(t_reject) + '</button>'
+        return '<span class="wl-admin-actions">' +
+          '<button class="layui-btn layui-btn-xs wl-admin-action-approve" lay-event="approve">' + escapeHtml(t_approve) + '</button>' +
+          '<button class="layui-btn layui-btn-danger layui-btn-xs wl-admin-action-reject" lay-event="reject">' + escapeHtml(t_reject) + '</button>' +
+          '</span>'
       }
-      return '<span style="color:#999">' + escapeHtml(t_reviewed) + '</span>'
+      return '<span class="wl-admin-actions"><span class="wl-admin-muted">' + escapeHtml(t_reviewed) + '</span></span>'
     }
 
     let cols = [
       [
         { title: "{{ t_id }}", field: 'id', align: 'center', width: 70 },
         { title: "{{ t_username }}", field: 'username', align: 'center', width: 120 },
-        { title: "{{ t_type }}", field: 'cert_type', align: 'center', width: 100 },
+        { title: "{{ t_type }}", field: 'cert_type', align: 'center', width: 100, templet: function (d) { return renderCertType(d.cert_type) } },
         { title: "{{ t_real_name }}", field: 'real_name', align: 'center', width: 120 },
-        { title: "{{ t_relation }}", field: 'relation', align: 'center', width: 120 },
+        { title: "{{ t_relation }}", field: 'relation', align: 'center', width: 120, templet: function (d) { return renderCertRelation(d.relation) } },
         { title: "{{ t_patient }}", field: 'patient_name', align: 'center', width: 120 },
         { title: "{{ t_illness }}", field: 'patient_illness', align: 'center', width: 140 },
         { title: "{{ t_hospital }}", field: 'hospital_name', align: 'center', width: 150 },
@@ -219,7 +248,7 @@
         { title: "{{ t_status }}", field: 'status', align: 'center', width: 110, templet: function (d) { return renderCertStatus(d.status) } },
         { title: "{{ t_reject_reason }}", field: 'reject_reason', align: 'center', minWidth: 150 },
         { title: "{{ t_created }}", field: 'create_at', align: 'center', width: 150 },
-        { title: "{{ t_actions }}", field: 'actions', align: 'center', width: 160, fixed: 'right', templet: function (d) { return renderCertActions(d.status) } }
+        { title: "{{ t_actions }}", field: 'actions', align: 'center', width: 220, fixed: 'right', templet: function (d) { return renderCertActions(d.status) } }
       ]
     ]
 

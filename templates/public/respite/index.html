@@ -18,7 +18,7 @@
       min-height: 60px;
       border-radius: var(--radius-xl) var(--radius-xl) 0 0;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
-      z-index: 20;
+      z-index: 1100;
       overflow: hidden;
       transition: max-height 0.3s ease;
     }
@@ -92,7 +92,7 @@
 
     <!-- Sidebar Toggle (when collapsed) -->
     <button class="btn btn-wl-primary position-absolute" id="sidebarToggle"
-            style="top:1rem;left:1rem;z-index:15;display:none;border-radius:var(--radius-full);"
+            style="top:1rem;left:1rem;z-index:1101;display:none;border-radius:var(--radius-full);"
             onclick="toggleSidebar()">
         <i data-lucide="panel-left-open" style="width:20px;height:20px"></i>
     </button>
@@ -231,5 +231,5 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-<script src="{{ url_for('static', filename='public/js/respite.js') }}"></script>
+<script src="{{ url_for('static', filename='public/js/respite.js') }}?v=20260524a"></script>
 {% endblock %}

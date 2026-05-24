@@ -1,0 +1,208 @@
+body.pear-container {
+    background: #f6f8fb;
+    padding: 16px;
+    color: #303133;
+}
+
+.pear-container .layui-card {
+    border: 1px solid #e8edf3;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(22, 34, 51, .04);
+}
+
+.pear-container .layui-card + .layui-card {
+    margin-top: 16px;
+}
+
+.pear-container .layui-card-body {
+    padding: 18px 20px;
+}
+
+.pear-container .layui-form-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0;
+}
+
+.pear-container .layui-form-label {
+    width: auto;
+    min-width: 58px;
+    padding: 0 4px 0 0;
+    line-height: 38px;
+    color: #303133;
+    font-weight: 600;
+    text-align: left;
+}
+
+.pear-container .layui-input-inline {
+    width: 190px;
+    margin-right: 0;
+}
+
+.pear-container .layui-input,
+.pear-container .layui-select,
+.pear-container .layui-textarea,
+.pear-container .layui-form-select dl {
+    border-color: #dce3eb;
+    border-radius: 6px;
+}
+
+.pear-container .layui-input:focus,
+.pear-container .layui-textarea:focus {
+    border-color: #5fb878 !important;
+    box-shadow: 0 0 0 3px rgba(95, 184, 120, .12);
+}
+
+.pear-container .pear-btn,
+.pear-container .layui-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-radius: 6px;
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.pear-container .layui-btn-xs {
+    height: 28px;
+    min-width: auto;
+    padding: 0 10px;
+    line-height: 28px;
+    font-size: 12px;
+}
+
+.pear-container .layui-table-cell .layui-btn + .layui-btn,
+.pear-container .layui-table-cell .wl-admin-muted + .layui-btn {
+    margin-left: 8px;
+}
+
+.pear-container .wl-admin-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.pear-container .wl-admin-actions .layui-btn,
+.pear-container .wl-admin-actions .layui-btn + .layui-btn,
+.pear-container .wl-admin-actions .wl-admin-muted + .layui-btn {
+    margin-left: 0;
+}
+
+.pear-container .wl-admin-muted {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    color: #8a94a6;
+}
+
+.pear-container .wl-admin-docs {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pear-container .wl-admin-action-approve {
+    background: #16a085;
+}
+
+.pear-container .wl-admin-action-view {
+    background: #4d8ef7;
+}
+
+.pear-container .wl-admin-action-reject,
+.pear-container .wl-admin-action-delete {
+    background: #e65f5c;
+}
+
+.pear-container .wl-admin-action-hide {
+    background: #f0ad4e;
+}
+
+.pear-container .layui-table-view {
+    border-color: #edf1f5;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.pear-container .layui-table-fixed,
+.pear-container .layui-table-fixed-r,
+.pear-container .layui-table-fixed-l,
+.pear-container .layui-table-fixed .layui-table-header,
+.pear-container .layui-table-fixed .layui-table-body,
+.pear-container .layui-table-fixed table,
+.pear-container .layui-table-fixed th,
+.pear-container .layui-table-fixed td {
+    background: #fff;
+}
+
+.pear-container .layui-table-fixed-r {
+    z-index: 4;
+    box-shadow: -10px 0 18px rgba(22, 34, 51, .08);
+}
+
+.pear-container .layui-table-fixed-l {
+    z-index: 4;
+    box-shadow: 10px 0 18px rgba(22, 34, 51, .06);
+}
+
+.pear-container .layui-table-fixed .layui-table-cell {
+    background: inherit;
+}
+
+.pear-container .layui-table-fixed tr:hover td {
+    background: #f8fbff;
+}
+
+.pear-container .layui-table-tool {
+    min-height: 54px;
+    border-color: #edf1f5;
+    background: #fff;
+}
+
+.pear-container .layui-table-tool-temp {
+    padding-right: 150px;
+}
+
+.pear-container .layui-table th {
+    background: #fbfcfe;
+    color: #667085;
+    font-weight: 600;
+}
+
+.pear-container .layui-table-cell {
+    height: auto;
+    min-height: 28px;
+    line-height: 28px;
+}
+
+.pear-container .layui-table-page {
+    border-color: #edf1f5;
+}
+
+.pear-container .layui-laypage a,
+.pear-container .layui-laypage span,
+.pear-container .layui-laypage button,
+.pear-container .layui-laypage input {
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    body.pear-container {
+        padding: 10px;
+    }
+
+    .pear-container .layui-card-body {
+        padding: 14px;
+    }
+
+    .pear-container .layui-input-inline {
+        width: 100%;
+    }
+}

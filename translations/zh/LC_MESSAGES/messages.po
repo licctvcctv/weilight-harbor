@@ -2563,6 +2563,9 @@ msgstr "否"
 msgid "Creator"
 msgstr "发起人"
 
+msgid "Author"
+msgstr "作者"
+
 msgid "Cover"
 msgstr "封面"
 
@@ -2604,6 +2607,45 @@ msgstr "好消息"
 
 msgid "Resources"
 msgstr "资源分享"
+
+msgid "Family"
+msgstr "家属"
+
+msgid "Spouse"
+msgstr "配偶"
+
+msgid "Parent"
+msgstr "父母"
+
+msgid "Child"
+msgstr "子女"
+
+msgid "Sibling"
+msgstr "兄弟姐妹"
+
+msgid "Not found"
+msgstr "未找到"
+
+msgid "Application rejected"
+msgstr "申请已驳回"
+
+msgid "Campaign rejected"
+msgstr "项目已驳回"
+
+msgid "Payment QR code is required before approval"
+msgstr "通过审核前必须先上传收款二维码"
+
+msgid "Permission denied"
+msgstr "无权操作"
+
+msgid "Post approved"
+msgstr "帖子已通过"
+
+msgid "Post hidden"
+msgstr "帖子已隐藏"
+
+msgid "Post deleted"
+msgstr "帖子已删除"
 
 msgid "Pediatric"
 msgstr "儿科"

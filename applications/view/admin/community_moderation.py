@@ -1,6 +1,7 @@
 import datetime
 from functools import wraps
 from flask import Blueprint, abort, jsonify, render_template, request
+from flask_babel import gettext as _
 from flask_login import current_user, login_required
 from sqlalchemy.orm import joinedload
 from applications.extensions import db
@@ -16,7 +17,7 @@ def admin_required(func):
     def wrapper(*args, **kwargs):
         if getattr(current_user, 'user_type', None) != 'admin':
             if request.method != 'GET' or request.path.endswith('/data'):
-                return jsonify({'success': False, 'msg': 'Permission denied'}), 403
+                return jsonify({'success': False, 'msg': _('Permission denied')}), 403
             abort(403)
         return func(*args, **kwargs)
     return wrapper
@@ -57,10 +58,10 @@ def data():
 def approve(post_id):
     post = Post.query.get(post_id)
     if not post:
-        return fail_api(msg="Not found")
+        return fail_api(msg=_("Not found"))
     post.status = 1
     db.session.commit()
-    return success_api(msg="Post approved")
+    return success_api(msg=_("Post approved"))
 
 
 @admin_community.put('/hide/<int:post_id>')
@@ -68,10 +69,10 @@ def approve(post_id):
 def hide(post_id):
     post = Post.query.get(post_id)
     if not post:
-        return fail_api(msg="Not found")
+        return fail_api(msg=_("Not found"))
     post.status = 0
     db.session.commit()
-    return success_api(msg="Post hidden")
+    return success_api(msg=_("Post hidden"))
 
 
 @admin_community.delete('/delete/<int:post_id>')
@@ -79,8 +80,8 @@ def hide(post_id):
 def delete(post_id):
     post = Post.query.get(post_id)
     if not post:
-        return fail_api(msg="Not found")
+        return fail_api(msg=_("Not found"))
     post.delete_at = datetime.datetime.now()
     post.status = 0
     db.session.commit()
-    return success_api(msg="Post deleted")
+    return success_api(msg=_("Post deleted"))

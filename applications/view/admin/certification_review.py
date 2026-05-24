@@ -1,6 +1,7 @@
 import datetime
 import json
 from flask import Blueprint, render_template, request
+from flask_babel import gettext as _
 from flask_login import current_user
 from sqlalchemy.orm import joinedload
 from applications.extensions import db
@@ -61,7 +62,7 @@ def data():
 def approve(cert_id):
     cert = Certification.query.get(cert_id)
     if not cert:
-        return fail_api(msg="Not found")
+        return fail_api(msg=_("Not found"))
     cert.status = 'approved'
     cert.reviewer_id = current_user.id
     cert.reviewed_at = datetime.datetime.now()
@@ -81,7 +82,7 @@ def approve(cert_id):
             user.role.append(role)
 
     db.session.commit()
-    return success_api(msg="Approved")
+    return success_api(msg=_("Approved"))
 
 
 @admin_cert.put('/reject/<int:cert_id>')
@@ -89,11 +90,11 @@ def approve(cert_id):
 def reject(cert_id):
     cert = Certification.query.get(cert_id)
     if not cert:
-        return fail_api(msg="Not found")
+        return fail_api(msg=_("Not found"))
     cert.status = 'rejected'
     data = request.get_json(silent=True) or {}
-    cert.reject_reason = data.get('reason', 'Application rejected')
+    cert.reject_reason = data.get('reason', _('Application rejected'))
     cert.reviewer_id = current_user.id
     cert.reviewed_at = datetime.datetime.now()
     db.session.commit()
-    return success_api(msg="Rejected")
+    return success_api(msg=_("Rejected"))

@@ -85,6 +85,48 @@ body,
 	position: absolute;
 }
 
+.pear-admin .layui-header .layui-layout-right {
+	display: flex !important;
+	align-items: center;
+	height: 60px;
+	line-height: 60px;
+	padding-right: 10px;
+}
+
+.pear-admin .layui-header .layui-layout-right > .layui-nav-item {
+	display: flex !important;
+	align-items: center;
+	height: 60px;
+	line-height: 60px;
+}
+
+.pear-admin .layui-header .layui-layout-right > .layui-nav-item > a {
+	display: inline-flex;
+	align-items: center;
+	height: 60px;
+	line-height: 60px;
+}
+
+.pear-admin .layui-header .lang-switch {
+	gap: 4px;
+}
+
+.pear-admin .layui-header .lang-switch span {
+	display: inline-block;
+	line-height: 60px;
+	color: rgba(0, 0, 0, .55) !important;
+}
+
+.pear-admin .layui-header .lang-switch a {
+	padding: 0 2px;
+	font-weight: 600;
+	color: rgba(0, 0, 0, .54);
+}
+
+.pear-admin .layui-header .lang-switch a.is-active {
+	color: #16a085;
+}
+
 .pear-admin .layui-layout-control .layui-nav {
 	padding: 0px;
 }

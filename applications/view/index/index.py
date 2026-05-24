@@ -84,4 +84,6 @@ def set_locale():
         if current_user.is_authenticated:
             current_user.locale = locale
             db.session.commit()
-    return jsonify(success=True)
+    response = jsonify(success=True)
+    response.set_cookie('locale', locale, max_age=60 * 60 * 24 * 365, samesite='Lax')
+    return response

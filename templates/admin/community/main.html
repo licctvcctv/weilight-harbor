@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ get_locale() if get_locale else 'en' }}">
 <head>
     <title>{{ _('Community Moderation') }}</title>
     {% include 'admin/common/header.html' %}
@@ -31,6 +31,7 @@
 {% set t_comments = _('Comments') %}
 {% set t_date = _('Date') %}
 {% set t_actions = _('Actions') %}
+{% set t_na = _('N/A') %}
 <body class="pear-container">
 {# Filter form #}
 <div class="layui-card">
@@ -85,12 +86,14 @@
 
 {# Actions template #}
 <script type="text/html" id="community-bar">
+    <span class="wl-admin-actions">
     {{ '{{# if(d.status === 0){ }}' }}
-    <button class="layui-btn layui-btn-xs" lay-event="approve">{{ t_approve }}</button>
+    <button class="layui-btn layui-btn-xs wl-admin-action-approve" lay-event="approve">{{ t_approve }}</button>
     {{ '{{# } else { }}' }}
-    <button class="layui-btn layui-btn-warm layui-btn-xs" lay-event="hide">{{ t_hide }}</button>
+    <button class="layui-btn layui-btn-warm layui-btn-xs wl-admin-action-hide" lay-event="hide">{{ t_hide }}</button>
     {{ '{{# } }}' }}
-    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">{{ t_delete }}</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs wl-admin-action-delete" lay-event="delete">{{ t_delete }}</button>
+    </span>
 </script>
 
 {# Toolbar #}
@@ -111,19 +114,46 @@
         let popup = layui.popup
         let layer = layui.layer
         let MODULE_PATH = '/admin/community/'
+    const t_na = {{ t_na|tojson }}
+    const communityCategoryLabels = {
+      emotional: {{ _('Emotional Support')|tojson }},
+      daily: {{ _('Daily Life')|tojson }},
+      medical: {{ _('Medical Info')|tojson }},
+      good_news: {{ _('Good News')|tojson }},
+      resources: {{ _('Resources')|tojson }}
+    }
+
+    const escapeHtml = function (value) {
+      return String(value === null || value === undefined ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+    }
+
+    const renderCommunityCategory = function (value) {
+      if (!value) {
+        return escapeHtml(t_na)
+      }
+      return String(value).split(',').map(function (item) {
+        const key = item.trim()
+        return escapeHtml(communityCategoryLabels[key] || key)
+      }).join(', ')
+    }
 
     let cols = [
       [
         { title: "{{ t_id }}", field: 'id', align: 'center', width: 70 },
         { title: "{{ t_author }}", field: 'username', align: 'center', width: 120 },
         { title: "{{ t_title }}", field: 'title', align: 'center', minWidth: 160 },
-        { title: "{{ t_category }}", field: 'category', align: 'center', width: 110 },
+        { title: "{{ t_category }}", field: 'category', align: 'center', width: 130, templet: function (d) { return renderCommunityCategory(d.category) } },
         { title: "{{ t_content_preview }}", field: 'content', align: 'center', minWidth: 180 },
         { title: "{{ t_status }}", field: 'status', align: 'center', width: 100, templet: '#community-status' },
         { title: "{{ t_likes }}", field: 'like_count', align: 'center', width: 80 },
         { title: "{{ t_comments }}", field: 'comment_count', align: 'center', width: 90 },
         { title: "{{ t_date }}", field: 'create_at', align: 'center', width: 150 },
-        { title: "{{ t_actions }}", toolbar: '#community-bar', align: 'center', width: 180, fixed: 'right' }
+        { title: "{{ t_actions }}", toolbar: '#community-bar', align: 'center', width: 200, fixed: 'right' }
       ]
     ]
 

@@ -1,5 +1,6 @@
 import datetime
 from flask import Blueprint, render_template, request
+from flask_babel import gettext as _
 from flask_login import current_user
 from sqlalchemy.orm import joinedload
 from applications.extensions import db
@@ -52,14 +53,14 @@ def data():
 def approve(campaign_id):
     campaign = Campaign.query.get(campaign_id)
     if not campaign:
-        return fail_api(msg="Not found")
+        return fail_api(msg=_("Not found"))
     if not campaign.qr_code_url:
-        return fail_api(msg="Payment QR code is required before approval")
+        return fail_api(msg=_("Payment QR code is required before approval"))
     campaign.status = 'approved'
     campaign.reviewer_id = current_user.id
     campaign.reviewed_at = datetime.datetime.now()
     db.session.commit()
-    return success_api(msg="Approved")
+    return success_api(msg=_("Approved"))
 
 
 @admin_campaign.put('/reject/<int:campaign_id>')
@@ -67,11 +68,11 @@ def approve(campaign_id):
 def reject(campaign_id):
     campaign = Campaign.query.get(campaign_id)
     if not campaign:
-        return fail_api(msg="Not found")
+        return fail_api(msg=_("Not found"))
     campaign.status = 'rejected'
     data = request.get_json(silent=True) or {}
-    campaign.reject_reason = data.get('reason', 'Campaign rejected')
+    campaign.reject_reason = data.get('reason', _('Campaign rejected'))
     campaign.reviewer_id = current_user.id
     campaign.reviewed_at = datetime.datetime.now()
     db.session.commit()
-    return success_api(msg="Rejected")
+    return success_api(msg=_("Rejected"))
