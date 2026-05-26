@@ -2697,3 +2697,6 @@ msgstr "您已捐助"
 
 msgid "Campaign is now {progress} percent funded with {count} donors"
 msgstr "当前进度为 {progress}％，共有 {count} 位捐助者"
+
+msgid "Please log in to access this page"
+msgstr "请登录以访问此页面"

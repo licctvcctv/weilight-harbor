@@ -25,4 +25,4 @@ def index():
 @admin_bp.get('/welcome')
 @authorize("admin:review", log=True)
 def welcome():
-    return render_template('admin/console/console.html')
+    return redirect(url_for('adminCert.main'))

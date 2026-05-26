@@ -9,6 +9,14 @@ from applications.common.utils.gen_captcha import gen_captcha
 from applications.schemas import PowerOutSchema
 
 
+ADMIN_REVIEW_MENU_CODES = {
+    'admin:review',
+    'admin:certification:main',
+    'admin:campaign:main',
+    'admin:community:main',
+}
+
+
 # 授权路由存入session
 def add_auth_session():
     role = current_user.role
@@ -35,6 +43,8 @@ def make_menu_tree():
         for p in i.power:
             # 如果权限关闭了就直接跳过
             if p.enable == 0:
+                continue
+            if p.code not in ADMIN_REVIEW_MENU_CODES:
                 continue
             # 一二级菜单
             if int(p.type) == 0 or int(p.type) == 1:
@@ -113,11 +123,11 @@ def get_render_config():
         "max": 30,
         "index": {
             # 标识 ID , 建议与菜单项中的 ID 一致
-            "id": "10",
+            "id": "admin:certification:main",
             # 页面地址
-            "href": "/admin/welcome",
+            "href": "/admin/certification/",
             # 标题
-            "title": _("Home")
+            "title": _("Certification Review")
         }
     }, theme={
         # 默认主题色，对应 colors 配置中的 ID 标识

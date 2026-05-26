@@ -6,7 +6,15 @@ def init_login_manager(app):
     login_manager.init_app(app)
 
     login_manager.login_view = 'auth.login_page'
-    login_manager.login_message = u'请登录以访问此页面'
+    login_manager.login_message = 'Please log in to access this page'
+
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        from flask import flash, redirect, request, url_for
+        from flask_babel import gettext as _
+
+        flash(_('Please log in to access this page'), 'info')
+        return redirect(url_for('auth.login_page', next=request.url))
 
     @login_manager.user_loader
     def load_user(user_id):

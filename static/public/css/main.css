@@ -71,33 +71,75 @@ a:hover {
   background-color: rgba(255,255,255,0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--color-border);
-  padding: 0 1.5rem;
+  padding: 0 1rem;
   height: 64px;
   position: sticky;
   top: 0;
   z-index: 1030;
 }
 
+.wl-navbar .container {
+  max-width: 1320px;
+  gap: 0.75rem;
+}
+
 .wl-navbar .navbar-brand {
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   color: var(--color-primary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .wl-navbar .nav-link {
   color: var(--color-text-secondary);
   font-weight: 500;
-  padding: 0.5rem 1rem !important;
+  padding: 0.5rem 0.75rem !important;
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
+  white-space: nowrap;
+  line-height: 1.2;
 }
 .wl-navbar .nav-link:hover,
 .wl-navbar .nav-link.active {
   color: var(--color-primary);
   background-color: var(--color-primary-bg);
+}
+
+.wl-navbar .navbar-collapse {
+  min-width: 0;
+}
+
+.wl-navbar .wl-primary-nav {
+  align-items: center;
+  min-width: 0;
+}
+
+.wl-navbar .wl-user-nav {
+  flex-shrink: 0;
+}
+
+.wl-navbar .wl-user-name {
+  display: inline-block;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .wl-navbar .nav-link {
+    padding-left: 0.55rem !important;
+    padding-right: 0.55rem !important;
+    font-size: 0.95rem;
+  }
+
+  .wl-navbar .navbar-brand {
+    font-size: 1.05rem;
+  }
 }
 
 /* Language Toggle */
