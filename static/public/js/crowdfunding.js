@@ -7,9 +7,23 @@ function initCrowdfundingDetail(config) {
     var isCustom = false;
     var selectedPaymentMethod = 'wechat';
     var paymentStatusTimer = null;
+    var donationCompleted = false;
     function t(key, fallback) {
         var i18n = window.WL_CROWDFUNDING_I18N || {};
         return i18n[key] || fallback;
+    }
+
+    function cleanupModalLock() {
+        if (typeof window.cleanupDonateModalArtifacts === 'function') {
+            window.cleanupDonateModalArtifacts();
+            return;
+        }
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('overflow');
+        document.body.style.removeProperty('padding-right');
+        document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
+            backdrop.remove();
+        });
     }
 
     function getConfirmAmountSpan() {
@@ -286,6 +300,7 @@ function initCrowdfundingDetail(config) {
 
     function showThankYou(data) {
         var summary = document.getElementById('donationSummary');
+        donationCompleted = true;
         showStep(4);
 
         if (summary) {
@@ -330,6 +345,14 @@ function initCrowdfundingDetail(config) {
     if (modal) {
         modal.addEventListener('hidden.bs.modal', function() {
             clearInterval(paymentStatusTimer);
+            cleanupModalLock();
+
+            if (donationCompleted) {
+                donationCompleted = false;
+                window.location.reload();
+                return;
+            }
+
             showStep(1);
 
             var finishBtn = document.getElementById('finishPaymentBtn');
@@ -367,6 +390,8 @@ function initCrowdfundingDetail(config) {
             document.querySelectorAll('.confetti-piece').forEach(function(p) { p.remove(); });
         });
     }
+
+    window.addEventListener('pageshow', cleanupModalLock);
 
     // Copy link
     window.copyLink = function() {

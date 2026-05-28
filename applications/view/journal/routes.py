@@ -142,7 +142,7 @@ def annual_film():
         slides.append({
             'date': e.entry_date.strftime('%B %d') if e.entry_date else '',
             'title': e.title or '',
-            'excerpt': (e.content or '')[:100],
+            'excerpt': e.content or '',
             'mood': e.mood or '',
             'image': imgs[0] if imgs else None
         })

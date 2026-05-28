@@ -509,7 +509,7 @@
                     </div>
 
                     {% if campaign.status == 'approved' and not campaign.is_fully_funded and campaign.qr_code_url %}
-                    <button class="btn-donate-lg active-donate" data-bs-toggle="modal" data-bs-target="#donateModal" id="openDonateBtn" onclick="wlShowDonateModal();">
+                    <button class="btn-donate-lg active-donate" id="openDonateBtn" onclick="wlShowDonateModal();">
                         <i data-lucide="heart" style="width:20px;height:20px;margin-right:6px"></i>
                         {{ _('Donate Now') }}
                     </button>
@@ -697,7 +697,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{{ url_for('static', filename='public/js/crowdfunding.js') }}?v=20260517a"></script>
+<script src="{{ url_for('static', filename='public/js/crowdfunding.js') }}?v=20260528a"></script>
 <script>
 window.WL_CROWDFUNDING_I18N = {
     iHavePaid: {{ _('I Have Paid')|tojson }},
@@ -717,6 +717,14 @@ window.WL_CROWDFUNDING_I18N = {
 function wlShowDonateModal() {
     var modal = document.getElementById('donateModal');
     if (!modal) return;
+    cleanupDonateModalArtifacts();
+    if (window.bootstrap && window.bootstrap.Modal) {
+        window.bootstrap.Modal.getOrCreateInstance(modal, {
+            backdrop: true,
+            keyboard: true
+        }).show();
+        return;
+    }
     modal.style.display = 'block';
     modal.removeAttribute('aria-hidden');
     modal.classList.add('show');
@@ -731,14 +739,28 @@ function wlShowDonateModal() {
 function wlHideDonateModal() {
     var modal = document.getElementById('donateModal');
     if (!modal) return;
+    if (window.bootstrap && window.bootstrap.Modal) {
+        var instance = window.bootstrap.Modal.getInstance(modal);
+        if (instance) {
+            instance.hide();
+            setTimeout(cleanupDonateModalArtifacts, 250);
+            return;
+        }
+    }
     modal.classList.remove('show');
     modal.style.display = 'none';
     modal.setAttribute('aria-hidden', 'true');
+    cleanupDonateModalArtifacts();
+}
+
+window.cleanupDonateModalArtifacts = function cleanupDonateModalArtifacts() {
     document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty('padding-right');
     document.querySelectorAll('.modal-backdrop').forEach(function(backdrop) {
         backdrop.remove();
     });
-}
+};
 
 document.addEventListener('DOMContentLoaded', function() {
     initCrowdfundingDetail({
