@@ -347,24 +347,28 @@ fi
 if [[ "$AUTO_VENDOR" == "1" ]]; then
     log "Probing core static assets on the VM..."
     STATIC_CMD="set -e; \
+rc=0; \
 for asset in /static/index/layui/layui.js /static/admin/component/pear/pear.js; do \
-code=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \"http://127.0.0.1\$asset\" || echo 000); \
+code=\$(curl -L -s -o /dev/null -w '%{http_code}' --max-time 15 \"http://127.0.0.1\$asset\" || echo 000); \
 echo STATIC:\$asset:\$code; \
-if [ \"\$code\" != \"200\" ]; then exit 5; fi; \
-done"
+if [ \"\$code\" != \"200\" ]; then rc=5; fi; \
+done; \
+[ \"\$rc\" = \"0\" ]"
     run_remote "$STATIC_CMD" || { err "Static asset probe failed on the VM"; exit 5; }
 fi
 
 # --- Smoke test ------------------------------------------------------------
 log "Smoke-testing on the VM..."
 SMOKE_CMD="set -e; \
-home=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 http://127.0.0.1/ || echo 000); \
+rc=0; \
+home=\$(curl -L -s -o /dev/null -w '%{http_code}' --max-time 15 http://127.0.0.1/ || echo 000); \
 echo SMOKE:/:\$home; \
-if [ \"\$home\" != \"200\" ]; then exit 3; fi; \
-if curl -s --max-time 15 http://127.0.0.1/ | tr -d '\n' | grep -q 'Weilight Harbor'; then echo SMOKE:brand:ok; else echo SMOKE:brand:missing; fi; \
+if [ \"\$home\" != \"200\" ]; then rc=3; fi; \
+if curl -L -s --max-time 15 http://127.0.0.1/ | tr -d '\n' | grep -q 'Weilight Harbor'; then echo SMOKE:brand:ok; else echo SMOKE:brand:missing; fi; \
 admin=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 http://127.0.0.1/admin/ || echo 000); \
 echo SMOKE:/admin/:\$admin; \
-case \"\$admin\" in 200|302|308) exit 0 ;; *) exit 0 ;; esac"
+case \"\$admin\" in 200|301|302|308) ;; *) rc=3 ;; esac; \
+[ \"\$rc\" = \"0\" ]"
 run_remote "$SMOKE_CMD" || { err "Smoke test failed on the VM"; exit 3; }
 
 ok "Deployment complete"
