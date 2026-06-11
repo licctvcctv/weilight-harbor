@@ -5,13 +5,13 @@
 # Usage:
 #   ./deploy.sh                  Deploy: VM resets to origin/main and runs vm_update.sh
 #   ./deploy.sh --diag           Inspect VM state only (no deploy)
-#   ./deploy.sh --sync-vendor    Upload large layui/tinymce/echarts vendor files
+#   ./deploy.sh --sync-vendor    Upload core layui/pear static files
 #   ./deploy.sh --no-vendor      Skip auto vendor check during deploy
 #   ./deploy.sh --quiet          Suppress remote SSH banners (only show key output)
 #   ./deploy.sh -h               Show this help
 #
-# A normal deploy auto-checks the layui.js asset on the VM and triggers
-# --sync-vendor on demand. Pass --no-vendor to skip that probe.
+# A normal deploy auto-checks core static assets on the VM. Pass --no-vendor
+# to skip that probe.
 #
 # Override defaults via env vars:
 #   JUMPER_USER, JUMPER_PASS, TOTP_SECRET,
@@ -191,15 +191,16 @@ EXPECT_SCP
 
 # --- Sub-task: vendor sync (used by --sync-vendor and auto check) ----------
 do_vendor_sync() {
-    local _layui="${SCRIPT_DIR}/static/admin/component/layui/layui.js"
+    local _layui="${SCRIPT_DIR}/static/index/layui/layui.js"
+    local _pear="${SCRIPT_DIR}/static/admin/component/pear/pear.js"
     [[ -f "$_layui" ]] || { err "Local layui.js missing at $_layui"; return 1; }
+    [[ -f "$_pear" ]] || { err "Local pear.js missing at $_pear"; return 1; }
 
     local _tar="/tmp/wlh-vendor.tar.gz"
-    log "Packing admin vendor assets..."
-    tar czf "$_tar" -C "${SCRIPT_DIR}/static/admin/component" \
-        layui/layui.js \
-        pear/module/echarts.js \
-        pear/module/tinymce
+    log "Packing core static assets..."
+    tar czf "$_tar" -C "${SCRIPT_DIR}/static" \
+        index/layui/layui.js \
+        admin/component/pear/pear.js
     local _size; _size=$(ls -lh "$_tar" | awk '{print $5}')
     log "Vendor tarball: $_size"
 
@@ -208,14 +209,6 @@ do_vendor_sync() {
         || { err "SCP to jump host failed"; return 1; }
 
     log "Pushing tarball from jump host to VM and unpacking..."
-    local _remote_cmd
-    _remote_cmd="scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /tmp/wlh-vendor.tar.gz ${VM_USER}@${VM_HOST}:/tmp/ <<< '${VM_PASS}' >/dev/null 2>&1 || true; \
-cd '${PROJECT_DIR}/static/admin/component' && tar xzf /tmp/wlh-vendor.tar.gz && \
-test -f layui/layui.js && test -f pear/module/echarts.js && \
-echo VENDOR_OK"
-    # The 'scp <<< pass' trick won't work because scp reads tty for the password;
-    # do the scp in a separate run by chaining: jumper scp + then unpack on VM.
-    # Implementation: split into 2 jumper-only steps using run_remote variants.
 
     # Step A: from jumper, scp to VM (use a short bash that handles the password
     # via expect at the local level; here we instead push the tar file by
@@ -225,9 +218,9 @@ echo VENDOR_OK"
         || { err "Jumper-to-VM SCP failed"; return 1; }
 
     # Step B: unpack on VM
-    run_remote "cd '${PROJECT_DIR}/static/admin/component' && \
+    run_remote "cd '${PROJECT_DIR}/static' && \
 tar xzf /tmp/wlh-vendor.tar.gz && \
-test -f layui/layui.js && test -f pear/module/echarts.js && \
+test -f index/layui/layui.js && test -f admin/component/pear/pear.js && \
 echo VENDOR_OK" \
         || { err "Vendor unpack failed"; return 1; }
 
@@ -235,7 +228,7 @@ echo VENDOR_OK" \
 
     local _http
     _http=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
-        "$SITE_URL/static/admin/component/layui/layui.js")
+        "$SITE_URL/static/index/layui/layui.js")
     if [[ "$_http" == "200" ]]; then
         ok "layui.js reachable on the VM (HTTP 200)"
         return 0
@@ -350,17 +343,24 @@ if [[ -n "$DEPLOYED_SHA" && -n "$LOCAL_SHA" ]]; then
     fi
 fi
 
-# --- Vendor auto-check -----------------------------------------------------
+# --- Static asset auto-check ----------------------------------------------
 if [[ "$AUTO_VENDOR" == "1" ]]; then
-    log "Probing admin vendor asset..."
-    HTTP=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
-        "$SITE_URL/static/admin/component/layui/layui.js" || echo "000")
-    if [[ "$HTTP" == "200" ]]; then
-        ok "Admin vendor assets present"
-    else
-        warn "layui.js returns HTTP $HTTP; running vendor sync..."
-        do_vendor_sync || { err "Vendor sync failed"; exit 5; }
-    fi
+    log "Probing core static assets..."
+    STATIC_OK=1
+    for asset in \
+        "/static/index/layui/layui.js" \
+        "/static/admin/component/pear/pear.js"
+    do
+        HTTP=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
+            "$SITE_URL$asset" || echo "000")
+        if [[ "$HTTP" == "200" ]]; then
+            ok "$asset reachable (HTTP 200)"
+        else
+            err "$asset returned HTTP $HTTP"
+            STATIC_OK=0
+        fi
+    done
+    [[ "$STATIC_OK" == "1" ]] || exit 5
 fi
 
 # --- Smoke test ------------------------------------------------------------
