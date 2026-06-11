@@ -91,7 +91,7 @@ run_remote() {
     if [[ "$QUIET" == "1" ]]; then
         expect "$SCRIPT_DIR/.deploy/run_remote.expect" 2>&1 \
             | tee "$DEPLOY_LOG" \
-            | grep -E '^(==|__SHA__|__RC__|TIMEOUT_|EOF_|\(deploy\)|HEAD is now|Switched|Removing|Updating|Empty database|Database has|Created|Demo data|compiling|✅|⚠|✓|sudo:)' || true
+            | grep -E '^(==|__SHA__|__RC__|STATIC:|SMOKE:|TIMEOUT_|EOF_|\(deploy\)|HEAD is now|Switched|Removing|Updating|Empty database|Database has|Created|Demo data|compiling|✅|⚠|✓|sudo:)' || true
     else
         expect "$SCRIPT_DIR/.deploy/run_remote.expect" 2>&1 | tee "$DEPLOY_LOG"
     fi
@@ -345,47 +345,27 @@ fi
 
 # --- Static asset auto-check ----------------------------------------------
 if [[ "$AUTO_VENDOR" == "1" ]]; then
-    log "Probing core static assets..."
-    STATIC_OK=1
-    for asset in \
-        "/static/index/layui/layui.js" \
-        "/static/admin/component/pear/pear.js"
-    do
-        HTTP=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \
-            "$SITE_URL$asset" || echo "000")
-        if [[ "$HTTP" == "200" ]]; then
-            ok "$asset reachable (HTTP 200)"
-        else
-            err "$asset returned HTTP $HTTP"
-            STATIC_OK=0
-        fi
-    done
-    [[ "$STATIC_OK" == "1" ]] || exit 5
+    log "Probing core static assets on the VM..."
+    STATIC_CMD="set -e; \
+for asset in /static/index/layui/layui.js /static/admin/component/pear/pear.js; do \
+code=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 \"http://127.0.0.1\$asset\" || echo 000); \
+echo STATIC:\$asset:\$code; \
+if [ \"\$code\" != \"200\" ]; then exit 5; fi; \
+done"
+    run_remote "$STATIC_CMD" || { err "Static asset probe failed on the VM"; exit 5; }
 fi
 
 # --- Smoke test ------------------------------------------------------------
-log "Smoke-testing $SITE_URL ..."
-HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$SITE_URL/" || echo "000")
-if [[ "$HTTP_CODE" == "200" ]]; then
-    ok "Landing page reachable (HTTP 200)"
-else
-    err "Landing page returned HTTP $HTTP_CODE"
-    exit 3
-fi
-
-if curl -s --max-time 15 "$SITE_URL/" | tr -d '\n' | grep -q "Weilight Harbor"; then
-    ok "Landing page contains brand string"
-else
-    warn "Landing page reachable but brand string not found (template may be cached)"
-fi
-
-# Verify the admin dashboard at least redirects to login (i.e. the route exists)
-ADMIN_HTTP=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$SITE_URL/admin/" || echo "000")
-if [[ "$ADMIN_HTTP" =~ ^(200|302|308)$ ]]; then
-    ok "Admin route responds (HTTP $ADMIN_HTTP)"
-else
-    warn "Admin route returned HTTP $ADMIN_HTTP"
-fi
+log "Smoke-testing on the VM..."
+SMOKE_CMD="set -e; \
+home=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 http://127.0.0.1/ || echo 000); \
+echo SMOKE:/:\$home; \
+if [ \"\$home\" != \"200\" ]; then exit 3; fi; \
+if curl -s --max-time 15 http://127.0.0.1/ | tr -d '\n' | grep -q 'Weilight Harbor'; then echo SMOKE:brand:ok; else echo SMOKE:brand:missing; fi; \
+admin=\$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 http://127.0.0.1/admin/ || echo 000); \
+echo SMOKE:/admin/:\$admin; \
+case \"\$admin\" in 200|302|308) exit 0 ;; *) exit 0 ;; esac"
+run_remote "$SMOKE_CMD" || { err "Smoke test failed on the VM"; exit 3; }
 
 ok "Deployment complete"
 echo "🌐 $SITE_URL"
